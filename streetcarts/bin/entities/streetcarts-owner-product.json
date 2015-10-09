@@ -1,5 +1,5 @@
 {
-  "apiResources" : [ "/**" ],
+  "apiResources" : [ "/carts**", "/users/{uuid}/carts**", "/accesstoken**" ],
   "approvalType" : "auto",
   "attributes" : [ ],
   "description" : "An app for street cart owners",
