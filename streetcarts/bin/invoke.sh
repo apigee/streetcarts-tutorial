@@ -40,10 +40,20 @@ userid1=`echo $accesstoken_response | awk -F ':' '{ print $3 }'`
 userid2=`echo $userid1 | cut -d'}' -f 1`
 echo -e "\n**** Got Owner ID 2: $userid2"
 
+baduserid="abc123"
 
-echo -e "\n**** Call /users/{id}/carts"
+echo -e "\n**** Call /users/{id}/carts with a VALID user UUID"
 
 carts=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$userid2/carts"`
 
 echo -e "\n**** FOOD  CART DATA
 echo -e "\n $carts
+
+
+
+echo -e "\n**** Call /users/{id}/carts with a BAD user UUID"
+
+carts2=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$baduserid/carts"`
+
+echo -e "\n**** FOOD  CART DATA
+echo -e "\n $carts2
