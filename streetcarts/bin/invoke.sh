@@ -22,10 +22,10 @@ echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 echo  -e "\n**** Requesting access token. **** "
 
-accesstoken_response=`curl -s -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://docs-test.apigee.net/$proxy/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
+accesstoken_response=`curl -s -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
 
 
-echo -e "curl -H \"Authorization: Basic $auth\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://docs-test.apigee.net/$proxy/accesstoken\" -d \"grant_type=password&username=wwitman@apigee.com&password=apigee123\" \n"
+echo -e "curl -H \"Authorization: Basic $auth\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://$org-$env.$api_domain/$proxy/accesstoken\" -d \"grant_type=password&username=wwitman@apigee.com&password=apigee123\" \n"
 
 
 echo -e  "**** AccessToken Response: \n $accesstoken_response"
@@ -43,7 +43,7 @@ echo -e "\n**** Got Owner ID 2: $userid2"
 
 echo -e "\n**** Call /users/{id}/carts"
 
-carts=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://docs-test.apigee.net/$proxy/users/$userid2/carts"`
+carts=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$userid2/carts"`
 
 echo -e "\n**** FOOD  CART DATA
 echo -e "\n $carts
