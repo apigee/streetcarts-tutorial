@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <FaultRules/>
+    <Flows>
+        <Flow name="GetCartsByUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>ValidateToken</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/users/{id}/carts") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="AccessToken">
+            <Description/>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>ValidateUser</Name>
+                </Step>
+                <Step>
+                    <Condition>streetcarts.user.valid = true</Condition>
+                    <FaultRules/>
+                    <Name>GenerateToken</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <FaultRules/>
+                    <Name>SetResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/accesstoken") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="GetAllTrucks">
+            <Description>Gets all the carts.</Description>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>VerifyKey</Name>
+                </Step>
+                <Step>
+                    <FaultRules/>
+                    <Name>RemoveApiKey</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/carts") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="GetMenusForCart">
+            <Description>Gets the menus for a cart.</Description>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>VerifyKey</Name>
+                </Step>
+                <Step>
+                    <FaultRules/>
+                    <Name>RemoveApiKey</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/carts/{id}/menus") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response/>
+    </PreFlow>
+    <HTTPProxyConnection>
+        <BasePath>/streetcarts</BasePath>
+        <Properties/>
+        <VirtualHost>default</VirtualHost>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>

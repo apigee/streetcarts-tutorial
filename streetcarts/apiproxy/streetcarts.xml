@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="2" name="streetcarts">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1444315710078</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
+    <Description></Description>
+    <DisplayName>streetcarts</DisplayName>
+    <LastModifiedAt>1444324762598</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <Policies>
+        <Policy>GenerateToken</Policy>
+        <Policy>RemoveApiKey</Policy>
+        <Policy>SetResponse</Policy>
+        <Policy>ValidateToken</Policy>
+        <Policy>ValidateUser</Policy>
+        <Policy>VerifyKey</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>node://data-manager.js</Resource>
+        <Resource>node://node_modules_argo.zip</Resource>
+        <Resource>node://node_modules_express.zip</Resource>
+        <Resource>node://node_modules_usergrid.zip</Resource>
+        <Resource>node://package.json</Resource>
+        <Resource>node://server.js</Resource>
+        <Resource>jsc://validate.js</Resource>
+    </Resources>
+    <TargetServers/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+    <validate>false</validate>
+</APIProxy>

@@ -1,0 +1,14 @@
+{
+  "apiResources" : [ "/**" ],
+  "approvalType" : "auto",
+  "attributes" : [ ],
+  "description" : "An app for street cart owners",
+  "displayName" : "StreetCart Owner Product",
+  "environments" : [ "test", "prod" ],
+  "name" : "streetcarts-owner-product",
+  "proxies" : ["streetcarts"],
+  "quota" : "",
+  "quotaInterval" : "",
+  "quotaTimeUnit" : "",
+  "scopes" : [  ]
+}

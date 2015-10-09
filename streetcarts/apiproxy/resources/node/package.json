@@ -1,0 +1,10 @@
+ {
+    "name":"usergrid-node",
+    "version":"0.0.0",
+    "description":"Usergrid Proxy",
+    "main":"server-usergrid.js",
+    "dependencies": {
+        "express":"4.x.x",
+        "request":"x.x.x"    
+    }
+}
