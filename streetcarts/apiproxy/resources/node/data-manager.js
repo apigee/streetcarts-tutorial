@@ -18,9 +18,14 @@ module.exports = {
 			method: "GET"
 		};
 
-		return makeRequest(options, function(response)
+		return makeRequest(options, function(error, response)
 		{
-			callback(response);
+			if (error) {
+				callback(error, null);
+			}
+			else {
+				callback(null, response);				
+			}
 		});
 	},
 	getCartsOwnedByUser : function(userUUID, callback){
@@ -33,9 +38,14 @@ module.exports = {
 			method: "GET"
 		};
 
-		return makeRequest(options, function(response)
+		return makeRequest(options, function(error, response)
 		{
-			callback(response);
+			if (error) {
+				callback(error, null);
+			}
+			else {
+				callback(null, response);				
+			}
 		});
 	},
 	getMenusForCart : function(cartUUID, callback){
@@ -48,9 +58,14 @@ module.exports = {
 			method: "GET"
 		};
 
-		return makeRequest(options, function(response)
+		return makeRequest(options, function(error, response)
 		{
-			callback(response);
+			if (error) {
+				callback(error, null);
+			}
+			else {
+				callback(null, response);				
+			}
 		});
 	},
 	getItemsForMenu : function(menuUUID, callback){
@@ -63,15 +78,19 @@ module.exports = {
 			method: "GET"
 		};
 
-		return makeRequest(options, function(response)
+		return makeRequest(options, function(error, response)
 		{
-			callback(response);
+			if (error) {
+				callback(error, null);
+			}
+			else {
+				callback(null, response);				
+			}
 		});
 	},
 	getDetailsForItem : function(itemUUID, callback){
 
-		endpointPath = '/items/' + itemUUID;
-
+		endpointPath = "/items" + "?ql=select * where uuid = " + itemUUID;
 		var uri = host + appPath + endpointPath;
 
 		var options = {
@@ -79,17 +98,107 @@ module.exports = {
 			method: "GET"
 		};
 
-		return makeRequest(options, function(response)
+		return makeRequest(options, function(error, response)
 		{
-			callback(response);
+			if (error) {
+				callback(error, null);
+			}
+			else {
+				callback(null, response);				
+			}
+		});
+	},
+	registerUser : function(userData, callback){
+
+		console.log(userData);
+
+		endpointPath = '/users';
+
+		// Make sure the client sent a username.
+		if (!userData.username){
+			console.log('No username set!');
+
+			var errorObject = new Error();
+			errorObject.message = "No username set. A unique username is required.";
+			errorObject.statusCode = "";
+			errorObject.errorType = "";
+
+			callback(errorObject, null);
+		} 
+		// Make sure the client sent a password.
+		if (userData.username && !userData.password){			
+			console.log('No password set!');
+
+			var errorObject = new Error();
+			errorObject.message = "No password set.";
+			errorObject.statusCode = "";
+			errorObject.errorType = "";
+
+			callback(errorObject, null);
+		}
+		// Try to create the user account.
+		else if (userData.username && userData.password) {
+			var uri = host + appPath + endpointPath;
+			var options = {
+				uri: uri,
+				body: JSON.stringify(userData),
+				method: "POST"
+			};
+			console.log("Options: " + JSON.stringify(options));
+			return makeRequest(options, function(error, response)
+			{
+				if (error) {
+					console.log("Got an error.");
+					callback(error, null);
+				}
+				else {
+					console.log("Success.");
+					callback(null, response);				
+				}
+			});
+		}
+	},
+	authenticateUser : function(credentials, callback){
+
+		endpointPath = "/token";
+		var uri = host + appPath + endpointPath;
+
+		var options = {
+			uri: uri,
+			body: JSON.stringify(credentials),
+			method: "POST"
+		};
+		return makeRequest(options, function(error, response)
+		{
+			if (error) {
+				callback(error, null);
+			}
+			else {
+				callback(null, response);				
+			}
 		});
 	}
 };
 
 
-function makeRequest(options, callback) {
+function makeRequest(options, callback){
 
-	request(options, function(error, response, body) {
-		callback(body);
+	request(options, function(error, response, body){
+
+		if (response.statusCode != 200) {
+
+			var responseBody = JSON.parse(body);
+
+			var errorObject = new Error();
+			errorObject.message = responseBody.error_description;
+			errorObject.statusCode = response.statusCode;
+			errorObject.errorType = responseBody.error;
+
+			callback(errorObject, response);
+		}
+		else {
+			callback(null, body);
+		}
 	});
 }
+

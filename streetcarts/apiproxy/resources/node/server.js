@@ -6,28 +6,33 @@ var app = express();
 
 app.get('/carts', function (req, res) {
   console.log('/carts');
-  dataManager.getAllCarts('', function(data) {
+  dataManager.getAllCarts('', function(error, data) {
     var expand = req.query.expand;
-      
-    if (expand !== undefined && expand == 'true') {
+    
+    if (error){
+      res.send(error);
+    }
+    if (data){
+      if (expand !== undefined && expand == 'true') {
+        res.set('Content-Type', 'application/json');
+        res.send(data); 
+      } else {
+
+        var jsonData = JSON.parse(data);
+        var cartdata = {
+          cartinfo: []
+        };
+
+        for (var i = 0; i < jsonData.entities.length; i++) {
+          cartdata.cartinfo.push({
+             "name": jsonData.entities[i].name,
+             "uuid": jsonData.entities[i].uuid,
+             "city": jsonData.entities[i].location.city
+          });
+        }
       res.set('Content-Type', 'application/json');
-      res.send(data); 
-    } else {
-
-      var jsonData = JSON.parse(data);
-      var cartdata = {
-        cartinfo: []
-      };
-
-      for (var i = 0; i < jsonData.entities.length; i++) {
-        cartdata.cartinfo.push({
-           "name": jsonData.entities[i].name,
-           "uuid": jsonData.entities[i].uuid,
-           "city": jsonData.entities[i].location.city
-        });
+      res.send(JSON.stringify(cartdata));
       }
-    res.set('Content-Type', 'application/json');
-    res.send(JSON.stringify(cartdata));
     }
   });
 });
@@ -36,9 +41,14 @@ app.get('/carts', function (req, res) {
 app.get('/carts/:uuid/menus', function (req, res) {
   var uuid = req.params.uuid;
   console.log('/carts/' + uuid + '/menus');
-  dataManager.getMenusForCart(uuid, function(data) {
-    res.set('Content-Type', 'application/json');
-    res.send(data);
+  dataManager.getMenusForCart(uuid, function(error, data) {
+    if (error){
+      res.send(error);
+    }
+    if (data){
+      res.set('Content-Type', 'application/json');
+      res.send(data);      
+    }
   });
 });
 
@@ -49,9 +59,14 @@ app.get('/users/:uuid/carts', function (req, res) {
   //var uuid = "4ab08a6a-6d16-11e5-817d-a9b5da1cd192";
   var uuid = req.params.uuid;
   console.log('/users/' + uuid + '/carts');
-  dataManager.getCartsOwnedByUser(uuid, function(data) {
-    res.set('Content-Type', 'application/json');
-    res.send(data);
+  dataManager.getCartsOwnedByUser(uuid, function(error, data) {
+    if (error){
+      res.send(error);
+    }
+    if (data){
+      res.set('Content-Type', 'application/json');
+      res.send(data);
+    }
   });
 });
 
