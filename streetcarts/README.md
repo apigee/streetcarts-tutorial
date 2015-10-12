@@ -2,7 +2,7 @@
 
 ### Deploy, setup, use
 
-**Prerequisites**: Make sure you have apigeetool installed. See http://apigee.com/docs/api-services/content/deploying-standalone-nodejs-app.
+**Prerequisites**: Make sure you have `apigeetool` installed. See http://apigee.com/docs/api-services/content/deploying-standalone-nodejs-app.
 
 1. Clone the docs-sandbox .
 2. `cd` to `docs-sandbox/apps/streetcarts/bin`
