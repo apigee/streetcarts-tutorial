@@ -90,7 +90,7 @@ module.exports = {
 	},
 	getDetailsForItem : function(itemUUID, callback){
 
-		endpointPath = "/items" + "?ql=select * where uuid = " + itemUUID;
+		endpointPath = "/items/" + itemUUID;
 		var uri = host + appPath + endpointPath;
 
 		var options = {
