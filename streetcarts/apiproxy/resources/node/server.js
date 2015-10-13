@@ -2,6 +2,10 @@ var dataManager = require( './data-manager' );
 var express = require('express');
 var app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 // Free public APIs
 
 app.get('/carts', function (req, res) {
@@ -53,7 +57,7 @@ app.get('/carts/:uuid/menus', function (req, res) {
 });
 
 
-// APIs for registered cart owners.
+//*** APIs for registered cart owners.
 
 app.get('/users/:uuid/carts', function (req, res) {
   //var uuid = "4ab08a6a-6d16-11e5-817d-a9b5da1cd192";
@@ -69,6 +73,40 @@ app.get('/users/:uuid/carts', function (req, res) {
     }
   });
 });
+
+
+app.post('/users', function (req, res) {
+
+  var username = req.body.username;
+  var password = req.body.password;
+  var email, city;
+  if (req.body.email) {
+     email = req.body.email;
+  } else {
+    email = "Not Given";
+  }
+  if (req.body.city) {
+     city = req.body.city;
+  } else {
+    city = "Not Given";
+  }
+  
+  var userdata = {"username" : username, "password": password, "email": email, "city": city};
+
+
+  dataManager.registerUser(userdata, function(error, data) {
+    if (error){
+      res.send(error);
+    }
+    if (data){
+      res.set('Content-Type', 'application/json');
+      res.send(data);
+    }
+  });
+
+});
+
+
 
 
 
