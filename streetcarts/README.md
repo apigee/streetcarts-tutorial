@@ -43,11 +43,17 @@
 
        b. It forms/makes a curl call to our proxy to get an access token and user ID.
 
-       c. It forms/makes a curl call against our API. Currently, the only one 
-          I have in there is:
+       c. It forms/makes a curl call against our API. See Tests below for a list of tests in the file. 
 
-          `https://docs-test.apigee.net/streetcarts/users/{userid}/carts`
+     
+### Tests
 
-          which returns the carts owned by the user.
+These are tests currently in invoke.sh:
 
+echo -e "\n**** Call /users/{id}/carts with a VALID user UUID"
+
+echo -e "\n**** Call /users/{id}/carts with a BAD user UUID"
+
+echo -e "\n**** Create a new user"
+      
 
