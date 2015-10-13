@@ -14,6 +14,17 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/users/{id}/carts") and (request.verb = "GET")</Condition>
         </Flow>
+        <Flow name="RegisterUser">
+            <Description/>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>ValidateToken</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/users") and (request.verb = "POST")</Condition>
+        </Flow>
         <Flow name="AccessToken">
             <Description/>
             <Request>
