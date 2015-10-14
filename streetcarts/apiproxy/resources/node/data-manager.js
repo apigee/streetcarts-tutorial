@@ -120,6 +120,67 @@ module.exports = {
             }
         });
     },
+    addNewMenu: function (menuData, callback) {
+        var cartID = menuData.cartID;
+        
+        endpointPath = "/foodcarts/" + cartID + "/publishes/menus";
+        
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            body: JSON.stringify(menuData),
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, response);
+            }
+        });
+    },
+    addItemToMenu: function (args, callback) {
+
+        endpointPath = "/menus/" + args.menu_uuid + 
+            "/includes/items/" + args.item_uuid;
+        
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, response);
+            }
+        });
+    },
+    removeItemFromMenu: function (args, callback) {
+
+        endpointPath = "/menus/" + args.menu_uuid + 
+            "/includes/items/" + args.item_uuid;
+        
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, response);
+            }
+        });
+    },
     registerUser: function (userData, callback) {
         
         console.log(userData);

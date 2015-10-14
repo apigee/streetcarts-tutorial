@@ -92,6 +92,51 @@ app.post('/carts/:uuid/items', function (req, res) {
     });
 });
 
+app.post('/carts/:uuid/menus', function (req, res) {
+    var uuid = req.params.uuid;
+    var menuData = req.body;
+    dataManager.addNewMenu(menuData, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.post('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+    var args = {
+        "menu_uuid": req.params.menu_uuid,
+        "item_uuid": req.params.item_uuid
+    };
+    dataManager.addItemToMenu(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+    var args = {
+        "menu_uuid": req.params.menu_uuid,
+        "item_uuid": req.params.item_uuid
+    };
+    dataManager.removeItemFromMenu(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 
 app.post('/users', function (req, res) {
     
