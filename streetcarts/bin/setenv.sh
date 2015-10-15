@@ -4,9 +4,9 @@ echo -e "\n**** Setting up environment variables. ****"
 proxy="streetcarts"
 export proxy=$proxy
 
-org="docs"
+org="docfood"
 username="wwitman@apigee.com"
-url="https://api.enterprise.apigee.com"
+url="https://api.e2e.apigee.net"
 env="test"
 api_domain="apigee.net"
 
