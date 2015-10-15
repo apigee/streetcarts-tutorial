@@ -8,7 +8,7 @@ org="docfood"
 username="wwitman@apigee.com"
 url="https://api.e2e.apigee.net"
 env="test"
-api_domain="apigee.net"
+api_domain="e2e.apigee.net"
 
 ## Do not change the settings below
 ## --------------------------------------
