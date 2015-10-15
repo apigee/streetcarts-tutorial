@@ -22,7 +22,7 @@ echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 echo  -e "\n**** Requesting access token. **** "
 
-accesstoken_response=`curl -s -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
+accesstoken_response=`curl -s -k -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
 
 
 echo -e "curl -H \"Authorization: Basic $auth\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://$org-$env.$api_domain/$proxy/accesstoken\" -d \"grant_type=password&username=wwitman@apigee.com&password=apigee123\" \n"
@@ -44,7 +44,7 @@ baduserid="abc123"
 
 echo -e "\n**** Call /users/{id}/carts with a VALID user UUID"
 
-carts=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$userid2/carts"`
+carts=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$userid2/carts"`
 
 echo -e "\n**** FOOD  CART DATA"
 echo -e "\n $carts"
@@ -53,7 +53,7 @@ echo -e "\n $carts"
 
 echo -e "\n**** Call /users/{id}/carts with a BAD user UUID"
 
-carts2=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$baduserid/carts"`
+carts2=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$baduserid/carts"`
 
 echo -e "\n**** FOOD  CART DATA"
 echo -e "\n $carts2"
@@ -62,7 +62,7 @@ echo -e "\n $carts2"
 
 echo -e "\n**** Create a new user"
 
-user=`curl -s -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/users" -d "username=will4&password=abc"`
+user=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/users" -d "username=will4&password=abc"`
 
 echo -e "\n**** NEW USER DATA -- MANUALLY DELETE USER IN BAAS TO CLEAN UP"
 echo -e "\n $user"
