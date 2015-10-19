@@ -31,11 +31,11 @@ app.get('/carts', function (req, res) {
                     cartinfo:[]
                 };
                 
-                for (var i = 0; i < jsonData.entities.length; i++) {
+                for (var i = 0; i < jsonData.carts.length; i++) {
                     cartdata.cartinfo.push({
-                        "name": jsonData.entities[i].name,
-                        "uuid": jsonData.entities[i].uuid,
-                        "city": jsonData.entities[i].location.city
+                        "name": jsonData.carts[i].name,
+                        "uuid": jsonData.carts[i].uuid,
+                        "city": jsonData.carts[i].location.city
                     });
                 }
                 res.set('Content-Type', 'application/json');
@@ -105,7 +105,6 @@ app.get('/menus/:uuid/items', function (req, res) {
 //*** APIs for registered cart owners.
 
 app.get('/users/:uuid/carts', function (req, res) {
-    //var uuid = "4ab08a6a-6d16-11e5-817d-a9b5da1cd192";
     var uuid = req.params.uuid;
     console.log('/users/' + uuid + '/carts');
     dataManager.getCartsOwnedByUser(uuid, function (error, data) {
@@ -121,6 +120,7 @@ app.get('/users/:uuid/carts', function (req, res) {
 
 app.post('/carts/:uuid/items', function (req, res) {
     var uuid = req.params.uuid;
+    console.log('/carts/' + uuid + '/items');
     var itemData = req.body;
     dataManager.addNewItem(itemData, function (error, data) {
         if (error) {
@@ -135,6 +135,7 @@ app.post('/carts/:uuid/items', function (req, res) {
 
 app.post('/carts/:uuid/menus', function (req, res) {
     var uuid = req.params.uuid;
+    console.log('/carts/' + uuid + '/menus');
     var menuData = req.body;
     dataManager.addNewMenu(menuData, function (error, data) {
         if (error) {
@@ -154,6 +155,7 @@ app.post('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
         "menu_uuid": req.params.menu_uuid,
         "item_uuid": req.params.item_uuid
     };
+    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
     dataManager.addItemToMenu(args, function (error, data) {
         if (error) {
             res.send(error);
@@ -170,6 +172,7 @@ app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
         "menu_uuid": req.params.menu_uuid,
         "item_uuid": req.params.item_uuid
     };
+    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
     dataManager.removeItemFromMenu(args, function (error, data) {
         if (error) {
             res.send(error);
@@ -185,6 +188,7 @@ app.post('/users', function (req, res) {
     
     var username = req.body.username;
     var password = req.body.password;
+    console.log('/users' + req.body);
     var email, city;
     if (req.body.email) {
         email = req.body.email;
@@ -198,7 +202,10 @@ app.post('/users', function (req, res) {
     }
     
     var userdata = {
-        "username": username, "password": password, "email": email, "city": city
+        "username": username, 
+        "password": password, 
+        "email": email, 
+        "city": city
     };
     
     

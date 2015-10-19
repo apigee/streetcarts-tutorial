@@ -24,6 +24,8 @@ module.exports = {
             } else {
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(cartList){
+                    cartList.carts = cartList.entities;
+                    delete cartList.entities;
                     callback(null, JSON.stringify(cartList));
                 });
             }
@@ -45,8 +47,10 @@ module.exports = {
             } else {
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(cartList){
+                    cartList.carts = cartList.entities;
+                    delete cartList.entities;
                     callback(null, JSON.stringify(cartList));
-                })                
+                });                
             }
         });
     },
@@ -67,8 +71,10 @@ module.exports = {
                 console.log(response);
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(menuList){
+                    menuList.menus = menuList.entities;
+                    delete menuList.entities;
                     callback(null, JSON.stringify(menuList));
-                })                
+                });
             }
         });
     },
@@ -124,13 +130,15 @@ module.exports = {
             uri: uri,
             method: "GET"
         };
-        
+
         return makeRequest(options, function (error, response) {
             if (error) {
                 callback(error, null);
             } else {
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(itemList){
+                    itemList.items = itemList.entities;
+                    delete itemList.entities;
                     callback(null, JSON.stringify(itemList));
                 });
             }
@@ -158,7 +166,7 @@ module.exports = {
         });
     },
     addNewItem: function (itemData, callback) {
-        
+
         var cartID = itemData.cartID;
         
         endpointPath = "/foodcarts/" + cartID + "/offers/items";
@@ -293,7 +301,6 @@ module.exports = {
                 callback(error, null);
             } else {
                 console.log("Success.");
-//                callback(null, response);
                 var entity = JSON.parse(response)['entities'][0];
                 streamlineResponseEntity(entity, function(streamlinedResponse){
                     callback(null, JSON.stringify(streamlinedResponse));
@@ -315,7 +322,6 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-//                callback(null, response);
                 var entity = JSON.parse(response)['entities'][0];
                 streamlineResponseEntity(entity, function(streamlinedResponse){
                     callback(null, JSON.stringify(streamlinedResponse));
