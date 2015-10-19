@@ -60,6 +60,47 @@ app.get('/carts/:uuid/menus', function (req, res) {
     });
 });
 
+app.get('/items/:uuid', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/items/' + uuid);
+    dataManager.getDetailsForItem(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.get('/menus/:uuid', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/menus/' + uuid);
+    dataManager.getMenu(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.get('/menus/:uuid/items', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/menus/' + uuid + 'items');
+    dataManager.getItemsForMenu(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 
 //*** APIs for registered cart owners.
 
@@ -105,6 +146,8 @@ app.post('/carts/:uuid/menus', function (req, res) {
         }
     });
 });
+
+
 
 app.post('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     var args = {

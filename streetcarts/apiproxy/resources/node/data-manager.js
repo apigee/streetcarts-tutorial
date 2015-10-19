@@ -22,7 +22,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(cartList){
+                    callback(null, JSON.stringify(cartList));
+                });
             }
         });
     },
@@ -40,7 +43,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(cartList){
+                    callback(null, JSON.stringify(cartList));
+                })                
             }
         });
     },
@@ -58,7 +64,54 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                console.log(response);
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(menuList){
+                    callback(null, JSON.stringify(menuList));
+                })                
+            }
+        });
+    },
+    getMenu: function (menuUUID, callback) {
+
+        var menu;
+        
+        endpointPath = '/menus/' + menuUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(menuData){
+                    menu = menuData;
+                });
+            }
+        });
+
+        endpointPath = '/menus/' + menuUUID + '/includes';
+        uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(itemList) {
+                    menu['items'] = itemList.entities.slice();
+                    callback(null, JSON.stringify(menu));
+                });
             }
         });
     },
@@ -76,7 +129,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(itemList){
+                    callback(null, JSON.stringify(itemList));
+                });
             }
         });
     },
@@ -94,7 +150,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
@@ -116,7 +175,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
@@ -137,7 +199,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
@@ -157,7 +222,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
@@ -177,7 +245,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
@@ -209,7 +280,7 @@ module.exports = {
             
             callback(errorObject, null);
         }
-        // Try to create the user account. else if (userData.username && userData.password) {
+        // Try to create the user account.
         var uri = host + appPath + endpointPath;
         var options = {
             uri: uri,
@@ -222,7 +293,11 @@ module.exports = {
                 callback(error, null);
             } else {
                 console.log("Success.");
-                callback(null, response);
+//                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
@@ -240,7 +315,11 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                callback(null, response);
+//                callback(null, response);
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     }
@@ -269,4 +348,43 @@ function makeRequest(options, callback) {
             callback(null, body);
         }
     });
+}
+
+function streamlineResponseArray(entityArray, callback) {
+
+    var entityList = {
+        entities:[]
+    };
+    for (var i = 0; i < entityArray.length; i++){                
+        streamlineResponseEntity(entityArray[i], function(streamlinedResponse){
+            entityList.entities[i] = streamlinedResponse;
+        });
+    }
+    callback(entityList);
+}
+
+function streamlineResponseEntity(responseData, callback) {
+
+    var unwantedProperties = [
+        "action",
+        "application",
+        "params",
+        "path",
+        "uri",
+        "timestamp",
+        "duration",
+        "organization",
+        "applicationName",
+        "type",
+        "created",
+        "modified",
+        "metadata"
+    ];
+
+    var arrayLength = unwantedProperties.length;
+    for (var i = 0; i < arrayLength; i++) {
+        var property = unwantedProperties[i];
+        delete responseData[property];
+    }
+    callback(responseData);
 }
