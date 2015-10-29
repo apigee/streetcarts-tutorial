@@ -22,29 +22,38 @@ echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 echo  -e "\n**** Requesting access token. **** "
 
-accesstoken_response=`curl -s -k -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
+accesstoken_response=`curl -s -k -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$basepath/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
 
 
-echo -e "curl -H \"Authorization: Basic $auth\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://$org-$env.$api_domain/$proxy/accesstoken\" -d \"grant_type=password&username=wwitman@apigee.com&password=apigee123\" \n"
+echo -e "curl -H \"Authorization: Basic $auth\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://$org-$env.$api_domain/$basepath/accesstoken\" -d \"grant_type=password&username=wwitman@apigee.com&password=apigee123\" \n"
 
 
 echo -e  "**** AccessToken Response: \n $accesstoken_response"
 
-token1=`echo $accesstoken_response | awk -F ':' '{ print $2 }'`
+token1=`echo $accesstoken_response | awk -F ':' '{ print $15 }'`
 token2=`echo $token1 | awk -F "," '{print $1}'`
+temp="${token2%\"}"
+token2="${temp#\"}"
 echo -e "\n**** Got Access Token: $token2"
 
 
+token_response=`echo $accesstoken_response | awk -F ':' '{ print $10 }'`
+#userid=`echo $token_response | cut -d'}' -f 2`
+userid=`echo $token_response | awk -F "," '{print $1}'`
 
-userid1=`echo $accesstoken_response | awk -F ':' '{ print $3 }'`
-userid2=`echo $userid1 | cut -d'}' -f 1`
-echo -e "\n**** Got Owner ID 2: $userid2"
+temp="${userid%\"}"
+userid="${temp#\"}"
+
+echo -e "\n**** Got Owner ID: $userid"
 
 baduserid="abc123"
 
 echo -e "\n**** Call /users/{id}/carts with a VALID user UUID"
 
-carts=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$userid2/carts"`
+echo -e "curl -H \"Authorization: Bearer $token2\" -H \"Content-Type: application/x-www-form-urlencoded\" -X GET \"https://$org-$env.$api_domain/$basepath/$userid/carts\" \n"
+
+carts=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$basepath/users/$userid/carts"`
+
 
 echo -e "\n**** FOOD  CART DATA"
 echo -e "\n $carts"
@@ -53,7 +62,7 @@ echo -e "\n $carts"
 
 echo -e "\n**** Call /users/{id}/carts with a BAD user UUID"
 
-carts2=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$proxy/users/$baduserid/carts"`
+carts2=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$basepath/users/$baduserid/carts"`
 
 echo -e "\n**** FOOD  CART DATA"
 echo -e "\n $carts2"
@@ -62,7 +71,7 @@ echo -e "\n $carts2"
 
 echo -e "\n**** Create a new user"
 
-user=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$proxy/users" -d "username=will4&password=abc"`
+user=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$basepath/users" -d "username=will4&password=abc"`
 
 echo -e "\n**** NEW USER DATA -- MANUALLY DELETE USER IN BAAS TO CLEAN UP"
 echo -e "\n $user"
