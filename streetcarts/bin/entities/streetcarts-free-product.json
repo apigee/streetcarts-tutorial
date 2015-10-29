@@ -1,5 +1,5 @@
 {
-  "apiResources" : [ "/carts", "/carts/{uuid}/menus" ],
+  "apiResources" : [ "/carts", "/carts/{id}", "/POST/v1/streetcarts/users" ],
   "approvalType" : "auto",
   "attributes" : [ ],
   "description" : "The free version of the StreetCarts app",
