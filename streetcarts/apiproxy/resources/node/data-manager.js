@@ -354,6 +354,29 @@ module.exports = {
             }
         });
     },
+    getUserList: function (args, callback) {
+        
+        endpointPath = '/users';
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(userList){
+                    userList.users = userList.entities;
+                    delete userList.entities;
+                    callback(null, JSON.stringify(userList));
+                });
+            }
+        });
+    },
     getUser: function (userUUID, callback) {
         
         endpointPath = "/users/" + userUUID;

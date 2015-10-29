@@ -292,6 +292,37 @@ app.post('/users', function (req, res) {
     });
 });
 
+app.get('/users', function (req, res) {
+    dataManager.getUserList('', function (error, data) {
+        var expand = req.query.expand;
+        
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            if (expand !== undefined && expand == 'true') {
+                res.set('Content-Type', 'application/json');
+                res.send(data);
+            } else {
+                
+                var jsonData = JSON.parse(data);
+                var userdata = {
+                    userinfo:[]
+                };
+                
+                for (var i = 0; i < jsonData.users.length; i++) {
+                    userdata.userinfo.push({
+                        "username": jsonData.users[i].username,
+                        "uuid": jsonData.users[i].uuid,
+                        "email": jsonData.users[i].email
+                    });
+                }
+                res.set('Content-Type', 'application/json');
+                res.send(JSON.stringify(userdata));
+            }
+        }
+    });
+});
 
 
 
