@@ -1,0 +1,13 @@
+{
+ "name" : "streetcarts-admin-app",
+ "apiProducts": [ "streetcarts-admin-product"],
+ "keyExpiresIn" : "100000000000",
+ "scopes": [ ],   
+ "attributes" : [ 
+  {
+   "name" : "DisplayName",
+   "value" : "StreetCarts Admin App"
+  } 
+ ],
+ "callbackUrl" : ""
+}

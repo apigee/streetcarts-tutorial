@@ -1,0 +1,14 @@
+{
+  "apiResources" : ["/users", "/carts**", "/accesstoken" ],
+  "approvalType" : "auto",
+  "attributes" : [ ],
+  "description" : "An app for street cart admins",
+  "displayName" : "StreetCart Admin Product",
+  "environments" : [ "test", "prod" ],
+  "name" : "streetcarts-admin-product",
+  "proxies" : ["streetcarts"],
+  "quota" : "",
+  "quotaInterval" : "",
+  "quotaTimeUnit" : "",
+  "scopes" : [  ]
+}
