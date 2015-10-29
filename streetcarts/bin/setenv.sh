@@ -4,11 +4,20 @@ echo -e "\n**** Setting up environment variables. ****"
 proxy="streetcarts"
 export proxy=$proxy
 
-org="docfood"
 username="wwitman@apigee.com"
-url="https://api.e2e.apigee.net"
+
+### If deploying to e2e docfood
+#url="https://api.e2e.apigee.net"
+#org="docfood"
+#env="test"
+#api_domain="e2e.apigee.net"
+
+
+### If deploying to another place
+url="https://api.enterprise.apigee.com"
+org="docs"
 env="test"
-api_domain="e2e.apigee.net"
+api_domain="apigee.net"
 
 ## Do not change the settings below
 ## --------------------------------------
