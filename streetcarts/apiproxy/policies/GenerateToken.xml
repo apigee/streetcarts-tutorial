@@ -4,13 +4,12 @@
     <FaultRules/>
     <Properties/>
     <Attributes>
-        <Attribute display="true" name="USER_UUID" ref="streetcarts.user.id"></Attribute>
+        <Attribute display="true" name="USER_UUID" ref="streetcarts.user.id"/>
     </Attributes>
+    <ExpiresIn>-1</ExpiresIn>
     <ExternalAuthorization>false</ExternalAuthorization>
     <Operation>GenerateAccessToken</Operation>
-    <GenerateResponse enabled="false">
-        <Format>FORM_PARAM</Format>
-    </GenerateResponse>
+    <GenerateResponse enabled="true"/>
     <ReuseRefreshToken>false</ReuseRefreshToken>
     <SupportedGrantTypes>
         <GrantType>password</GrantType>
