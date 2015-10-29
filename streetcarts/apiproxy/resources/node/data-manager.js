@@ -1,14 +1,12 @@
 var request = require('request');
+var async = require('async');
 
 var host = 'https://api.usergrid.com';
 var appPath = '/docfood/foodcarttest';
 var endpointPath = '';
-var queryParams = '';
 var token = '';
-var path = '';
 
 module.exports = {
-    getAllCarts: function (args, callback) {
         
         endpointPath = '/foodcarts';
         var uri = host + appPath + endpointPath;
@@ -31,6 +29,7 @@ module.exports = {
             }
         });
     },
+        
     getCartsOwnedByUser: function (userUUID, callback) {
         
         endpointPath = '/users/' + userUUID + '/owns';
@@ -68,7 +67,6 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                console.log(response);
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(menuList){
                     menuList.menus = menuList.entities;
@@ -78,6 +76,8 @@ module.exports = {
             }
         });
     },
+        
+        
     getMenu: function (menuUUID, callback) {
 
         var menu;
