@@ -1,5 +1,5 @@
 {
-  "apiResources" : ["/users", "/carts**", "/accesstoken" ],
+  "apiResources" : ["/POST/v1/streetcarts/users", "/GET/v1/streetcarts/users", "/users/**", "/carts/**", "/accesstoken" ],
   "approvalType" : "auto",
   "attributes" : [ ],
   "description" : "An app for street cart admins",
