@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({
 
 app.get('/carts', function (req, res) {
     console.log('/carts');
-    dataManager.getAllCarts('', function (error, data) {
+    dataManager.getCartList('', function (error, data) {
         var expand = req.query.expand;
         
         if (error) {
@@ -45,6 +45,19 @@ app.get('/carts', function (req, res) {
     });
 });
 
+app.get('/carts/:uuid', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/carts/' + uuid);
+    dataManager.getCart(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 
 app.get('/carts/:uuid/menus', function (req, res) {
     var uuid = req.params.uuid;
@@ -70,6 +83,38 @@ app.get('/items/:uuid', function (req, res) {
         if (data) {
             res.set('Content-Type', 'application/json');
             res.send(data);
+        }
+    });
+});
+
+app.get('/menus', function (req, res) {
+    console.log('/menus');
+    dataManager.getMenuList('', function (error, data) {
+        var expand = req.query.expand;
+        
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            if (expand !== undefined && expand == 'true') {
+                res.set('Content-Type', 'application/json');
+                res.send(data);
+            } else {
+                var jsonData = JSON.parse(data);
+                var menudata = {
+                    menuinfo:[]
+                };
+                
+                for (var i = 0; i < jsonData.menus.length; i++) {
+                    menudata.menuinfo.push({
+                        "uuid": jsonData.menus[i].uuid,
+                        "menuName": jsonData.menus[i].menuName,
+                        "cartName": jsonData.menus[i].cartName
+                    });
+                }
+                res.set('Content-Type', 'application/json');
+                res.send(JSON.stringify(menudata));
+            }
         }
     });
 });
@@ -102,12 +147,41 @@ app.get('/menus/:uuid/items', function (req, res) {
     });
 });
 
+app.get('/users/:uuid', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/users/' + uuid);
+    dataManager.getUser(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+
 //*** APIs for registered cart owners.
 
 app.get('/users/:uuid/carts', function (req, res) {
     var uuid = req.params.uuid;
     console.log('/users/' + uuid + '/carts');
     dataManager.getCartsOwnedByUser(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.get('/carts/:uuid/items', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/users/' + uuid + '/carts');
+    dataManager.getItemsForCart(uuid, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -147,8 +221,6 @@ app.post('/carts/:uuid/menus', function (req, res) {
         }
     });
 });
-
-
 
 app.post('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     var args = {
@@ -220,6 +292,37 @@ app.post('/users', function (req, res) {
     });
 });
 
+app.get('/users', function (req, res) {
+    dataManager.getUserList('', function (error, data) {
+        var expand = req.query.expand;
+        
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            if (expand !== undefined && expand == 'true') {
+                res.set('Content-Type', 'application/json');
+                res.send(data);
+            } else {
+                
+                var jsonData = JSON.parse(data);
+                var userdata = {
+                    userinfo:[]
+                };
+                
+                for (var i = 0; i < jsonData.users.length; i++) {
+                    userdata.userinfo.push({
+                        "username": jsonData.users[i].username,
+                        "uuid": jsonData.users[i].uuid,
+                        "email": jsonData.users[i].email
+                    });
+                }
+                res.set('Content-Type', 'application/json');
+                res.send(JSON.stringify(userdata));
+            }
+        }
+    });
+});
 
 
 
