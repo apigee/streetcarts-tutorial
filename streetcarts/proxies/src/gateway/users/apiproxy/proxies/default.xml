@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
+            </Step>
+            <Step>
+                <Name>Spike-Arrest</Name>
+            </Step>
+            <Step>
+                <Name>Quota</Name>
+            </Step>
+            <Step>
+                <Name>ExtractUserID</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="Get User">
+            <Description>Get User</Description>
+            <Request>
+                <Step>
+                    <Name>Get-User-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Update User">
+            <Description>Update User</Description>
+            <Request>
+                <Step>
+                    <Name>Update-User-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
+        </Flow>
+        <Flow name="Delete User">
+            <Description>Delete User</Description>
+            <Request>
+                <Step>
+                    <Name>Delete-User</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
+        </Flow>
+        <Flow name="GetUsers">
+            <Description>Get Users</Description>
+            <Request>
+                <Step>
+                    <Name>Get-Users-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="GET"</Condition>
+        </Flow>
+        <Flow name="Post User">
+            <Description>Create a user</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Create-User-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="POST"</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/streetcarts/users</BasePath>
+        <VirtualHost>default</VirtualHost>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>

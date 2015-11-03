@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="Access-Token-Response">
+    <DisplayName>Access Token Response</DisplayName>
+    <Set>
+        <Payload contentType="text/plain">Created access token</Payload>
+        <StatusCode>201</StatusCode>
+        <ReasonPhrase>Success</ReasonPhrase>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="true" transport="http" type="response"/>
+</AssignMessage>

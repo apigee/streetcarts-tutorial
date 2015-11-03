@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="3" name="menus">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1446571213851</CreatedAt>
+    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <Description>menus</Description>
+    <DisplayName>menus</DisplayName>
+    <LastModifiedAt>1446571213851</LastModifiedAt>
+    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <Policies>
+        <Policy>Add-Menu-Item-to-Menu-Response</Policy>
+        <Policy>Assign-Message-1</Policy>
+        <Policy>Create-Menu-Response</Policy>
+        <Policy>Delete-Menu-Response</Policy>
+        <Policy>Get-Menu-Items-Response</Policy>
+        <Policy>Get-MenuID</Policy>
+        <Policy>Get-Menus-Response</Policy>
+        <Policy>Quota-1</Policy>
+        <Policy>Remove-API-Key</Policy>
+        <Policy>Remove-Item-from-Menu-Response</Policy>
+        <Policy>Spike-Arrest-1</Policy>
+        <Policy>Update-Menu-Response</Policy>
+        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
+        <Policy>Verify-API-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources/>
+    <TargetServers/>
+    <TargetEndpoints/>
+</APIProxy>

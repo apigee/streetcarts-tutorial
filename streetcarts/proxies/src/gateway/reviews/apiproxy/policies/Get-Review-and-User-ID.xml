@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="Get-Review-and-User-ID">
+    <DisplayName>Get Review and User ID</DisplayName>
+    <Source>request</Source>
+    <URIPath>
+        <Pattern ignoreCase="true">/{reviewID}</Pattern>
+        <Pattern ignoreCase="true">/users/{userID}</Pattern>
+    </URIPath>
+    <VariablePrefix>reviewRequest</VariablePrefix>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

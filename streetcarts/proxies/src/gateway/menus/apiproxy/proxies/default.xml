@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
+            </Step>
+            <Step>
+                <Name>Spike-Arrest-1</Name>
+            </Step>
+            <Step>
+                <Name>Quota-1</Name>
+            </Step>
+            <Step>
+                <Name>Get-MenuID</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="Add Meu Item to Menu">
+            <Description>Add Meu Item to Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Add-Menu-Item-to-Menu-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="Remove Item from Menu">
+            <Description>Remove Item from Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Remove-Item-from-Menu-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "DELETE")</Condition>
+        </Flow>
+        <Flow name="Get Menu Items">
+            <Description>Get Menu Items</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-Menu-Items-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*/items") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Get Menu">
+            <Description>Get Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Assign-Message-1</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Update Menu">
+            <Description>Update Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Update-Menu-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
+        </Flow>
+        <Flow name="Delete Menu">
+            <Description>Delete Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Delete-Menu-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
+        </Flow>
+        <Flow name="Get Menus">
+            <Description>Get Menus</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-Menus-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="GET"</Condition>
+        </Flow>
+        <Flow name="Create Menu">
+            <Description>Create Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Create-Menu-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="POST"</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/streetcarts/menus</BasePath>
+        <VirtualHost>default</VirtualHost>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="5" name="foodcarts">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1446571255941</CreatedAt>
+    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <Description>foodcarts</Description>
+    <DisplayName>foodcarts</DisplayName>
+    <LastModifiedAt>1446571255941</LastModifiedAt>
+    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <Policies>
+        <Policy>Create-FoodCart-Response</Policy>
+        <Policy>Delete-FoodCart-Response</Policy>
+        <Policy>Get-FoodCart-Items-Response</Policy>
+        <Policy>Get-FoodCart-Menus-Response</Policy>
+        <Policy>Get-FoodCart-Response</Policy>
+        <Policy>Get-FoodCarts</Policy>
+        <Policy>GetCartId</Policy>
+        <Policy>Quota</Policy>
+        <Policy>Remove-API-Key</Policy>
+        <Policy>Spike-Arrest</Policy>
+        <Policy>Update-FoodCart-Response</Policy>
+        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
+        <Policy>Verify-API-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources/>
+    <TargetServers/>
+    <TargetEndpoints/>
+</APIProxy>

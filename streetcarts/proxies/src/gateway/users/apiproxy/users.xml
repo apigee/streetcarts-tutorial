@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="2" name="users">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1446571320955</CreatedAt>
+    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <Description>users API</Description>
+    <DisplayName>users</DisplayName>
+    <LastModifiedAt>1446571320955</LastModifiedAt>
+    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <Policies>
+        <Policy>Create-User-Response</Policy>
+        <Policy>Delete-User</Policy>
+        <Policy>ExtractUserID</Policy>
+        <Policy>Get-User-Response</Policy>
+        <Policy>Get-Users-Response</Policy>
+        <Policy>Quota</Policy>
+        <Policy>Remove-API-Key</Policy>
+        <Policy>Spike-Arrest</Policy>
+        <Policy>Update-User-Response</Policy>
+        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
+        <Policy>Verify-API-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources/>
+    <TargetServers/>
+    <TargetEndpoints/>
+</APIProxy>

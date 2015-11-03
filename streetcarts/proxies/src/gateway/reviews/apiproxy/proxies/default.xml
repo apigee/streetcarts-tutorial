@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
+            </Step>
+            <Step>
+                <Name>Spike-Arrest</Name>
+            </Step>
+            <Step>
+                <Name>Quota</Name>
+            </Step>
+            <Step>
+                <Name>Get-Review-and-User-ID</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="Get User Review">
+            <Description>Get User Review</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-User-Review</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Add Review">
+            <Description>Add Review</Description>
+            <Request>
+                <Step>
+                    <Name>Add-Review-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="Update Review">
+            <Description>Update Review</Description>
+            <Request>
+                <Step>
+                    <Name>Update-User-Review</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "PUT")</Condition>
+        </Flow>
+        <Flow name="Delete Review">
+            <Description>Delete Review</Description>
+            <Request>
+                <Step>
+                    <Name>Deleted-user-Review</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "DELETE")</Condition>
+        </Flow>
+        <Flow name="Get Review">
+            <Description>Get Review</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-Review-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Get All Reviews for All Trucks">
+            <Description>Get All Reviews for All Trucks</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-All-Reviews-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="GET"</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/streetcarts/reviews</BasePath>
+        <VirtualHost>default</VirtualHost>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="4" name="items">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1446571288055</CreatedAt>
+    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <Description>items</Description>
+    <DisplayName>items</DisplayName>
+    <LastModifiedAt>1446571288055</LastModifiedAt>
+    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <Policies>
+        <Policy>Create-Item-Response</Policy>
+        <Policy>Delete-Item-Response</Policy>
+        <Policy>Get-Item-ID</Policy>
+        <Policy>Get-Items-Response</Policy>
+        <Policy>Got-Item-Response</Policy>
+        <Policy>Quota</Policy>
+        <Policy>Remove-API-Key</Policy>
+        <Policy>Spike-Arrest</Policy>
+        <Policy>Update-Item-Response</Policy>
+        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
+        <Policy>Verify-API-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources/>
+    <TargetServers/>
+    <TargetEndpoints/>
+</APIProxy>

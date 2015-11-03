@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="Get-Menu-Items-Response">
+    <DisplayName>Get Menu Items Response</DisplayName>
+    <Set>
+        <Payload contentType="text/plain">Get items for menuID = {menuRequest.menuID}</Payload>
+        <StatusCode>200</StatusCode>
+        <ReasonPhrase>Success</ReasonPhrase>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="true" transport="http" type="response"/>
+</AssignMessage>

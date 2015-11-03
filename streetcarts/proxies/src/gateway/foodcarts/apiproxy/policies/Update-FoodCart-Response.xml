@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="Update-FoodCart-Response">
+    <DisplayName>Update FoodCart Response</DisplayName>
+    <Set>
+        <Payload contentType="text/plain">Updated specific foodcart: cartID = {foodcartRequest.cartID}</Payload>
+        <StatusCode>200</StatusCode>
+        <ReasonPhrase>Success</ReasonPhrase>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="true" transport="http" type="response"/>
+</AssignMessage>

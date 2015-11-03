@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="Get-MenuID">
+    <DisplayName>Get MenuID and ItemID</DisplayName>
+    <Source>request</Source>
+    <URIPath>
+        <Pattern ignoreCase="true">/{menuID}</Pattern>
+        <Pattern ignoreCase="true">/{menuID}/items</Pattern>
+        <Pattern ignoreCase="true">/{menuID}/items/{itemID}</Pattern>
+    </URIPath>
+    <VariablePrefix>menuRequest</VariablePrefix>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description/>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
+            </Step>
+            <Step>
+                <Name>Spike-Arrest</Name>
+            </Step>
+            <Step>
+                <Name>Quota</Name>
+            </Step>
+            <Step>
+                <Name>GetCartId</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="Get FoodCart Items">
+            <Description>Get FoodCart Items</Description>
+            <Request>
+                <Step>
+                    <Name>Get-FoodCart-Items-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*/items") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Get FoodCart Menus">
+            <Description>Get FoodCart Menus</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-FoodCart-Menus-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*/menus") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Get FoodCart">
+            <Description>Get a FoodCart</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-FoodCart-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Update FoodCart">
+            <Description>Update FoodCart</Description>
+            <Request>
+                <Step>
+                    <Name>Update-FoodCart-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
+        </Flow>
+        <Flow name="Delete FoodCart">
+            <Description>Delete FoodCart</Description>
+            <Request>
+                <Step>
+                    <Name>Delete-FoodCart-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
+        </Flow>
+        <Flow name="Get FoodCarts">
+            <Description>Get FoodCarts</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Get-FoodCarts</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="GET"</Condition>
+        </Flow>
+        <Flow name="Create FoodCart">
+            <Description>Create FoodCart</Description>
+            <Request>
+                <Step>
+                    <Name>Create-FoodCart-Response</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>request.verb="POST"</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/streetcarts/foodcarts</BasePath>
+        <VirtualHost>default</VirtualHost>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>

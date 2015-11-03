@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="2" name="reviews">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1446571180078</CreatedAt>
+    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <Description>reviews</Description>
+    <DisplayName>reviews</DisplayName>
+    <LastModifiedAt>1446571180078</LastModifiedAt>
+    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <Policies>
+        <Policy>Add-Review-Response</Policy>
+        <Policy>Deleted-user-Review</Policy>
+        <Policy>Get-All-Reviews-Response</Policy>
+        <Policy>Get-Review-Response</Policy>
+        <Policy>Get-Review-and-User-ID</Policy>
+        <Policy>Get-User-Review</Policy>
+        <Policy>Quota</Policy>
+        <Policy>Remove-API-Key</Policy>
+        <Policy>Spike-Arrest</Policy>
+        <Policy>Update-User-Review</Policy>
+        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
+        <Policy>Verify-API-Key</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources/>
+    <TargetServers/>
+    <TargetEndpoints/>
+</APIProxy>

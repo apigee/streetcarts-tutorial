@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="Update-User-Review">
+    <DisplayName>Update User Review</DisplayName>
+    <Set>
+        <Payload contentType="text/plain">Updated user review: userID = {reviewRequest.userID}</Payload>
+        <StatusCode>200</StatusCode>
+        <ReasonPhrase>Success</ReasonPhrase>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="true" transport="http" type="response"/>
+</AssignMessage>

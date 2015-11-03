@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="GetCartId">
+    <DisplayName>GetCartId</DisplayName>
+    <Source>request</Source>
+    <URIPath>
+        <Pattern ignoreCase="true">/{cartID}</Pattern>
+        <Pattern ignoreCase="true">/{cartID}/items</Pattern>
+        <Pattern ignoreCase="true">/{cartID}/menus</Pattern>
+    </URIPath>
+    <VariablePrefix>foodcartRequest</VariablePrefix>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</ExtractVariables>
