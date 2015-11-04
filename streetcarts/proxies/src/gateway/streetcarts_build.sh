@@ -7,6 +7,11 @@ username=user@apigee.com
 password=your_password
 org=docfood
 
+cd ../../../../../
+git pull https://github.com/apigee/docs-sandbox
+cd apps/streetcarts/proxies/src/gateway
+
+
 # The -Doptions=clean undeploys and deletes the existing revision
 
 cd accesstoken
