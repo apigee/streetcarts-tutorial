@@ -6,9 +6,12 @@ We can auto-deploy the latest versions of our StreetCarts proxies using Maven. T
 
 1. Make sure you have Java 1.7 or later. Type ```java -version``` in the terminal to find out your version. Upgrade to the latest version of Java if needed.
 2. [Download and install Maven 3.x](http://maven.apache.org/download.cgi)
-   Add Maven to your ~/.bash_profile. For example: 
+   
+   Then add Maven to your ~/.bash_profile so that the ```mvn``` command is recognized. For example, in ~/.bash_profile, add: 
    
    ```export PATH=/Users/ApigeeCorporation/development/apache-maven-3.3.3/bin:$PATH```
+
+   pointing to wherever you've stashed Maven.
 
 ### Get the latest API proxy updates
 
