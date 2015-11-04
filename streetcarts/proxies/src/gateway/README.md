@@ -14,9 +14,11 @@ We can auto-deploy the latest versions of our StreetCarts proxies using Maven. T
    pointing to wherever you've stashed Maven.
 3. Make sure you have the ```git``` command-line tool installed. In a terminal window, run ```which git```. If no path is returned, you need to install it.
 
-### Get the latest API proxy updates
+### Git the latest API proxy updates
 
 The script does an automatic pull to get the latest from the repo. Your local changes should remain intact.
+
+If git prompts you for credentials, you can configure it to either use SSH or set up a credential keychain. For more info, see https://help.github.com/articles/caching-your-github-password-in-git/.
 
 ### Modify files for test deployment
 
