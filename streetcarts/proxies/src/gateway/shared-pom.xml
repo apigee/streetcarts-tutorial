@@ -99,7 +99,7 @@
             <id>test</id>
             <properties>
                 <org>docfood</org>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
-                <options>validate</options>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
+                <!--<options>update</options>--> <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
                 <apigee.profile>test</apigee.profile>
                 <apigee.env>test</apigee.env>
                 <apigee.hosturl>https://api.e2e.apigee.net</apigee.hosturl>
@@ -116,7 +116,7 @@
             <id>prod</id>
             <properties>
                 <org>docfood</org>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
-                <options>validate</options>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
+                <!--<options>update</options> --> <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
                 <apigee.profile>prod</apigee.profile>
                 <apigee.env>prod</apigee.env>
                 <apigee.hosturl>https://api.e2e.apigee.net</apigee.hosturl>
