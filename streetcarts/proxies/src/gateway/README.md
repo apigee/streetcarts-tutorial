@@ -18,7 +18,9 @@ We can auto-deploy the latest versions of our StreetCarts proxies using Maven. T
 
 The script does an automatic pull to get the latest from the repo. Your local changes should remain intact.
 
-If git prompts you for credentials, you can configure it to either use SSH or set up a credential keychain. For more info, see https://help.github.com/articles/caching-your-github-password-in-git/.
+If git prompts you for credentials, you can configure it to either use SSH or set up a credential keychain. For info and troubleshooting, see the following topics:
+- https://help.github.com/articles/caching-your-github-password-in-git/
+- http://olivierlacan.com/posts/why-is-git-https-not-working-on-github/
 
 ### Modify files for test deployment
 
