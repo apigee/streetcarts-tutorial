@@ -2,7 +2,7 @@
 
 We can auto-deploy the latest versions of our StreetCarts proxies using Maven. This setup is based on the Apigee Maven plugin: https://github.com/apigee/apigee-deploy-maven-plugin.
 
-### Download and install Maven
+### Download and install software
 
 1. Make sure you have Java 1.7 or later. Type ```java -version``` in the terminal to find out your version. Upgrade to the latest version of Java if needed.
 2. [Download and install Maven 3.x](http://maven.apache.org/download.cgi)
@@ -12,11 +12,11 @@ We can auto-deploy the latest versions of our StreetCarts proxies using Maven. T
    ```export PATH=/Users/ApigeeCorporation/development/apache-maven-3.3.3/bin:$PATH```
 
    pointing to wherever you've stashed Maven.
+3. Make sure you have the ```git``` command-line tool installed. In a terminal window, run ```which git```. If no path is returned, you need to install it.
 
 ### Get the latest API proxy updates
 
-To get the latest version of the API proxies, cd to this project's parent directory and do a ```git pull https://github.com/apigee/docs-sandbox```, or do a sync in your Git client.
-
+The script does an automatic pull to get the latest from the repo. Your local changes should remain intact.
 
 ### Modify files for test deployment
 
