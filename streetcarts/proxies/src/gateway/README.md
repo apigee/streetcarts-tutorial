@@ -21,7 +21,7 @@ To get the latest version of the API proxies, cd to this project's parent direct
 ### Modify files for test deployment
 
 1. Point the build to the correct org and server.
-   In /streetcarts/proxies/src/gateway/shared-pom.xml, scroll to the <profiles> section and modify the following in the ```test``` and ```prod``` groups:
+   In **/streetcarts/proxies/src/gateway/shared-pom.xml**, scroll to the ```<profiles>``` section and modify the following in the ```test``` and ```prod``` groups:
    - ```<org>``` - Change this to the org you want to deploy to.
    - ```<apigee.hosturl>``` - For the public cloud, change this to https://api.enterprise.apigee.com so that it's not pointing at e2e.
 
