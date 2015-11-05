@@ -1,5 +1,5 @@
 {
-  "apiResources" : ["/GET/v1/streetcarts/menus/"],
+  "apiResources" : ["/GET/v1/streetcarts/menus/", "/POST/v1/streetcarts/users/", "/"],
   "approvalType" : "auto",
   "attributes" : [ ],
   "description" : "The API Product for street cart public users",
