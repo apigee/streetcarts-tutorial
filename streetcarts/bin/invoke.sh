@@ -39,12 +39,12 @@ token="${temp#\"}"
 echo -e "\n**** Got Access Token: $token"
 
 
-echo -e "\n**** Create a new user"
+#echo -e "\n**** Create a new user"
 
-user=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$basepath/users" -d "username=will4&password=abc"`
+#user=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X POST "https://$org-$env.$api_domain/$basepath/users" -d "username=will4&password=abc"`
 
-echo -e "\n**** NEW USER DATA -- MANUALLY DELETE USER IN BAAS TO CLEAN UP"
-echo -e "\n $user"
+#echo -e "\n**** NEW USER DATA -- MANUALLY DELETE USER IN BAAS TO CLEAN UP"
+#echo -e "\n $user"
 
 
 
@@ -55,15 +55,5 @@ echo -e "\n $user"
 # Get updated menu Item
 
 
-
-echo -e "\n**** Call /users/{id}/carts with a VALID user UUID"
-
-echo -e "curl -H \"Authorization: Bearer $token2\" -H \"Content-Type: application/x-www-form-urlencoded\" -X GET \"https://$org-$env.$api_domain/$basepath/users/$userid/carts\" \n"
-
-carts=`curl -s -k -H "Authorization: Bearer $token2" -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$basepath/users/$userid/carts"`
-
-
-echo -e "\n**** FOOD  CART DATA"
-echo -e "\n $carts"
 
 
