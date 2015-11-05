@@ -4,12 +4,6 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>Verify-API-Key</Name>
-            </Step>
-            <Step>
-                <Name>Remove-API-Key</Name>
-            </Step>
-            <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
             <Step>
@@ -19,6 +13,22 @@
         <Response/>
     </PreFlow>
     <Flows>
+        <Flow name="AccessToken">
+            <Description/>
+            <Request>
+                <Step>
+                    <FaultRules/>
+                    <Name>ValidateUser</Name>
+                </Step>
+                <Step>
+                    <Condition>streetcarts.user.valid = true</Condition>
+                    <FaultRules/>
+                    <Name>GenerateToken</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/accesstoken") and (request.verb = "POST")</Condition>
+        </Flow>
         <Flow name="Generate Access Token">
             <Description>Generate Access Token</Description>
             <Request>
