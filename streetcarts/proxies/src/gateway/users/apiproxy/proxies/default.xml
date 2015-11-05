@@ -30,14 +30,15 @@
     </PreFlow>
     <Flows>
         <Flow name="Get User">
-            <Description>Get User</Description>
+            <Description>Get user info.</Description>
             <Request>
                 <Step>
-                    <Name>Get-User-Response</Name>
+                    <FaultRules/>
+                    <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{id}") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Update User">
             <Description>Update User</Description>
@@ -59,7 +60,7 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
         </Flow>
-        <Flow name="GetUsers">
+        <Flow name="Get Users">
             <Description>Get Users</Description>
             <Request>
                 <Step>
@@ -69,7 +70,7 @@
             <Response/>
             <Condition>request.verb="GET"</Condition>
         </Flow>
-        <Flow name="CreateUser">
+        <Flow name="Create User">
             <Description/>
             <Request>
                 <Step>
@@ -82,7 +83,7 @@
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/users") and (request.verb = "POST")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">
