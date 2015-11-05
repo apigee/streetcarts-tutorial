@@ -10,12 +10,8 @@
             </Step>
         </FaultRule>
     </FaultRules>
-
     <PreFlow name="PreFlow">
         <Request>
-            <Step>
-                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
-            </Step>
             <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
@@ -80,6 +76,10 @@
                 <Step>
                     <FaultRules/>
                     <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <FaultRules/>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
