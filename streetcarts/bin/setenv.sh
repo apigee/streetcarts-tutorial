@@ -3,6 +3,7 @@ echo -e "\n**** Setting up environment variables. ****"
 
 proxy="streetcarts"
 export proxy=$proxy
+
 basepath="v1/streetcarts"
 export basepath=$basepath
 
@@ -17,7 +18,7 @@ username="wwitman@apigee.com"
 
 ### If deploying to another place
 url="https://api.enterprise.apigee.com"
-org="docs"
+org="wwitman"
 env="test"
 api_domain="apigee.net"
 

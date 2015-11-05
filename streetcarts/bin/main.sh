@@ -9,12 +9,6 @@ if [ -z $password ]; then
    source ./verify.sh
 fi
 
-echo -e "\nDo you want to deploy the proxy? ([y]/n):"
-read deploy
-
-if [ -z $deploy ] || [ "$deploy" = "y" ]; then
-  source ./deploy.sh
-fi
 
 echo -e "\nDo you want to cleanup entities? ([y]/n):"
 read cleanup
