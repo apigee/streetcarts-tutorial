@@ -1,0 +1,14 @@
+{
+  "apiResources" : ["/GET/v1/streetcarts/menus/"],
+  "approvalType" : "auto",
+  "attributes" : [ ],
+  "description" : "The API Product for street cart public users",
+  "displayName" : "SC-PUBLIC-PRODUCT",
+  "environments" : [ "test", "prod" ],
+  "name" : "sc-public-product",
+  "proxies" : ["users", "reviews", "menus", "items", "foodcarts", "accesstoken"],
+  "quota" : "",
+  "quotaInterval" : "",
+  "quotaTimeUnit" : "",
+  "scopes" : [  ]
+}

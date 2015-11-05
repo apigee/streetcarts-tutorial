@@ -1,0 +1,13 @@
+{
+ "name" : "sc-owner-app",
+ "apiProducts": [ "sc-owner-product"],
+ "keyExpiresIn" : "100000000000",
+ "scopes": [ ],   
+ "attributes" : [ 
+  {
+   "name" : "DisplayName",
+   "value" : "SC-OWNER-APP"
+  } 
+ ],
+ "callbackUrl" : "http://streetcarts.com"
+}
