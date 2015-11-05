@@ -10,7 +10,7 @@
             </Step>
         </FaultRule>
     </FaultRules>
-    
+
     <PreFlow name="PreFlow">
         <Request>
             <Step>
@@ -78,7 +78,7 @@
                 </Step>
                 <Step>
                     <FaultRules/>
-                    <Name>VerifyKey</Name>
+                    <Name>Verify-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
