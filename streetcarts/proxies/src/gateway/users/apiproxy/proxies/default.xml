@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ProxyEndpoint name="default">
     <Description/>
+    <FaultRules>
+        <FaultRule name="invalid_key_rule">
+            <Condition>(fault.name = "InvalidApiKey")</Condition>
+            <Step>
+                <FaultRules/>
+                <Name>ApiKeyFaultMessage</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    
     <PreFlow name="PreFlow">
         <Request>
             <Step>
@@ -59,21 +69,20 @@
             <Response/>
             <Condition>request.verb="GET"</Condition>
         </Flow>
-        <Flow name="Post User">
-            <Description>Create a user</Description>
+        <Flow name="CreateUser">
+            <Description/>
             <Request>
                 <Step>
-                    <Name>Verify-API-Key</Name>
+                    <FaultRules/>
+                    <Name>SetRestrictedResourcePost</Name>
                 </Step>
                 <Step>
-                    <Name>Remove-API-Key</Name>
-                </Step>
-                <Step>
-                    <Name>Create-User-Response</Name>
+                    <FaultRules/>
+                    <Name>VerifyKey</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>request.verb="POST"</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/users") and (request.verb = "POST")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">
