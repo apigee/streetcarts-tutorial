@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OAuthV2 async="false" continueOnError="false" enabled="true" name="GenerateToken">
+    <DisplayName>GenerateToken</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <Attributes>
+        <Attribute display="true" name="USER_UUID" ref="streetcarts.user.id"/>
+    </Attributes>
+    <ExpiresIn>-1</ExpiresIn>
+    <ExternalAuthorization>false</ExternalAuthorization>
+    <Operation>GenerateAccessToken</Operation>
+    <GenerateResponse enabled="true"/>
+    <ReuseRefreshToken>false</ReuseRefreshToken>
+    <SupportedGrantTypes>
+        <GrantType>password</GrantType>
+    </SupportedGrantTypes>
+    <Tokens/>
+</OAuthV2>
