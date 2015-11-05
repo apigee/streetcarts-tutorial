@@ -1,5 +1,5 @@
 {
-  "apiResources" : ["/PUT/v1/streetcarts/menus/*", "/POST/v1/streetcarts/menus/*", "/DELETE/v1/streetcarts/menus/*"],
+  "apiResources" : ["/POST/v1/streetcarts/users", "/PUT/v1/streetcarts/menus/*", "/POST/v1/streetcarts/menus/*", "/DELETE/v1/streetcarts/menus/*"],
   "approvalType" : "auto",
   "attributes" : [ ],
   "description" : "The API Product for street cart owners",
