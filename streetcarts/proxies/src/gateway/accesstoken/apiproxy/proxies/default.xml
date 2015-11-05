@@ -29,16 +29,6 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
         </Flow>
-        <Flow name="Generate Access Token">
-            <Description>Generate Access Token</Description>
-            <Request>
-                <Step>
-                    <Name>Access-Token-Response</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>request.verb="POST"</Condition>
-        </Flow>
     </Flows>
     <PostFlow name="PostFlow">
         <Request/>
