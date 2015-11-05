@@ -3,9 +3,11 @@
 
 # Change the following as appropriate
 
-username=user@apigee.com
-password=your_password
-org=docfood
+stty_orig=`stty -g` # save original terminal setting.
+read -p "Apigee email: " username
+read -sp "Password: " password
+
+org=wwitman
 
 cd ../../../../../
 git pull https://github.com/apigee/docs-sandbox
@@ -39,6 +41,12 @@ rm -r target
 cd ..
 
 cd reviews
+# mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Doptions=clean
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org
+rm -r target
+cd ..
+
+cd data-manager
 # mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Doptions=clean
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org
 rm -r target
