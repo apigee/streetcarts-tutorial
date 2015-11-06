@@ -2,7 +2,7 @@ var request = require('request');
 var async = require('async');
 
 var host = 'https://api.usergrid.com';
-var appPath = '/docfood/foodcarttest';
+var appPath = '/steventraut/foodcart1';
 var endpointPath = '';
 var token = '';
 
@@ -505,6 +505,29 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    deleteUser: function (userUUID, callback) {
+        
+        endpointPath = "/users/" + userUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                error.message = "That user ID is not in the system.";
+                callback(error, null);
+            } else {
+                console.log(response);
                 var entity = JSON.parse(response)['entities'][0];
                 streamlineResponseEntity(entity, function(streamlinedResponse){
                     callback(null, JSON.stringify(streamlinedResponse));

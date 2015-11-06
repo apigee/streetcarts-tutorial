@@ -1,5 +1,6 @@
 var dataManager = require('./data-manager');
 var express = require('express');
+var cors = require('cors');
 var app = express();
 
 var bodyParser = require('body-parser');
@@ -360,7 +361,19 @@ app.get('/users', function (req, res) {
 });
 
 
-
+app.delete('/users/:uuid', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/users/' + uuid);
+    dataManager.deleteUser(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 
 
 var server = app.listen(3000, function () {
