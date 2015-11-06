@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(cors());
 // support encoded bodies
 
 // Free public APIs
@@ -135,8 +136,22 @@ app.get('/menus/:uuid', function (req, res) {
 
 app.get('/menus/:uuid/items', function (req, res) {
     var uuid = req.params.uuid;
-    console.log('/menus/' + uuid + 'items');
+    console.log('/menus/' + uuid + '/items');
     dataManager.getItemsForMenu(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.get('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+    var item_uuid = req.params.item_uuid;
+    console.log('/items/' + item_uuid);
+    dataManager.getDetailsForItem(item_uuid, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -238,6 +253,26 @@ app.post('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
         }
     });
 });
+
+app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+    var args = {
+        "item_uuid": req.params.item_uuid,
+        "menu_uuid": req.params.menu_uuid,
+        "new_values": req.body
+    };
+    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
+    console.log(req.body);
+    dataManager.updateDetailsForItem(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
 
 app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     var args = {

@@ -260,6 +260,51 @@ module.exports = {
             }
         });
     },
+    updateDetailsForItem: function (args, callback) {
+        
+        endpointPath = "/menus/" + args.menu_uuid + "/includes/items/" +
+            args.item_uuid;
+
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        var entity;
+        
+        makeRequest(options, function (error, response) {
+            if (error) {
+                console.log("error: " + JSON.stringify(error));
+                error.message = "That item appears not to be in this menu.";
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                console.log(entity);
+
+                options = {
+                    uri: uri,
+                    body: JSON.stringify(args.new_values),
+                    method: "PUT"
+                };
+        
+                return makeRequest(options, function (error, response) {
+                    if (error) {
+                        console.log(JSON.stringify(error));
+                        callback(error, null);
+                    } else {
+                        var entity = JSON.parse(response)['entities'][0];
+                        console.log(entity);
+                        streamlineResponseEntity(entity, function(streamlinedResponse){
+                            callback(null, JSON.stringify(streamlinedResponse));
+                        });
+                    }
+                });
+            }
+        });
+
+    },    
     addNewItem: function (itemData, callback) {
 
         var cartID = itemData.cartID;        
