@@ -8,6 +8,8 @@ if [ -z $password ]; then
    source ./verify.sh
 fi
 
+price="300"
+
 
 echo -e "\n**** Getting PUBLIC app profile ****"
 
@@ -143,9 +145,9 @@ menuid="4f93347a-6c57-11e5-9e1e-bba7b255b4ca"
 
 echo -e "\n**** GET ITEMS IN MENU"
 
-echo -e "curl -s -k \"Content-Type: application/x-www-form-urlencoded\" -X GET \"https://$org-$env.$api_domain/$basepath/menus/$menuid/items?apikey=$pub_key\""
+echo -e "curl -s -k \"Content-Type: application/x-www-form-urlencoded\" -X GET \"https://$org-$env.$api_domain/$basepath/menus/$menuid?apikey=$pub_key\""
 
-items=`curl -s -k -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$basepath/menus/$menuid/items?apikey=$pub_key"`
+items=`curl -s -k -H "Content-Type: application/x-www-form-urlencoded" -X GET "https://$org-$env.$api_domain/$basepath/menus/$menuid?apikey=$pub_key"`
 
 echo -e "\n    **** THE ITEMS: "
 echo -e "\n    $items"
@@ -175,18 +177,11 @@ echo -e "\n**** UPDATE MENU ITEM"
 echo -e "curl -s -k -H \"Authorization: Bearer $token2\"  \"Content-Type: application/x-www-form-urlencoded\" -X PUT \"http://$org-$env.$api_domain/$basepath/menus/$menuid/items/$itemid\" -d \"price=100\""
 
 cartid="6766b55a-6b9d-11e5-9621-25cf35c25a04"
-new_item=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: application/x-www-form-urlencoded" -X PUT "http://$org-$env.$api_domain/$basepath/menus/$menuid/items/$itemid" -d "price=100"`
+new_item=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: application/x-www-form-urlencoded" -X PUT "http://$org-$env.$api_domain/$basepath/menus/$menuid/items/$itemid" -d "price=$price"`
 
 echo -e "\n    **** UPDATED ITEM: "
 echo -e "\n    $new_item"
 
-
-
-# Get a menu Item
-
-# Put a menu Item
-
-# Get updated menu Item
 
 
 
