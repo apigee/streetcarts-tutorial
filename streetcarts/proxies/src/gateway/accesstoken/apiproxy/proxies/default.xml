@@ -13,9 +13,15 @@
         <Response/>
     </PreFlow>
     <Flows>
-        <Flow name="AccessToken">
+        <Flow name="Generate Access Token">
             <Description/>
             <Request>
+                <Step>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
                 <Step>
                     <FaultRules/>
                     <Name>ValidateUser</Name>

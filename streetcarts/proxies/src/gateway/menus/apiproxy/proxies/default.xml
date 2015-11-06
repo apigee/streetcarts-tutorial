@@ -4,9 +4,6 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
-            </Step>
-            <Step>
                 <Name>Spike-Arrest-1</Name>
             </Step>
             <Step>
@@ -48,9 +45,6 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Get-Menu-Items-Response</Name>
-                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*/items") and (request.verb = "GET")</Condition>
@@ -71,11 +65,14 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
         </Flow>
-        <Flow name="Update Menu">
-            <Description>Update Menu</Description>
+        <Flow name="Update Menu Item">
+            <Description>Update Menu Item</Description>
             <Request>
                 <Step>
-                    <Name>Update-Menu-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>
@@ -127,5 +124,7 @@
         <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
-    <RouteRule name="noroute"/>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
 </ProxyEndpoint>

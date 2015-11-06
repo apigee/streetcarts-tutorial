@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z $org ]; then
-   source ./setenv.sh
+   source ./setenv.sh 
 fi
 if [ -z $password ]; then
    source ./pw.sh
@@ -37,6 +37,18 @@ token=`echo $tr | awk -F "," '{print $1}'`
 temp="${token%\"}"
 token="${temp#\"}"
 echo -e "\n**** Got Access Token: $token"
+
+
+echo -e "**** Getting OWNER UUID"
+
+token_response=`echo $accesstoken_response | awk -F ':' '{ print $10 }'`
+#userid=`echo $token_response | cut -d'}' -f 2`
+userid=`echo $token_response | awk -F "," '{print $1}'`
+
+temp="${userid%\"}"
+userid="${temp#\"}"
+
+echo -e "\n**** Got OWNER UUID: $userid"
 
 
 #echo -e "\n**** Create a new user"

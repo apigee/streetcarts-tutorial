@@ -29,6 +29,9 @@
             <Description>Get user info.</Description>
             <Request>
                 <Step>
+                    <Name>SetRestrictedResourcePost</Name>
+                </Step>
+                <Step>
                     <FaultRules/>
                     <Name>ValidateToken</Name>
                 </Step>

@@ -4,9 +4,6 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
-            </Step>
-            <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
             <Step>
@@ -49,13 +46,10 @@
             <Description>Get a FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Verify-API-Key</Name>
+                    <Name>SetRestrictedResourcePost</Name>
                 </Step>
                 <Step>
-                    <Name>Remove-API-Key</Name>
-                </Step>
-                <Step>
-                    <Name>Get-FoodCart-Response</Name>
+                    <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>
@@ -90,9 +84,6 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Get-FoodCarts</Name>
-                </Step>
             </Request>
             <Response/>
             <Condition>request.verb="GET"</Condition>
@@ -117,5 +108,7 @@
         <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
-    <RouteRule name="noroute"/>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
 </ProxyEndpoint>
