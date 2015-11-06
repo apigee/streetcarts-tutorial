@@ -150,9 +150,11 @@ app.get('/menus/:uuid/items', function (req, res) {
 });
 
 app.get('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
-    var item_uuid = req.params.item_uuid;
-    console.log('/items/' + item_uuid);
-    dataManager.getDetailsForItem(item_uuid, function (error, data) {
+    var args = {
+        "item_uuid": req.params.item_uuid,
+        "menu_uuid": req.params.menu_uuid
+    };
+    dataManager.getDetailsForItemInMenu(args, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -359,7 +361,6 @@ app.get('/users', function (req, res) {
         }
     });
 });
-
 
 app.delete('/users/:uuid', function (req, res) {
     var uuid = req.params.uuid;

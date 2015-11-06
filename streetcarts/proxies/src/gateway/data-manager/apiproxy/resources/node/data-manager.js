@@ -2,7 +2,7 @@ var request = require('request');
 var async = require('async');
 
 var host = 'https://api.usergrid.com';
-var appPath = '/steventraut/foodcart1';
+var appPath = '/docfood/foodcarttest';
 var endpointPath = '';
 var token = '';
 
@@ -251,6 +251,33 @@ module.exports = {
         
         return makeRequest(options, function (error, response) {
             if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    getDetailsForItemInMenu: function (args, callback) {
+        
+        endpointPath = "/menus/" + args.menu_uuid + "/includes/items/" +
+            args.item_uuid;
+
+        var uri = host + appPath + endpointPath;
+        
+        console.log(uri);
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        makeRequest(options, function (error, response) {
+            if (error) {
+                console.log(error);
+                error.message = "That item appears not to be in this menu.";
                 callback(error, null);
             } else {
                 var entity = JSON.parse(response)['entities'][0];
