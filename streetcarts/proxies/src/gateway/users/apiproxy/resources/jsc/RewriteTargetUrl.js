@@ -1,11 +1,9 @@
  var target = context.getVariable("target.url");
  var suffix = context.getVariable("proxy.pathsuffix");
- print(suffix);
+
+ print("target.url: " + target)
+ print("proxy.pathsuffix: " + suffix);
  
- var newTarget = target+"/users";
- context.setVariable("target.url", newTarget);
- 
- if (suffix !== "") {
-     newTarget = newTarget + suffix;
-     context.setVariable("target.url", newTarget);
- }
+ var targetRewrite = target + "/users" + suffix;
+ print("target.rewrite: " + targetRewrite);
+ context.setVariable("target.url", targetRewrite);
