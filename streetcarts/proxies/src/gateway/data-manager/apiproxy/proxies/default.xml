@@ -4,7 +4,7 @@
     <FaultRules/>
     <Flows/>
     <HTTPProxyConnection>
-        <BasePath>/v1/streetcarts/data-manager</BasePath>
+        <BasePath>/</BasePath>
         <Properties/>
         <VirtualHost>default</VirtualHost>
     </HTTPProxyConnection>
