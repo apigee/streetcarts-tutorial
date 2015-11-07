@@ -47,8 +47,7 @@ rm -r target
 cd ..
 
 cd data-manager
-# mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Doptions=clean
-mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Doptions=clean
 rm -r target
 cd ..
 
