@@ -356,8 +356,10 @@ module.exports = {
             }
         });
     },
-    addNewMenu: function (menuData, callback) {
-        var cartID = menuData.cartID;
+    addNewMenu: function (args, callback) {
+        var cartID = args.cart_uuid;
+        var menuData = args.new_values;
+        menuData.cartID = cartID;
         
         endpointPath = "/foodcarts/" + cartID + "/publishes/menus";
         

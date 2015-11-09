@@ -227,9 +227,13 @@ app.post('/carts/:uuid/items', function (req, res) {
 
 app.post('/carts/:uuid/menus', function (req, res) {
     var uuid = req.params.uuid;
+    var args = {
+        "cart_uuid": uuid,
+        "new_values": req.body
+    };
     console.log('/carts/' + uuid + '/menus');
-    var menuData = req.body;
-    dataManager.addNewMenu(menuData, function (error, data) {
+
+    dataManager.addNewMenu(args, function (error, data) {
         if (error) {
             res.send(error);
         }
