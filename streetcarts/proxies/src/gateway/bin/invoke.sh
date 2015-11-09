@@ -8,7 +8,7 @@ if [ -z $password ]; then
    source ./verify.sh
 fi
 
-price="300"
+price="500"
 
 
 echo -e "\n**** Getting PUBLIC app profile ****"
@@ -181,6 +181,21 @@ new_item=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: appli
 
 echo -e "\n    **** UPDATED ITEM: "
 echo -e "\n    $new_item"
+
+
+# Create a new menu
+
+echo -e "\n**** CREATE NEW MENU"
+
+echo -e "curl -s -k -H \"Authorization: Bearer $token2\"  \"Content-Type: application/x-www-form-urlencoded\" -X POST \"http://$org-$env.$api_domain/$basepath/foodcarts/$cartid/menus\" -d \"menuName=Famous Texas Hot Weiner\""
+
+#new_menu=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: application/json" -X POST "http://$org-$env.$api_domain/$basepath/foodcarts/$cartid/menus" -d "{'menuName':'Famous Texas Hot Weiner'}"`
+new_menu=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: application/x-www-form-urlencoded" -X POST "http://$org-$env.$api_domain/$basepath/foodcarts/$cartid/menus" -d "menuName=Famous Texas Hot Weiner"`
+
+echo -e "\n    **** New Menu: "
+echo -e "\n    $new_menu"
+
+
 
 
 
