@@ -64,7 +64,8 @@ There are a lot of API paths to implement in StreetCarts. For example, there has
 4. In the Edge UI, open the proxy you need to work in. For example, the menus proxy has most (but not all) of the menu-related APIs. 
 5. Find the API that you want implement -- most of the APIs were stubbed in, so you should be able to find what you need.
 6. Think about if the API needs an OAuth token or if just an API key will do. Most of the APIs that let you edit things require a token. The public APIs just need a key.
-7. Edit the Flow as shown below. You have to add SetRestrictedResource and ValidateToken first. Then, be sure the Condition property is set up correctly. The Condition below is set up to match paths like /menus/{menuid}. Remember that all the proxies contain the proxy name in the basepath, so you don't have to add that to the Condition. 
+7. Edit the Flow as shown below. You have to add SetRestrictedResource and ValidateToken first. Every proxy also needs to have the RewriteTargetUrl proxy attached to the Target Endpoint Preflow. This policy must execute before the target is called. It sets `target.url` with the proper path expected by the backend server.
+8. Then, be sure the Condition property is set up correctly. The Condition below is set up to match paths like /menus/{menuid}. Remember that all the proxies contain the proxy name in the basepath, so you don't have to add that to the Condition. 
 
      ```
           <Flow name="Update Menu Item">
