@@ -1,0 +1,29 @@
+{
+  "apiResources": [
+    "/authorize"
+  ],
+  "approvalType": "auto",
+  "attributes": [
+    {
+      "name": "access",
+      "value": "public"
+    }
+  ],
+  "createdAt": 1447123692037,
+  "createdBy": "wwitman@apigee.com",
+  "description": "",
+  "displayName": "SC-DATA-MANAGER-AUTH",
+  "environments": [
+    "test",
+    "prod"
+  ],
+  "lastModifiedAt": 1447123692037,
+  "lastModifiedBy": "wwitman@apigee.com",
+  "name": "SC-DATA-MANAGER-AUTH",
+  "proxies": [
+    "data-manager"
+  ],
+  "scopes": [
+    ""
+  ]
+}
