@@ -195,6 +195,20 @@ new_menu=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: appli
 echo -e "\n    **** New Menu: "
 echo -e "\n    $new_menu"
 
+# Add item to menu 
+itemid='bdb8630a-6c41-11e5-9cca-0754ad997d2c'
+menuid='f9be6ed4-8718-11e5-94b4-652ae5977f7d'
+
+echo -e "\n**** ADD ITEM TO A MENU"
+
+echo -e "curl -s -k -H \"Authorization: Bearer $token2\"  \"Content-Type: application/json\" -X POST \"http://$org-$env.$api_domain/$basepath/menus/$menuid/items/$itemid\""
+
+#new_menu=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: application/json" -X POST "http://$org-$env.$api_domain/$basepath/foodcarts/$cartid/menus" -d "{'menuName':'Famous Texas Hot Weiner'}"`
+new_menu=`curl -s -k -H "Authorization: Bearer $token2"  -H "Content-Type: application/json" -X POST "http://$org-$env.$api_domain/$basepath/menus/$menuid/items/$itemid"`
+
+echo -e "\n    **** New Menu: "
+echo -e "\n    $new_menu"
+
 
 
 
