@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ProxyEndpoint name="default">
-    <Description></Description>
+    <Description/>
     <FaultRules/>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>ValidateToken</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
     <Flows/>
     <HTTPProxyConnection>
         <BasePath>/v1/streetcarts/data-manager</BasePath>
