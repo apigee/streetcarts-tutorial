@@ -10,6 +10,7 @@
     "/GET/v1/streetcarts/users/",
     "/POST/v1/streetcarts/users",
     "/PUT/v1/streetcarts/menus/",
+    "/POST/v1/streetcarts/menus/*/items/*",
     "/DELETE/v1/streetcarts/menus/",
     "/GET/v1/streetcarts/users/*"
   ],
