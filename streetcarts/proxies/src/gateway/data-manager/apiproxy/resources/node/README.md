@@ -1,18 +1,6 @@
-Before running maven to deploy this proxy:
+Before running Maven to deploy the data-manager proxy, remove the `node_modules` directory. 
 
-    1. cd to this folder
-    2. run npm install
+After running maven to deploy this proxy, call [this Edge API](http://apigee.com/docs/management/apis/post/organizations/%7Borg_name%7D/apis/%7Bapi_name%7D/revisions/%7Brevision_num%7D/npm-0) to run npm install on Edge. This is the API called "Manage Node Packaged Modules" under the SmartDocs->API Proxies menu. 
 
-This will ensure all the node dependencies are uploaded. Need
-to find an alternative way of doing this, but it works for now. 
+Be sure to secify the correct revision for your deployed instance of data-manager.
 
--OR-
-
-
-Run Maven without the node_modules directory.
-For example: do rm -rf node_modules first. 
-
-Then call this Edge API to run npm install on Edge. 
-
-
-https://api.enterprise.apigee.com/v1/organizations/wwitman/apis/data-manager/revisions/1/npm
