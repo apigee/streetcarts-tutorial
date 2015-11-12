@@ -14,7 +14,7 @@ The `invoke.sh` script makes a bunch of API calls to streetcarts. Please try to 
 #### Set up and provision
 
 1. Clone the docs-sandbox .
-2. `cd` to `docs-sandbox/apps/streetcarts/bin`
+2. `cd` to `docs-sandbox/apps/streetcarts/proxies/src/gateway/bin`
 3. Do `chmod 755 *.sh`
 4. Open `setenv.sh` in an editor and add your Apigee Edge org information to it. 
 
