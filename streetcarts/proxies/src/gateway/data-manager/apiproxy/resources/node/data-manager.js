@@ -7,6 +7,28 @@ var endpointPath = '';
 var token = '';
 
 module.exports = {
+    addNewCart: function (args, callback) {
+        
+        endpointPath = '/foodcarts';
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            body: JSON.stringify(args.new_values),
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
     getCartList: function (args, callback) {
         
         endpointPath = '/foodcarts';
@@ -331,11 +353,14 @@ module.exports = {
             }
         });
 
-    },    
-    addNewItem: function (itemData, callback) {
+    },
+    addNewItem: function (args, callback) {
 
-        var cartID = itemData.cartID;        
+        var cartID = args.cart_uuid;
+        var itemData = args.new_values;
         endpointPath = "/foodcarts/" + cartID + "/offers/items";
+        console.log(cartID);
+        itemData.cartID = cartID;
         
         var uri = host + appPath + endpointPath;
         

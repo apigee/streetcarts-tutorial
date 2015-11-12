@@ -182,6 +182,23 @@ app.get('/users/:uuid', function (req, res) {
 
 //*** APIs for registered cart owners.
 
+app.post('/carts', function (req, res) {
+    var args = {
+        "new_values": req.body
+    };
+    console.log('/carts');
+
+    dataManager.addNewCart(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
 app.get('/users/:uuid/carts', function (req, res) {
     var uuid = req.params.uuid;
     console.log('/users/' + uuid + '/carts');
@@ -213,8 +230,11 @@ app.get('/carts/:uuid/items', function (req, res) {
 app.post('/carts/:uuid/items', function (req, res) {
     var uuid = req.params.uuid;
     console.log('/carts/' + uuid + '/items');
-    var itemData = req.body;
-    dataManager.addNewItem(itemData, function (error, data) {
+    var args = {
+        "cart_uuid": uuid,
+        "new_values": req.body
+    };
+    dataManager.addNewItem(args, function (error, data) {
         if (error) {
             res.send(error);
         }
