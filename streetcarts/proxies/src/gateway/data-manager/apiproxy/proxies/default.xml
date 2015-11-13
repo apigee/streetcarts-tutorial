@@ -3,10 +3,34 @@
     <Description/>
     <FaultRules/>
     <PreFlow name="PreFlow">
-        <Request></Request>
+        <Request/>
         <Response/>
     </PreFlow>
-    <Flows/>
+    <Flows>
+        <Flow name="GenerateToken">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>GenerateAccessToken</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/token") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="GetFlow">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key-1</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/**") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
     <HTTPProxyConnection>
         <BasePath>/v1/streetcarts/data-manager</BasePath>
         <Properties/>
