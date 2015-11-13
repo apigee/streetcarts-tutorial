@@ -547,6 +547,7 @@ module.exports = {
         
         endpointPath = "/token";
         var uri = host + appPath + endpointPath;
+        credentials.grant_type = "password";
         
         var options = {
             uri: uri,
@@ -557,10 +558,9 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
+                console.log(response);
+                var message = '{"message":"User found.","statusCode":"200"}';
+                callback(null, message);
             }
         });
     },
