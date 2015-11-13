@@ -1,0 +1,42 @@
+{
+  "accessType": "",
+  "apiProducts": [],
+  "appFamily": "default",
+  "appId": "b28f38bf-566b-4f41-99ff-62beb9a1a65c",
+  "attributes": [
+    {
+      "name": "DisplayName",
+      "value": "SC-DATA-MANAGER-APP"
+    },
+    {
+      "name": "Notes",
+      "value": ""
+    }
+  ],
+  "callbackUrl": "",
+  "createdAt": 1447428976850,
+  "createdBy": "wwitman@apigee.com",
+  "credentials": [
+    {
+      "apiProducts": [
+        {
+          "apiproduct": "SC-DATA-MANAGER-PRODUCT",
+          "status": "approved"
+        }
+      ],
+      "attributes": [],
+      "consumerKey": "JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD",
+      "consumerSecret": "dCk2uN80KYonXfLg",
+      "expiresAt": -1,
+      "issuedAt": 1447428976871,
+      "scopes": [],
+      "status": "approved"
+    }
+  ],
+  "developerId": "hvcDxrlYCAHp0EgS",
+  "lastModifiedAt": 1447428976850,
+  "lastModifiedBy": "wwitman@apigee.com",
+  "name": "SC-DATA-MANAGER-APP",
+  "scopes": [],
+  "status": "approved"
+}
