@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="2" name="users">
+<APIProxy revision="12" name="users">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1446571320955</CreatedAt>
-    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <CreatedAt>1447254310681</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>users API</Description>
     <DisplayName>users</DisplayName>
-    <LastModifiedAt>1446571320955</LastModifiedAt>
-    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1447375423532</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
+        <Policy>ApiKeyFaultMessage</Policy>
         <Policy>Create-User-Response</Policy>
         <Policy>Delete-User</Policy>
         <Policy>ExtractUserID</Policy>
@@ -15,15 +16,24 @@
         <Policy>Get-Users-Response</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
+        <Policy>RewriteTargetUrl</Policy>
+        <Policy>SetRestrictedResourcePost</Policy>
         <Policy>Spike-Arrest</Policy>
         <Policy>Update-User-Response</Policy>
+        <Policy>ValidateToken</Policy>
         <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
-    <Resources/>
+    <Resources>
+        <Resource>jsc://RewriteTargetUrl.js</Resource>
+        <Resource>jsc://SetRestrictedResourcePost.js</Resource>
+    </Resources>
     <TargetServers/>
-    <TargetEndpoints/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>

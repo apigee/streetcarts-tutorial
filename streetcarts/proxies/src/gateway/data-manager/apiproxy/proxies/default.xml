@@ -3,11 +3,7 @@
     <Description/>
     <FaultRules/>
     <PreFlow name="PreFlow">
-        <Request>
-            <Step>
-                <Name>ValidateToken</Name>
-            </Step>
-        </Request>
+        <Request></Request>
         <Response/>
     </PreFlow>
     <Flows/>

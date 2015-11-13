@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="5" name="foodcarts">
+<APIProxy revision="14" name="foodcarts">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1446571255941</CreatedAt>
-    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <CreatedAt>1447254238442</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>foodcarts</Description>
     <DisplayName>foodcarts</DisplayName>
-    <LastModifiedAt>1446571255941</LastModifiedAt>
-    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1447363449244</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Create-FoodCart-Response</Policy>
         <Policy>Delete-FoodCart-Response</Policy>
@@ -17,15 +17,24 @@
         <Policy>GetCartId</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
+        <Policy>RewriteTargetUrl</Policy>
+        <Policy>SetRestrictedResourcePost</Policy>
         <Policy>Spike-Arrest</Policy>
         <Policy>Update-FoodCart-Response</Policy>
+        <Policy>ValidateToken</Policy>
         <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
-    <Resources/>
+    <Resources>
+        <Resource>jsc://RewriteTargetUrl.js</Resource>
+        <Resource>jsc://SetRestrictedResource.js</Resource>
+    </Resources>
     <TargetServers/>
-    <TargetEndpoints/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>

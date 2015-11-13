@@ -98,11 +98,11 @@
         <profile>
             <id>test</id>
             <properties>
-                <org>docfood</org>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
+                <org>wwitman</org>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
                 <!--<options>update</options>--> <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
                 <apigee.profile>test</apigee.profile>
                 <apigee.env>test</apigee.env>
-                <apigee.hosturl>https://api.e2e.apigee.net</apigee.hosturl>
+                <apigee.hosturl>https://api.enterprise.apigee.com</apigee.hosturl>
                 <apigee.apiversion>v1</apigee.apiversion>
                 <apigee.org>${org}</apigee.org>
                 <apigee.username>${username}</apigee.username>

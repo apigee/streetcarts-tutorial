@@ -7,7 +7,7 @@ export proxy=$proxy
 basepath="v1/streetcarts"
 export basepath=$basepath
 
-username="your apigee email"
+username="wwitman@apigee.com"
 
 ### If deploying to e2e docfood
 #url="https://api.e2e.apigee.net"
@@ -18,8 +18,8 @@ username="your apigee email"
 
 ### If deploying to another place
 url="https://api.enterprise.apigee.com"
-org="your org name"
-env="your environment name"
+org="wwitman"
+env="test"
 api_domain="apigee.net"
 
 ## Do not change the settings below

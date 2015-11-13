@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="3" name="menus">
+<APIProxy revision="17" name="menus">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1446571213851</CreatedAt>
-    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <CreatedAt>1447254268074</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>menus</Description>
     <DisplayName>menus</DisplayName>
-    <LastModifiedAt>1446571213851</LastModifiedAt>
-    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1447366815856</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Add-Menu-Item-to-Menu-Response</Policy>
         <Policy>Assign-Message-1</Policy>
@@ -18,15 +18,24 @@
         <Policy>Quota-1</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>Remove-Item-from-Menu-Response</Policy>
+        <Policy>RewriteTargetUrl</Policy>
+        <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest-1</Policy>
         <Policy>Update-Menu-Response</Policy>
+        <Policy>ValidateToken</Policy>
         <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
-    <Resources/>
+    <Resources>
+        <Resource>jsc://RewriteTargetUrl.js</Resource>
+        <Resource>jsc://SetRestrictedResource.js</Resource>
+    </Resources>
     <TargetServers/>
-    <TargetEndpoints/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>

@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="3" name="data-manager">
+<APIProxy revision="1" name="data-manager">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1446746915966</CreatedAt>
+    <CreatedAt>1447369322758</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1446746915966</LastModifiedAt>
+    <LastModifiedAt>1447369977858</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
-    <Policies/>
-    <ProxyEndpoints/>
-    <Resources/>
+    <Policies>
+        <Policy>ValidateToken</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>node://README.md</Resource>
+        <Resource>node://data-manager.js</Resource>
+        <Resource>node://node_modules_async.zip</Resource>
+        <Resource>node://node_modules_body-parser.zip</Resource>
+        <Resource>node://node_modules_cors.zip</Resource>
+        <Resource>node://node_modules_express.zip</Resource>
+        <Resource>node://node_modules_request.zip</Resource>
+        <Resource>node://package.json</Resource>
+        <Resource>node://server.js</Resource>
+    </Resources>
     <TargetServers/>
-    <TargetEndpoints/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
     <validate>false</validate>
 </APIProxy>
