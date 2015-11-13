@@ -504,9 +504,7 @@ module.exports = {
         endpointPath = '/users';
         
         // Make sure the client sent a username.
-        if (! userData.username) {
-            console.log('No username set!');
-            
+        if (!userData.username) {
             var errorObject = new Error();
             errorObject.message = "No username set. A unique username is required.";
             errorObject.statusCode = "";
@@ -515,9 +513,7 @@ module.exports = {
             callback(errorObject, null);
         }
         // Make sure the client sent a password.
-        if (userData.username && ! userData.password) {
-            console.log('No password set!');
-            
+        if (userData.username && !userData.password) {
             var errorObject = new Error();
             errorObject.message = "No password set.";
             errorObject.statusCode = "";
@@ -525,25 +521,27 @@ module.exports = {
             
             callback(errorObject, null);
         }
-        // Try to create the user account.
-        var uri = host + appPath + endpointPath;
-        var options = {
-            uri: uri,
-            body: JSON.stringify(userData),
-            method: "POST"
-        };
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                console.log("Got an error.");
-                callback(error, null);
-            } else {
-                console.log("Success.");
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
+        else {
+            // Try to create the user account.
+            var uri = host + appPath + endpointPath;
+            var options = {
+                uri: uri,
+                body: JSON.stringify(userData),
+                method: "POST"
+            };
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    console.log("Got an error.");
+                    callback(error, null);
+                } else {
+                    console.log("Success.");
+                    var entity = JSON.parse(response)['entities'][0];
+                    streamlineResponseEntity(entity, function(streamlinedResponse){
+                        callback(null, JSON.stringify(streamlinedResponse));
+                    });
+                }
+            });            
+        }
     },
     authenticateUser: function (credentials, callback) {
         

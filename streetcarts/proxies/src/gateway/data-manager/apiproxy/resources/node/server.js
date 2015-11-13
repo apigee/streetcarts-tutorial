@@ -264,7 +264,7 @@ app.post('/carts/:uuid/menus', function (req, res) {
     });
 });
 
-app.post('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     var args = {
         "menu_uuid": req.params.menu_uuid,
         "item_uuid": req.params.item_uuid
@@ -319,31 +319,30 @@ app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
 });
 
 app.post('/users', function (req, res) {
+    var userData = req.body;
     
-    var username = req.body.username;
-    var password = req.body.password;
     console.log('/users' + req.body);
-    var email, city;
-    if (req.body.email) {
-        email = req.body.email;
-    } else {
+    
+    if (!req.body.email) {
         email = "Not Given";
     }
-    if (req.body.city) {
-        city = req.body.city;
-    } else {
-        city = "Not Given";
-    }
+    dataManager.registerUser(userData, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.post('/authenticate', function (req, res) {
+    var credentials = req.body;
     
-    var userdata = {
-        "username": username, 
-        "password": password, 
-        "email": email, 
-        "city": city
-    };
+    console.log('/authenticate ' + JSON.stringify(req.body));
     
-    
-    dataManager.registerUser(userdata, function (error, data) {
+    dataManager.authenticateUser(credentials, function (error, data) {
         if (error) {
             res.send(error);
         }
