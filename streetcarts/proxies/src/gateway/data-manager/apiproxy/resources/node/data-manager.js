@@ -504,7 +504,7 @@ module.exports = {
         endpointPath = '/users';
         
         // Make sure the client sent a username.
-        if (!userData.username) {
+        if (!(userData.username)) {
             var errorObject = new Error();
             errorObject.message = "No username set. A unique username is required.";
             errorObject.statusCode = "";
@@ -513,7 +513,7 @@ module.exports = {
             callback(errorObject, null);
         }
         // Make sure the client sent a password.
-        if (userData.username && !userData.password) {
+        if ((userData.username) && !(userData.password)) {
             var errorObject = new Error();
             errorObject.message = "No password set.";
             errorObject.statusCode = "";
