@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="1" name="data-manager">
+<APIProxy revision="2" name="data-manager">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447369322758</CreatedAt>
+    <CreatedAt>1447430427969</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1447369977858</LastModifiedAt>
+    <LastModifiedAt>1447433576374</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
+        <Policy>GenerateAccessToken</Policy>
+        <Policy>SetRestrictedResource</Policy>
         <Policy>ValidateToken</Policy>
+        <Policy>Verify-API-Key-1</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
@@ -22,6 +25,7 @@
         <Resource>node://node_modules_request.zip</Resource>
         <Resource>node://package.json</Resource>
         <Resource>node://server.js</Resource>
+        <Resource>jsc://SetRestrictedResource.js</Resource>
     </Resources>
     <TargetServers/>
     <TargetEndpoints>
