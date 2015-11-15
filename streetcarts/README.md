@@ -116,6 +116,11 @@ These are the steps -- good luck!
 11. A lot of the time, some debugging is required. 
 11. Call your test script as many times as it takes to get the API debugged and working properly. 
 
+#### API keys and Tokens
+
+* If you need an API key, the best bet is to take the Consumer Key in the Developer App called "SC-OWNER-APP". 
+* If you need Token validation, you can run the `invoke.sh` script and it'll go through steps to generate a token against the key/secret in SC-OWNER-APP, and it should work. 
+
 #### Keeping things in sync
 
 The proxies are XML files, and they exist in two places -- the ones that are deployed to Edge and the ones on your file system. 
