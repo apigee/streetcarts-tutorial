@@ -1,6 +1,16 @@
 {
   "apiResources": [
-    "/POST/v1/streetcarts/data-manager/authenticate"
+    "/PUT/v1/streetcarts/data-manager/**",
+    "/DELETE/v1/streetcarts/data-manager/**",
+    "/POST/v1/streetcarts/data-manager/**",
+    "/GET/v1/streetcarts/data-manager/**"
+  ],
+  "approvalType": "auto",
+  "attributes": [
+    {
+      "name": "access",
+      "value": "public"
+    }
   ],
   "approvalType": "auto",
   "attributes": [
