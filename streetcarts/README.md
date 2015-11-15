@@ -7,9 +7,12 @@ Following are instructions for setting up and deploying the StreetCarts app to E
 
 #### About the scripts
 
-The main script `main.sh` provisions products, developer apps, and a developer to your Edge organization. You should only need to do this once, and after that, only if you edit any of these entity files. The script also prompts you to run the `invoke.sh` script, which tests your APIs. You can always run `invoke.sh` by calling it directly. As you develop your APIs, you'll call `invoke.sh` many many times.
+Unless indicated otherwise, the scripts are in `smartcarts/proxies/src/gateway/bin`.
 
-The `invoke.sh` script makes a bunch of API calls to streetcarts. Please try to keep the file up to date as you add proxy flows. That is, if you add a proxy flow (e.g., add an item to a cart), then add a call to the API in `invoke.sh`.
+* `main.sh` provisions products, developer apps, and a developer to your Edge organization. You should only need to do this once, and after that, only if you edit any of these entity files.  
+* `setenv.sh` where you put your Edge account info used by other scripts. 
+* `invoke.sh` CURRENTLY BROKEN tests your APIs. You can always run `invoke.sh` by calling it directly. As you develop your APIs, you'll call `invoke.sh` many many times.
+* `streetcarts-build.sh` runs the Maven sync/deploy operations. Covered in another [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). This one is in `smartcarts/proxies/src/gateway`. 
 
 #### Set up and provision
 
@@ -41,33 +44,35 @@ The `invoke.sh` script makes a bunch of API calls to streetcarts. Please try to 
 
    3. `Do you want to invoke? ([y]/n):`
 
-       Say "y" to run the tests. 
+       No No No! Say **"n"** to NOT run the tests. The invoke script is probably broken until further notice. You can always run it standalone. 
 
 
-#### Deploy using Maven
+#### Sync and Deploy using Maven
 
-We are using the Maven plugin to deploy StreetCarts to Edge. To set things up, follow this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
+Maven is used to sync to GitHub and deploy to Edge. To set things up, follow this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
 
 **Tip:** Because the main Maven build script takes a long time to run, it's handy to hack `build_streetcarts.sh` into separate scripts, one for each of the proxies. For example, `build_users.sh`, `build_data_manager.sh`, and so on.
 
 #### Developing proxies
 
-There are a lot of API paths to implement in StreetCarts. For example, there has to be an API to "add an item to a menu" or "update a menu item". Where to start?
+These are the steps -- good luck!
 
-1. Come up with a use case that you'd like to implement. 
-2. Check in `invoke.sh` to see if it's already implemented. If it is, there should be a test for it. 
-3. Take some time to examine one of the existing APIs. The APIs for adding an item to a menu or updating an item are both good examples. 
+1. Decide what you want to implement and make sure it isn't already. 
+3. Take some time to examine one of the existing APIs. Some of the APIs require just an API key and others require an OAuth token. Token is required for the "owner" APIs. Look at other APIs that work and follow the pattern.  
 4. Open the `default.xml` file for the Target Endpoint, and notice that the TargetConnection points to the data-manager proxy. 
 
-    **Important:** You need to edit the URL to match your org-name and environment. You have to be sure to set the target URL in each proxy in your org. 
-
-4. In the Edge UI, open the proxy you need to work in. For example, the menus proxy has most (but not all) of the menu-related APIs. 
-5. Find the API that you want implement -- most of the APIs were stubbed in, so you should be able to find what you need.
+    **Important:** 
+        * Do these steps to point the proxies to the data-manager deployed in YOUR test environment:
+          - Edit the default target URL to match your org-name and environment. The one that's checked in points to `wwitman-test` -- you want to set yours to `yourorgname-yourenvname`. 
+          - Change this target URL in EVERY proxy EXCEPT data-manager and accesstoken.  
+          - Do not change the `production` target URL. It points to E2E and should not be changed. 
+         
 6. Think about if the API needs an OAuth token or if just an API key will do. Most of the APIs that let you edit things require a token. The public APIs just need a key.
-7. Edit the Flow as shown below. You have to add SetRestrictedResource and ValidateToken first. Every proxy also needs to have the RewriteTargetUrl proxy attached to the Target Endpoint Preflow. This policy must execute before the target is called. It sets `target.url` with the proper path expected by the backend server.
-8. Then, be sure the Condition property is set up correctly. The Condition below is set up to match paths like /menus/{menuid}. Remember that all the proxies contain the proxy name in the basepath, so you don't have to add that to the Condition. 
+7. In your flow along the lines of this example. Be sure to set the condition property appropriately:
 
-     ```
+   If you're doing Token validation, like this:
+
+    ```
           <Flow name="Update Menu Item">
                 <Description>Update Menu Item</Description>
                 <Request>
@@ -79,15 +84,37 @@ There are a lot of API paths to implement in StreetCarts. For example, there has
                     </Step>
                 </Request>
                 <Response/>
-                <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
+                <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/item") and (request.verb = "PUT")</Condition>
             </Flow>
-     ```
+    ```
+
+    If you're doing API KEY validation, like this:
+
+    ```
+          <Flow name="GetFoodcart">
+                <Description>Get a Foodcart</Description>
+                <Request>
+                    <Step>
+                        <Name>SetRestrictedResource</Name>
+                    </Step>
+                    <Step>
+                        <Name>VerifyAPIKey</Name>
+                    </Step>
+                    <Step>
+                        <Name>RemoveAPIKey</Name>
+                    </Step>
+                </Request>
+                <Response/>
+                <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "GET")</Condition>
+            </Flow>
+    ```
+
 
 8. Save the proxy.
 9. Open the product called `SC-OWNER-PRODUCT`, and follow the pattern to add your proxy to the product. You'll need to add something like `/PUT/v1/streetcarts/menus`. This is the path that Edge checks to make sure the token is valid. It is set in the proxy flow by the SetRestrictedResource JavaScript policy. 
-10. Add your API to the `invoke.sh` script.
+10. Add your API to a test script. You can hack invoke.sh or test-menus.sh or test-users.sh to get something going. 
 11. A lot of the time, some debugging is required. 
-11. Call `invoke.sh` as many times as it takes to get the API debugged and working properly. 
+11. Call your test script as many times as it takes to get the API debugged and working properly. 
 
 #### Keeping things in sync
 
