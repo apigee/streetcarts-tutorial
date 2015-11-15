@@ -2,6 +2,7 @@
   "apiResources": [
     "/GET/v1/streetcarts/foodcarts/*/menus",
     "/GET/v1/streetcarts/menus/*",
+    "/GET/v1/streetcarts/foodcarts/*",
     "/POST/v1/streetcarts/menus",
     "/POST/v1/streetcarts/accesstoken",
     "/PUT/v1/streetcarts/users/*",
@@ -14,7 +15,8 @@
     "/GET/v1/streetcarts/menus/*/items",
     "/POST/v1/streetcarts/menus/*/items/*",
     "/DELETE/v1/streetcarts/menus/",
-    "/GET/v1/streetcarts/users/*"
+    "/GET/v1/streetcarts/users/*",
+    "/GET/v1/streetcarts/foodcarts"
   ],
   "approvalType" : "auto",
   "attributes" : [ ],
