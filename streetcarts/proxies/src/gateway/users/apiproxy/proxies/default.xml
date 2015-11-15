@@ -88,7 +88,12 @@
         <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
-    <RouteRule name="default">
+    <RouteRule name="test">
+        <Condition>organization.name = "wwitman"</Condition>
         <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="production">
+        <Condition>organization.name = "docfood"</Condition>
+        <TargetEndpoint>docfood</TargetEndpoint>
     </RouteRule>
 </ProxyEndpoint>

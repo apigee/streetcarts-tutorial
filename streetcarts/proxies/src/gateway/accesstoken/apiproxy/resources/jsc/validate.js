@@ -1,8 +1,25 @@
-var username = context.getVariable("request.formparam.username");
+ var username = context.getVariable("request.formparam.username");
  var password = context.getVariable("request.formparam.password");
  
  // TBD: Code to validate the user. We would ask BaaS to return a User object
  // that has the sumbitted username and password. 
+ 
+// var valid=false;
+ 
+// var myRequest = new Request();
+ 
+// var headers = {'Content-Type' : 'application/json' };
+// var myRequest = new Request("http:wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate?apikey=JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD","POST",headers);
+
+// myRequest.url = "http:wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate?apikey=JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD";
+// var exchangeObj = httpClient.send(myRequest);
+ 
+// if (exchangeObj.isSuccess()) {
+//     valid = exchangeObj.getResponse().content.asJSON;
+ //    print("************: " + valid);
+ //} else {
+     print("**********: SOMETHING BAD");
+ //}
  
  
  var valid = true;

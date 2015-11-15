@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="14" name="foodcarts">
+<APIProxy revision="16" name="foodcarts">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447254238442</CreatedAt>
+    <CreatedAt>1447610489958</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>foodcarts</Description>
     <DisplayName>foodcarts</DisplayName>
-    <LastModifiedAt>1447363449244</LastModifiedAt>
+    <LastModifiedAt>1447610489958</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Create-FoodCart-Response</Policy>
         <Policy>Delete-FoodCart-Response</Policy>
         <Policy>Get-FoodCart-Items-Response</Policy>
-        <Policy>Get-FoodCart-Menus-Response</Policy>
-        <Policy>Get-FoodCart-Response</Policy>
-        <Policy>Get-FoodCarts</Policy>
         <Policy>GetCartId</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
-        <Policy>SetRestrictedResourcePost</Policy>
+        <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest</Policy>
         <Policy>Update-FoodCart-Response</Policy>
         <Policy>ValidateToken</Policy>
-        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
@@ -35,6 +31,6 @@
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
-    <validate>false</validate>
 </APIProxy>

@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="17" name="menus">
+<APIProxy revision="19" name="menus">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447254268074</CreatedAt>
+    <CreatedAt>1447611865295</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>menus</Description>
     <DisplayName>menus</DisplayName>
-    <LastModifiedAt>1447366815856</LastModifiedAt>
+    <LastModifiedAt>1447611865295</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Add-Menu-Item-to-Menu-Response</Policy>
-        <Policy>Assign-Message-1</Policy>
-        <Policy>Create-Menu-Response</Policy>
         <Policy>Delete-Menu-Response</Policy>
-        <Policy>Get-Menu-Items-Response</Policy>
         <Policy>Get-MenuID</Policy>
-        <Policy>Get-Menus-Response</Policy>
         <Policy>Quota-1</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>Remove-Item-from-Menu-Response</Policy>
         <Policy>RewriteTargetUrl</Policy>
         <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest-1</Policy>
-        <Policy>Update-Menu-Response</Policy>
         <Policy>ValidateToken</Policy>
-        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
@@ -36,6 +29,6 @@
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
-    <validate>false</validate>
 </APIProxy>

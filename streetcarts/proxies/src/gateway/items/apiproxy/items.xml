@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="4" name="items">
+<APIProxy revision="12" name="items">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1446571288055</CreatedAt>
-    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <CreatedAt>1447383657908</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>items</Description>
     <DisplayName>items</DisplayName>
-    <LastModifiedAt>1446571288055</LastModifiedAt>
-    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1447383657908</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Create-Item-Response</Policy>
         <Policy>Delete-Item-Response</Policy>

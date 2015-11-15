@@ -30,7 +30,7 @@
             <Description>Get FoodCart Menus</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResourcePost</Name>
+                    <Name>SetRestrictedResource</Name>
                 </Step>
                 <Step>
                     <Name>Verify-API-Key</Name>
@@ -46,10 +46,13 @@
             <Description>Get a FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResourcePost</Name>
+                    <Name>SetRestrictedResource</Name>
                 </Step>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
@@ -79,6 +82,9 @@
             <Description>Get FoodCarts</Description>
             <Request>
                 <Step>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>
@@ -102,7 +108,7 @@
             <Description>Create Foodcart Menu</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResourcePost</Name>
+                    <Name>SetRestrictedResource</Name>
                 </Step>
                 <Step>
                     <Name>ValidateToken</Name>
@@ -115,7 +121,7 @@
             <Description>Create Foodcart Item</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResourcePost</Name>
+                    <Name>SetRestrictedResource</Name>
                 </Step>
                 <Step>
                     <Name>ValidateToken</Name>
@@ -140,7 +146,12 @@
         <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
-    <RouteRule name="default">
+    <RouteRule name="test">
+        <Condition>organization.name = "wwitman"</Condition>
         <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="production">
+        <Condition>organization.name = "docfood"</Condition>
+        <TargetEndpoint>docfood</TargetEndpoint>
     </RouteRule>
 </ProxyEndpoint>

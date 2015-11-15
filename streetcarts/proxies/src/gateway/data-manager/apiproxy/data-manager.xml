@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="2" name="data-manager">
+<APIProxy revision="4" name="data-manager">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447430427969</CreatedAt>
+    <CreatedAt>1447609478437</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1447433576374</LastModifiedAt>
+    <LastModifiedAt>1447615061188</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GenerateAccessToken</Policy>
+        <Policy>Remove-API-Key</Policy>
         <Policy>SetRestrictedResource</Policy>
         <Policy>ValidateToken</Policy>
-        <Policy>Verify-API-Key-1</Policy>
+        <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>

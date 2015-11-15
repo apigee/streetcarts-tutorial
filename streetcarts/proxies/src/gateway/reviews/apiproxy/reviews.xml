@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="2" name="reviews">
+<APIProxy revision="13" name="reviews">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1446571180078</CreatedAt>
-    <CreatedBy>sgilson@apigee.com</CreatedBy>
+    <CreatedAt>1447604206489</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>reviews</Description>
     <DisplayName>reviews</DisplayName>
-    <LastModifiedAt>1446571180078</LastModifiedAt>
-    <LastModifiedBy>sgilson@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1447604312532</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Add-Review-Response</Policy>
         <Policy>Deleted-user-Review</Policy>
@@ -16,6 +16,8 @@
         <Policy>Get-User-Review</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
+        <Policy>RewriteTargetUrl</Policy>
+        <Policy>SetRestrictedResourcePost</Policy>
         <Policy>Spike-Arrest</Policy>
         <Policy>Update-User-Review</Policy>
         <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
@@ -24,7 +26,14 @@
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
-    <Resources/>
+    <Resources>
+        <Resource>jsc://RewriteTargetUrl.js</Resource>
+        <Resource>jsc://SetRestrictedResource.js</Resource>
+    </Resources>
     <TargetServers/>
-    <TargetEndpoints/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>docfood</TargetEndpoint>
+    </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>

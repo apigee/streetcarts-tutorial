@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <APIProxy revision="12" name="accesstoken">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447254224966</CreatedAt>
+    <CreatedAt>1447383626264</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>accesstoken</Description>
     <DisplayName>accesstoken</DisplayName>
-    <LastModifiedAt>1447254224966</LastModifiedAt>
+    <LastModifiedAt>1447440337802</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Access-Token-Response</Policy>
@@ -28,4 +28,5 @@
     </Resources>
     <TargetServers/>
     <TargetEndpoints/>
+    <validate>false</validate>
 </APIProxy>
