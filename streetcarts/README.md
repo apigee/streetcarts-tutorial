@@ -62,10 +62,10 @@ These are the steps -- good luck!
 4. Open the `default.xml` file for the Target Endpoint, and notice that the TargetConnection points to the data-manager proxy. 
 
     **Important:** 
-        * Do these steps to point the proxies to the data-manager deployed in YOUR test environment:
-          - Edit the default target URL to match your org-name and environment. The one that's checked in points to `wwitman-test` -- you want to set yours to `yourorgname-yourenvname`. 
-          - Change this target URL in EVERY proxy EXCEPT data-manager and accesstoken.  
-          - Do not change the `production` target URL. It points to E2E and should not be changed. 
+
+    Make these  changes in EVERY proxy EXCEPT data-manager and accesstoken.
+        * In the default TargetEndpoint, change the default target URL to match your org-name and environment. The one that's checked in points to `wwitman-test` -- you want to set yours to `yourorgname-yourenvname`.  Do not change the `production` target URL. It points to E2E and should not be changed. 
+        * In the ProxyEndpoint, change the RouteRule for the default TargetEndpoint that points to `wwitman` to your org name. 
          
 6. Think about if the API needs an OAuth token or if just an API key will do. Most of the APIs that let you edit things require a token. The public APIs just need a key.
 7. In your flow along the lines of this example. Be sure to set the condition property appropriately:
