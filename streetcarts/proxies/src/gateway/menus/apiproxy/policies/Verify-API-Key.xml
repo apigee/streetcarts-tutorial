@@ -2,5 +2,5 @@
 <VerifyAPIKey async="false" continueOnError="false" enabled="true" name="Verify-API-Key">
     <DisplayName>Verify API Key</DisplayName>
     <Properties/>
-    <APIKey ref="request.queryparam.apikey"/>
+    <APIKey ref="request.header.x-api-key"/>
 </VerifyAPIKey>

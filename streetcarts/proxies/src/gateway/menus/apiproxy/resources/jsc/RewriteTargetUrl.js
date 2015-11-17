@@ -3,7 +3,9 @@
 
  print("target.url: " + target)
  print("proxy.pathsuffix: " + suffix);
+print("KEY: " + context.getVariable("DATA-MANAGER-KEY"));
  
- var targetRewrite = target + "/menus" + suffix + "?apikey=JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD";
+ context.setVariable("request.header.x-api-key", "nFES3HWNLTOnfv6Ga6AqPtbe86NA48wJ");
+ var targetRewrite = target + "/menus" + suffix;
  print("target.rewrite: " + targetRewrite);
  context.setVariable("target.url", targetRewrite);
