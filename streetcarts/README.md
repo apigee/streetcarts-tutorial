@@ -14,6 +14,12 @@ Unless indicated otherwise, the scripts are in `smartcarts/proxies/src/gateway/b
 * `invoke.sh` CURRENTLY BROKEN tests your APIs. You can always run `invoke.sh` by calling it directly. As you develop your APIs, you'll call `invoke.sh` many many times.
 * `streetcarts-build.sh` runs the Maven sync/deploy operations. Covered in another [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). This one is in `smartcarts/proxies/src/gateway`. 
 
+#### Sync and Deploy using Maven
+
+Maven is used to sync to GitHub and deploy to Edge. To set things up, follow this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
+
+**Tip:** Because the main Maven build script takes a long time to run, it's handy to hack `build_streetcarts.sh` into separate scripts, one for each of the proxies. For example, `build_users.sh`, `build_data_manager.sh`, and so on.
+
 #### Set up and provision
 
 1. Clone the docs-sandbox .
@@ -46,12 +52,6 @@ Unless indicated otherwise, the scripts are in `smartcarts/proxies/src/gateway/b
 
        No No No! Say **"n"** to NOT run the tests. The invoke script is probably broken until further notice. You can always run it standalone. 
 
-
-#### Sync and Deploy using Maven
-
-Maven is used to sync to GitHub and deploy to Edge. To set things up, follow this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
-
-**Tip:** Because the main Maven build script takes a long time to run, it's handy to hack `build_streetcarts.sh` into separate scripts, one for each of the proxies. For example, `build_users.sh`, `build_data_manager.sh`, and so on.
 
 #### Developing proxies
 
