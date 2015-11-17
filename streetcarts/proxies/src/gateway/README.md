@@ -27,11 +27,12 @@ If git prompts you for credentials, you can configure it to either use SSH or se
 1. In **/streetcarts/proxies/src/gateway/shared-pom.xml**, scroll to the ```<profiles>``` section and modify the following in the ```test``` and ```prod``` groups:
    - ```<org>``` - Change this to the org you want to deploy to.
    - ```<apigee.hosturl>``` - For the public cloud, change this to https://api.enterprise.apigee.com so that it's not pointing at e2e.
-2. In **/streetcarts/proxies/src/gateway/streetcarts_build.sh**, at the top of the file, modify the username, password, and org.
+2. In **/streetcarts/proxies/src/gateway/streetcarts_build.sh**, at the top of the file, modify the org.
 
 ### Run the script
-
 cd to /streetcarts/proxies/src/gateway and run the shell script: ```./streetcarts_build.sh```
+
+You will be prompted to enter your organization email and password.
 
 In the Edge UI, check your org to make sure the proxies were deployed.
 
