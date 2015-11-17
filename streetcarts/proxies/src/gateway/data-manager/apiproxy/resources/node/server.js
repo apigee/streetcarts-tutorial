@@ -199,10 +199,45 @@ app.post('/carts', function (req, res) {
     });
 });
 
+app.put('/carts/:uuid', function (req, res) {
+    var args = {
+        "cart_uuid": req.params.uuid,
+        "new_values": req.body
+    };
+    console.log('/carts/' + req.params.uuid);
+
+    dataManager.updateDetailsForCart(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
 app.get('/users/:uuid/carts', function (req, res) {
     var uuid = req.params.uuid;
     console.log('/users/' + uuid + '/carts');
     dataManager.getCartsOwnedByUser(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.delete('/carts/:uuid', function (req, res) {
+
+    var cartUUID = req.params.uuid;
+    
+    console.log('/carts/' + cartUUID);
+
+    dataManager.deleteCart(cartUUID, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -254,6 +289,25 @@ app.post('/carts/:uuid/menus', function (req, res) {
     console.log('/carts/' + uuid + '/menus');
 
     dataManager.addNewMenu(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
+app.post('/menus/:uuid/items', function (req, res) {
+    var uuid = req.params.uuid;
+    var args = {
+        "menuUUID": uuid,
+        "new_values": req.body
+    };
+    console.log('/menus/' + uuid + '/items');
+
+    dataManager.addNewItemToMenu(args, function (error, data) {
         if (error) {
             res.send(error);
         }

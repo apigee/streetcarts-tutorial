@@ -4,6 +4,6 @@
  print("target.url: " + target)
  print("proxy.pathsuffix: " + suffix);
  
- var targetRewrite = target + "/carts" + suffix + "?apikey=JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD";
+ var targetRewrite = target + "/carts" + suffix + "?apikey=zuwAsKN3eLLTvGlE3FSHoahrLvb6rqir";
  print("target.rewrite: " + targetRewrite);
  context.setVariable("target.url", targetRewrite);

@@ -29,6 +29,52 @@ module.exports = {
             }
         });
     },
+    updateDetailsForCart: function (args, callback) {
+        
+        endpointPath = "/foodcarts/" + args.cart_uuid;
+
+        var uri = host + appPath + endpointPath;
+        
+        options = {
+            uri: uri,
+            body: JSON.stringify(args.new_values),
+            method: "PUT"
+        };
+
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                console.log(entity);
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    deleteCart: function (cartUUID, callback) {
+        
+        endpointPath = "/foodcarts/" + cartUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
     getCartList: function (args, callback) {
         
         endpointPath = '/foodcarts';
@@ -430,6 +476,34 @@ module.exports = {
             }
         });
     },
+    addNewItemToMenu: function (args, callback) {
+
+        var cartID = args.new_values.cartID;
+        var itemData = args.new_values;
+        itemData.cartID = cartID;
+
+        endpointPath = "/menus/" + args.menuUUID + 
+            "/includes/items ";
+        
+        var uri = host + appPath + endpointPath;
+        console.log(uri);
+        var options = {
+            uri: uri,
+            body: JSON.stringify(itemData),
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
     removeItemFromMenu: function (args, callback) {
 
         endpointPath = "/menus/" + args.menu_uuid + 
@@ -579,7 +653,6 @@ module.exports = {
                 error.message = "That user ID is not in the system.";
                 callback(error, null);
             } else {
-                console.log(response);
                 var entity = JSON.parse(response)['entities'][0];
                 streamlineResponseEntity(entity, function(streamlinedResponse){
                     callback(null, JSON.stringify(streamlinedResponse));

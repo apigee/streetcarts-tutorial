@@ -62,21 +62,39 @@
             <Description>Update FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Update-FoodCart-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>ValidateToken</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "PUT")</Condition>
         </Flow>
         <Flow name="Delete FoodCart">
             <Description>Delete FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Delete-FoodCart-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>ValidateToken</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Get FoodCarts">
             <Description>Get FoodCarts</Description>
@@ -98,11 +116,14 @@
             <Description>Create FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Create-FoodCart-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "") and (request.verb = "POST")</Condition>
         </Flow>
         <Flow name="Create Cart Menu">
             <Description>Create Foodcart Menu</Description>
