@@ -23,6 +23,9 @@
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
                     <FaultRules/>
                     <Name>ValidateUser</Name>
                 </Step>

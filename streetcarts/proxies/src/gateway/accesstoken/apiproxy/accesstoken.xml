@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="12" name="accesstoken">
+<APIProxy revision="14" name="accesstoken">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447383626264</CreatedAt>
+    <CreatedAt>1447708499241</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>accesstoken</Description>
     <DisplayName>accesstoken</DisplayName>
-    <LastModifiedAt>1447440337802</LastModifiedAt>
+    <LastModifiedAt>1447782527534</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Access-Token-Response</Policy>
         <Policy>GenerateToken</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
-        <Policy>SetResponse</Policy>
         <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>ValidateToken</Policy>
         <Policy>ValidateUser</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>

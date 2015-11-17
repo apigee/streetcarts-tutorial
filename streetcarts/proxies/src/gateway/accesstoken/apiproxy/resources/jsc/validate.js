@@ -1,33 +1,39 @@
+ //-- TODO see this article: https://community.apigee.com/articles/2340/asynchronous-http-requests-in-an-api-proxy.html
+ 
+ //-- Get credentials. 
+ 
  var username = context.getVariable("request.formparam.username");
  var password = context.getVariable("request.formparam.password");
  
- // TBD: Code to validate the user. We would ask BaaS to return a User object
- // that has the sumbitted username and password. 
+ //-- Assemble the request to the Data Manager.
  
-// var valid=false;
- 
-// var myRequest = new Request();
- 
-// var headers = {'Content-Type' : 'application/json' };
-// var myRequest = new Request("http:wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate?apikey=JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD","POST",headers);
+ var bodyObj = {
+    'username': username,
+    'password': password
+  };
+  
+  var bodyStr = JSON.stringify(bodyObj);
+  var dmurl = "http://wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate";
+  var headers = {'Content-Type' : 'application/json', 'x-api-key': 'nFES3HWNLTOnfv6Ga6AqPtbe86NA48wJ'};
 
-// myRequest.url = "http:wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate?apikey=JBjbg7SL1dHfRJPE3AuFUewGS6k9LTgD";
-// var exchangeObj = httpClient.send(myRequest);
- 
-// if (exchangeObj.isSuccess()) {
-//     valid = exchangeObj.getResponse().content.asJSON;
- //    print("************: " + valid);
- //} else {
-     print("**********: SOMETHING BAD");
- //}
- 
- 
- var valid = true;
- var ownerId = "4ab08a6a-6d16-11e5-817d-a9b5da1cd192"; // returned from BaaS
- 
- if (valid) {
-    context.setVariable("streetcarts.user.valid", "true");
-    context.setVariable("streetcarts.user.id", ownerId);
- } else {
-     context.setVariable("streetcarts.user.valid", "false");
- }
+  //-- Call the data manager.
+  var myRequest = new Request(dmurl,"POST",headers, JSON.stringify(bodyObj));
+  var exchange = httpClient.send(myRequest);
+
+  exchange.waitForComplete();
+
+  if (exchange.isSuccess()) {
+    var responseObj = exchange.getResponse().content.asJSON;
+    var statusCode = responseObj.statusCode;
+    if (statusCode == "200") {
+        print("USER VALID");
+        //TODO --- Steve needs to return this in the response. 
+        var ownerId = "4ab08a6a-6d16-11e5-817d-a9b5da1cd192"; 
+        context.setVariable("streetcarts.user.valid", "true");
+        context.setVariable("streetcarts.user.id", ownerId);
+         }
+     }
+      else {
+        print("USER VALIDATION FAILED");
+        context.setVariable("streetcarts.user.valid", "false");
+     }
