@@ -27,13 +27,28 @@ If git prompts you for credentials, you can configure it to either use SSH or se
 1. In **/streetcarts/proxies/src/gateway/shared-pom.xml**, scroll to the ```<profiles>``` section and modify the following in the ```test``` and ```prod``` groups:
    - ```<org>``` - Change this to the org you want to deploy to.
    - ```<apigee.hosturl>``` - For the public cloud, change this to https://api.enterprise.apigee.com so that it's not pointing at e2e.
-2. In **/streetcarts/proxies/src/gateway/streetcarts_build.sh**, at the top of the file, modify the username, password, and org.
+2. In **/streetcarts/proxies/src/gateway/streetcarts_build.sh**, at the top of the file, modify the org.
 
 ### Run the script
-
 cd to /streetcarts/proxies/src/gateway and run the shell script: ```./streetcarts_build.sh```
 
+You will be prompted to enter your organization email and password.
+
 In the Edge UI, check your org to make sure the proxies were deployed.
+
+### Ensure you have the required Node.js plugins
+
+If this is the first time that you have uploaded the proxies, you have to ensure that you have all of the required Node.js plugins used by the data-manager API proxy.
+
+1. After running maven to deploy this proxy, call [this Edge API](http://apigee.com/docs/management/apis/post/organizations/%7Borg_name%7D/apis/%7Bapi_name%7D/revisions/%7Brevision_num%7D/npm-0) to run npm install on Edge. This is the API called "Manage Node Packaged Modules" under the SmartDocs->API Proxies menu. 
+
+   - Ensure that you specify "data-manager" as the name of the API proxy.
+   - Ensure that you set the Request Body to: command=install   
+
+   Note: Be sure to specify the correct revision for your deployed instance of data-manager.
+
+2. Undeploy and then redeploy the data-manager proxy in the Edge UI. 
+
 
 ### Problems?
 
