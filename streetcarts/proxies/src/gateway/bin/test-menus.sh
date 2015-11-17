@@ -43,9 +43,9 @@ echo -e "\n    **** Base64 encoded credentials:  $auth ****"
 
 echo  -e "\n**** Requesting access token. **** "
 
-echo -e "curl -H \"Authorization: Basic $auth\" -H \"x-api-key: $owner_key\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://$org-$env.$api_domain/$basepath/accesstoken\" -d \"grant_type=password&username=wwitman@apigee.com&password=apigee123\" \n"
+echo -e "curl -H \"Authorization: Basic $auth\" -H \"x-api-key: $owner_key\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST \"https://$org-$env.$api_domain/$basepath/accesstoken\" -d \"grant_type=password&username=will100&password=abc123\" \n"
 
-accesstoken_response=`curl -s -k -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -H "x-api-key: $owner_key" -X POST "https://$org-$env.$api_domain/$basepath/accesstoken" -d "grant_type=password&username=wwitman%40apigee.com&password=apigee123"`
+accesstoken_response=`curl -s -k -H "Authorization: Basic $auth" -H "Content-Type: application/x-www-form-urlencoded" -H "x-api-key: $owner_key" -X POST "https://$org-$env.$api_domain/$basepath/accesstoken" -d "grant_type=password&username=will100&password=abc123"`
 
 echo -e  "**** AccessToken Response: \n $accesstoken_response"
 
