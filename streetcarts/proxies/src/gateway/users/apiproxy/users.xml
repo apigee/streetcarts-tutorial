@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="13" name="users">
+<APIProxy revision="14" name="users">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447611170506</CreatedAt>
+    <CreatedAt>1447796287460</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>users API</Description>
     <DisplayName>users</DisplayName>
-    <LastModifiedAt>1447611170506</LastModifiedAt>
+    <LastModifiedAt>1447796537801</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>ApiKeyFaultMessage</Policy>
         <Policy>Delete-User</Policy>
         <Policy>ExtractUserID</Policy>
+        <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
@@ -33,4 +34,5 @@
         <TargetEndpoint>default</TargetEndpoint>
         <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>
