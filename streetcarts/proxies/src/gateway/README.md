@@ -44,7 +44,7 @@ If this is the first time that you have uploaded the proxies, you have to ensure
    - Ensure that you specify "data-manager" as the name of the API proxy.
    - Ensure that you set the Request Body to: command=install   
 
-Note: Be sure to specify the correct revision for your deployed instance of data-manager.
+   Note: Be sure to specify the correct revision for your deployed instance of data-manager.
 
 2. Undeploy and then redeploy the data-manager proxy in the Edge UI. 
 
