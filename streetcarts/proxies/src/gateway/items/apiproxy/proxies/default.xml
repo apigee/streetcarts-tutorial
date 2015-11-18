@@ -4,9 +4,6 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
-            </Step>
-            <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
             <Step>
@@ -39,7 +36,16 @@
             <Description>Update Menu Item</Description>
             <Request>
                 <Step>
-                    <Name>Update-Item-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>ValidateToken</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
@@ -91,5 +97,12 @@
         <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
-    <RouteRule name="noroute"/>
+    <RouteRule name="test">
+        <Condition>organization.name = "apptraining"</Condition>
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="production">
+        <Condition>organization.name = "docfood"</Condition>
+        <TargetEndpoint>docfood</TargetEndpoint>
+    </RouteRule>
 </ProxyEndpoint>

@@ -179,6 +179,68 @@ app.get('/users/:uuid', function (req, res) {
     });
 });
 
+app.get('/reviews/:uuid', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/review/' + uuid);
+    dataManager.getDetailsForReview(uuid, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+app.post('/reviews', function (req, res) {
+    var args = {
+        "new_values": req.body
+    };
+    console.log('reviews');
+
+    dataManager.addNewReview(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+app.delete('/reviews/:uuid', function (req, res) {
+
+    var reviewUUID = req.params.uuid;
+    
+    console.log('/reviews/' + reviewUUID);
+
+    dataManager.deleteReview(reviewUUID, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+app.put('/reviews/:uuid', function (req, res) {
+    var args = {
+        "review_uuid": req.params.uuid,
+        "new_values": req.body
+    };
+    console.log('/reviews/' + req.params.uuid);
+
+    dataManager.updateDetailsForReview(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 
 //*** APIs for registered cart owners.
 
@@ -318,13 +380,14 @@ app.post('/menus/:uuid/items', function (req, res) {
     });
 });
 
-app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+app.put('/items/:item_uuid', function (req, res) {
     var args = {
-        "menu_uuid": req.params.menu_uuid,
-        "item_uuid": req.params.item_uuid
+        "item_uuid": req.params.item_uuid,
+        "new_values": req.body
     };
-    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
-    dataManager.addItemToMenu(args, function (error, data) {
+    console.log(args);
+    console.log('/items/' + req.params.item_uuid);
+    dataManager.updateDetailsForItem(args, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -341,8 +404,8 @@ app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
         "menu_uuid": req.params.menu_uuid,
         "new_values": req.body
     };
-    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
     console.log(req.body);
+    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
     dataManager.updateDetailsForItem(args, function (error, data) {
         if (error) {
             res.send(error);
@@ -354,6 +417,22 @@ app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     });
 });
 
+app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
+    var args = {
+        "menu_uuid": req.params.menu_uuid,
+        "item_uuid": req.params.item_uuid
+    };
+    console.log('/menus/' + req.params.menu_uuid + '/items/' + req.params.item_uuid);
+    dataManager.addItemToMenu(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 
 app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     var args = {

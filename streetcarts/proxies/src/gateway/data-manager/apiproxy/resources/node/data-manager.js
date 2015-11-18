@@ -355,12 +355,14 @@ module.exports = {
             }
         });
     },
-    updateDetailsForItem: function (args, callback) {
+/*    updateDetailsForItem: function (args, callback) {
         
         endpointPath = "/menus/" + args.menu_uuid + "/includes/items/" +
             args.item_uuid;
 
         var uri = host + appPath + endpointPath;
+        
+        console.log(uri);
         
         var options = {
             uri: uri,
@@ -399,6 +401,35 @@ module.exports = {
             }
         });
 
+    },
+*/
+    updateDetailsForItem: function (args, callback) {
+        
+        endpointPath = "/items/" + args.item_uuid;
+
+        var uri = host + appPath + endpointPath;
+        
+        console.log(uri);
+        
+        var options = {
+            uri: uri,
+            body: JSON.stringify(args.new_values),
+            method: "PUT"
+        };
+
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                console.log(entity);
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+        
     },
     addNewItem: function (args, callback) {
 
@@ -509,6 +540,95 @@ module.exports = {
         endpointPath = "/menus/" + args.menu_uuid + 
             "/includes/items/" + args.item_uuid;
         
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    addNewReview: function (args, callback) {
+        
+        endpointPath = '/reviews';
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            body: JSON.stringify(args.new_values),
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    getDetailsForReview: function (reviewUUID, callback) {
+        
+        endpointPath = "/reviews/" + reviewUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    updateDetailsForReview: function (args, callback) {
+        
+        endpointPath = "/reviews/" + args.review_uuid;
+
+        var uri = host + appPath + endpointPath;
+        
+        options = {
+            uri: uri,
+            body: JSON.stringify(args.new_values),
+            method: "PUT"
+        };
+
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                console.log(JSON.stringify(error));
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                console.log(entity);
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    deleteReview: function (reviewUUID, callback) {
+        
+        endpointPath = "/reviews/" + reviewUUID;
         var uri = host + appPath + endpointPath;
         
         var options = {
