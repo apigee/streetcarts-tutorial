@@ -29,7 +29,7 @@ If git prompts you for credentials, you can configure it to either use SSH or se
 
 2. Run the shell script: ```./streetcarts_build.sh```
 
-   You will be prompted to enter your Edge email, password, org name, and deployment environment. The deployment environment is typically either the Edge Cloud, https://api.enterprise.apigee.com, or the Edge e2e server:  https://api.e2e.apigee.net. 
+   You will be prompted to enter your Edge email, password, org name, and deployment environment. The deployment environment is typically either the Edge Cloud, https://api.enterprise.apigee.com, or the Edge e2e server: https://api.e2e.apigee.net. 
 
    If you want to pass all that on the command line:
 
