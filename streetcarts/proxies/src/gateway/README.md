@@ -33,11 +33,11 @@ You will be prompted to enter your Edge email, password, org name, and deploymen
 
 If you want to pass all that on the command line:
 
-> ./streetcarts_build.sh  -u sfoo@apigee.com -p PWORD -o myorg -e https://api.enterprise.apigee.com
+# ./streetcarts_build.sh  -u sfoo@apigee.com -p PWORD -o myorg -e https://api.enterprise.apigee.com
 
 Use the -h option for help:
 
-> ./streetcarts_build.sh  -h
+# ./streetcarts_build.sh  -h
 
 In the Edge UI, check your org to make sure the proxies were deployed.
 
