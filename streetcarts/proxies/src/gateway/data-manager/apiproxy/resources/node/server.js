@@ -61,10 +61,10 @@ app.get('/carts/:uuid', function (req, res) {
     });
 });
 
-app.get('/carts/:uuid/menus', function (req, res) {
+app.get('/items/:uuid', function (req, res) {
     var uuid = req.params.uuid;
-    console.log('/carts/' + uuid + '/menus');
-    dataManager.getMenusForCart(uuid, function (error, data) {
+    console.log('/items/' + uuid);
+    dataManager.getDetailsForItem(uuid, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -75,10 +75,10 @@ app.get('/carts/:uuid/menus', function (req, res) {
     });
 });
 
-app.get('/items/:uuid', function (req, res) {
+app.get('/carts/:uuid/menus', function (req, res) {
     var uuid = req.params.uuid;
-    console.log('/items/' + uuid);
-    dataManager.getDetailsForItem(uuid, function (error, data) {
+    console.log('/carts/' + uuid + '/menus');
+    dataManager.getMenusForCart(uuid, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -179,9 +179,28 @@ app.get('/users/:uuid', function (req, res) {
     });
 });
 
+app.post('/carts/:uuid/reviews', function (req, res) {
+    var uuid = req.params.uuid;
+    var reviewData = req.body;
+    var args = {
+        "cartID": uuid,
+        "new_values": reviewData
+    };
+    console.log('/carts/' + uuid + '/reviews');
+
+    dataManager.addNewReview(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
 app.get('/reviews/:uuid', function (req, res) {
     var uuid = req.params.uuid;
-    console.log('/review/' + uuid);
+    console.log('/reviews/' + uuid);
     dataManager.getDetailsForReview(uuid, function (error, data) {
         if (error) {
             res.send(error);
@@ -192,13 +211,10 @@ app.get('/reviews/:uuid', function (req, res) {
         }
     });
 });
-app.post('/reviews', function (req, res) {
-    var args = {
-        "new_values": req.body
-    };
-    console.log('reviews');
-
-    dataManager.addNewReview(args, function (error, data) {
+app.get('/carts/:uuid/reviews', function (req, res) {
+    var uuid = req.params.uuid;
+    console.log('/carts/' + uuid + '/reviews');
+    dataManager.getReviewsForCart(uuid, function (error, data) {
         if (error) {
             res.send(error);
         }
