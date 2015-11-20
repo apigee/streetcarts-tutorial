@@ -34,6 +34,11 @@
                     <FaultRules/>
                     <Name>GenerateToken</Name>
                 </Step>
+                <Step>
+                    <Condition>streetcarts.user.valid = false</Condition>
+                    <FaultRules/>
+                    <Name>InvalidUserFault</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>

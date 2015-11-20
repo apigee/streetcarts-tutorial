@@ -25,15 +25,15 @@
   if (exchange.isSuccess()) {
     var responseObj = exchange.getResponse().content.asJSON;
     var statusCode = responseObj.statusCode;
+    print("CODE: " + statusCode);
     if (statusCode == "200") {
         print("USER VALID");
-        //TODO --- Steve needs to return this in the response. 
+        //TODO --- Steve needs to return this in the response or entire user.  
         var ownerId = "4ab08a6a-6d16-11e5-817d-a9b5da1cd192"; 
         context.setVariable("streetcarts.user.valid", "true");
         context.setVariable("streetcarts.user.id", ownerId);
-         }
      }
-      else {
-        print("USER VALIDATION FAILED");
+     else {
         context.setVariable("streetcarts.user.valid", "false");
      }
+  }
