@@ -4,5 +4,5 @@
  print("KEY: " + dmKey);
  
  context.setVariable("request.header.x-api-key", dmKey);
- var targetRewrite = target + "/carts" + suffix;
+ var targetRewrite = target + "/foodcarts" + suffix;
  context.setVariable("target.url", targetRewrite);

@@ -7,14 +7,19 @@ var endpointPath = '';
 var token = '';
 
 module.exports = {
+
+    // Carts //
+
+    // Create a new cart.
     addNewCart: function (args, callback) {
         
         endpointPath = '/foodcarts';
-        var uri = host + appPath + endpointPath;
         
+        var uri = host + appPath + endpointPath;
+
         var options = {
             uri: uri,
-            body: JSON.stringify(args.new_values),
+            body: JSON.stringify(args.newValues),
             method: "POST"
         };
         
@@ -29,52 +34,8 @@ module.exports = {
             }
         });
     },
-    updateDetailsForCart: function (args, callback) {
-        
-        endpointPath = "/foodcarts/" + args.cart_uuid;
-
-        var uri = host + appPath + endpointPath;
-        
-        options = {
-            uri: uri,
-            body: JSON.stringify(args.new_values),
-            method: "PUT"
-        };
-
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                console.log(JSON.stringify(error));
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                console.log(entity);
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
-    deleteCart: function (cartUUID, callback) {
-        
-        endpointPath = "/foodcarts/" + cartUUID;
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
+    
+    // Get the list of carts
     getCartList: function (args, callback) {
         
         endpointPath = '/foodcarts';
@@ -91,13 +52,15 @@ module.exports = {
             } else {
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(cartList){
-                    cartList.carts = cartList.entities;
+                    cartList.foodcarts = cartList.entities;
                     delete cartList.entities;
                     callback(null, JSON.stringify(cartList));
                 });
             }
         });
     },
+    
+    // Get a cart by ID
     getCart: function (cartUUID, callback) {
         
         endpointPath = "/foodcarts/" + cartUUID;
@@ -110,7 +73,14 @@ module.exports = {
         
         return makeRequest(options, function (error, response) {
             if (error) {
-                callback(error, null);
+                if (error.statusCode == 401) {
+                    error.message = "Unable to find a food cart with ID "+ 
+                        cartUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
             } else {
                 var entity = JSON.parse(response)['entities'][0];
                 streamlineResponseEntity(entity, function(streamlinedResponse){
@@ -119,6 +89,8 @@ module.exports = {
             }
         });
     },
+    
+    // Get carts owned by a user
     getCartsOwnedByUser: function (userUUID, callback) {
         
         endpointPath = '/users/' + userUUID + '/owns';
@@ -135,59 +107,100 @@ module.exports = {
             } else {
                 var entities = JSON.parse(response)['entities'];
                 streamlineResponseArray(entities, function(cartList){
-                    cartList.carts = cartList.entities;
+                    cartList.foodcarts = cartList.entities;
                     delete cartList.entities;
                     callback(null, JSON.stringify(cartList));
                 });                
             }
         });
     },
-    getMenusForCart: function (cartUUID, callback) {
+    
+    // Update a cart
+    updateDetailsForCart: function (args, callback) {
         
-        endpointPath = '/foodcarts/' + cartUUID + '/publishes';
+        endpointPath = "/foodcarts/" + args.cartUUID;
+
+        var uri = host + appPath + endpointPath;
+        
+        options = {
+            uri: uri,
+            body: JSON.stringify(args.newValues),
+            method: "PUT"
+        };
+
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    
+    // Delete a cart
+    deleteCart: function (cartUUID, callback) {
+        
+        endpointPath = "/foodcarts/" + cartUUID;
         var uri = host + appPath + endpointPath;
         
         var options = {
             uri: uri,
-            method: "GET"
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a food cart with ID "+ 
+                        cartUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    
+    // Menus //
+    
+    // Create a new menu
+    addNewMenu: function (args, callback) {
+        var cartID = args.cartUUID;
+        var menuData = args.newValues;
+        menuData.cartID = cartID;
+        
+        endpointPath = "/foodcarts/" + cartID + "/publishes/menus";
+        
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            body: JSON.stringify(menuData),
+            method: "POST"
         };
         
         return makeRequest(options, function (error, response) {
             if (error) {
                 callback(error, null);
             } else {
-                var entities = JSON.parse(response)['entities'];
-                streamlineResponseArray(entities, function(menuList){
-                    menuList.menus = menuList.entities;
-                    delete menuList.entities;
-                    callback(null, JSON.stringify(menuList));
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
                 });
             }
         });
     },
-    getItemsForCart: function (cartUUID, callback) {
-        
-        endpointPath = '/foodcarts/' + cartUUID + '/offers';
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entities = JSON.parse(response)['entities'];
-                streamlineResponseArray(entities, function(menuList){
-                    menuList.menus = menuList.entities;
-                    delete menuList.entities;
-                    callback(null, JSON.stringify(menuList));
-                });
-            }
-        });
-    },
+    
+    // Get a list of all menus
     getMenuList: function (args, callback) {
         
         var menuList = [];
@@ -230,9 +243,9 @@ module.exports = {
                                 callback();
                             }
                         });
-                    }, function(err){
-                        if(err) {
-                            console.log('Could not add the menu name: ' + err);
+                    }, function(error){
+                        if(error) {
+                            callback(error, null);
                         } else {
                             callback(null, JSON.stringify(menuList));
                         }
@@ -241,6 +254,8 @@ module.exports = {
             }
         });
     },
+    
+    // Get a menu by its ID
     getMenu: function (menuUUID, callback) {
 
         var menu;
@@ -255,191 +270,51 @@ module.exports = {
         
         makeRequest(options, function (error, response) {
             if (error) {
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(menuData){
-                    menu = menuData;
-                });
-            }
-        });
-
-        endpointPath = '/menus/' + menuUUID + '/includes';
-        uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entities = JSON.parse(response)['entities'];
-                streamlineResponseArray(entities, function(itemList) {
-                    menu['items'] = itemList.entities.slice();
-                    callback(null, JSON.stringify(menu));
-                });
-            }
-        });
-    },
-    getItemsForMenu: function (menuUUID, callback) {
-        
-        endpointPath = '/menus/' + menuUUID + '/includes';
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entities = JSON.parse(response)['entities'];
-                streamlineResponseArray(entities, function(itemList){
-                    itemList.items = itemList.entities;
-                    delete itemList.entities;
-                    callback(null, JSON.stringify(itemList));
-                });
-            }
-        });
-    },
-    getDetailsForItem: function (itemUUID, callback) {
-        
-        endpointPath = "/items/" + itemUUID;
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
-    getDetailsForItemInMenu: function (args, callback) {
-        
-        endpointPath = "/menus/" + args.menu_uuid + "/includes/items/" +
-            args.item_uuid;
-
-        var uri = host + appPath + endpointPath;
-        
-        console.log(uri);
-        
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-        
-        makeRequest(options, function (error, response) {
-            if (error) {
-                console.log(error);
-                error.message = "That item appears not to be in this menu.";
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
-    updateDetailsForItem: function (args, callback) {
-        
-        endpointPath = "/items/" + args.item_uuid;
-
-        var uri = host + appPath + endpointPath;
-        
-        console.log(uri);
-        
-        var options = {
-            uri: uri,
-            body: JSON.stringify(args.new_values),
-            method: "PUT"
-        };
-
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                console.log(JSON.stringify(error));
-                callback(error, null);
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a menu with ID "+ 
+                        menuUUID;                    
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
             } else {
                 var entity = JSON.parse(response)['entities'][0];
                 console.log(entity);
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+                streamlineResponseEntity(entity, function(menuData){
+                    menu = menuData;
                 });
-            }
-        });
-        
-    },
-    addNewItem: function (args, callback) {
+                
+                endpointPath = '/menus/' + menuUUID + '/includes';
+                uri = host + appPath + endpointPath;
+                
+                var options = {
+                    uri: uri,
+                    method: "GET"
+                };
+                
+                return makeRequest(options, function (error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        console.log(response);
+                        var entities = JSON.parse(response)['entities'];
+                        streamlineResponseArray(entities, function(itemList) {
+                            menu['items'] = itemList.entities.slice();
+                            callback(null, JSON.stringify(menu));
+                        });
+                    }
+                });
 
-        var cartID = args.cart_uuid;
-        var itemData = args.new_values;
-        endpointPath = "/foodcarts/" + cartID + "/offers/items";
-        console.log(cartID);
-        itemData.cartID = cartID;
-        
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            body: JSON.stringify(itemData),
-            method: "POST"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
             }
         });
     },
-    addNewMenu: function (args, callback) {
-        var cartID = args.cart_uuid;
-        var menuData = args.new_values;
-        menuData.cartID = cartID;
-        
-        endpointPath = "/foodcarts/" + cartID + "/publishes/menus";
-        
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            body: JSON.stringify(menuData),
-            method: "POST"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
+    
+    // Add an existing item to a menu
     addItemToMenu: function (args, callback) {
 
-        endpointPath = "/menus/" + args.menu_uuid + 
-            "/includes/items/" + args.item_uuid;
+        endpointPath = "/menus/" + args.menuUUID + 
+            "/includes/items/" + args.itemUUID;
         
         var uri = host + appPath + endpointPath;
         
@@ -459,10 +334,12 @@ module.exports = {
             }
         });
     },
+    
+    // Create an item and add it to a menu
     addNewItemToMenu: function (args, callback) {
 
-        var cartID = args.new_values.cartID;
-        var itemData = args.new_values;
+        var cartID = args.newValues.cartID;
+        var itemData = args.newValues;
         itemData.cartID = cartID;
 
         endpointPath = "/menus/" + args.menuUUID + 
@@ -487,10 +364,12 @@ module.exports = {
             }
         });
     },
+    
+    // Remove an item from a menu
     removeItemFromMenu: function (args, callback) {
 
-        endpointPath = "/menus/" + args.menu_uuid + 
-            "/includes/items/" + args.item_uuid;
+        endpointPath = "/menus/" + args.menuUUID + 
+            "/includes/items/" + args.itemUUID;
         
         var uri = host + appPath + endpointPath;
         
@@ -510,11 +389,264 @@ module.exports = {
             }
         });
     },
+    
+    // Get the menus for a cart
+    getMenusForCart: function (cartUUID, callback) {
+        
+        endpointPath = '/foodcarts/' + cartUUID + '/publishes';
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a food cart with ID "+ 
+                        cartUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(menuList){
+                    menuList.menus = menuList.entities;
+                    delete menuList.entities;
+                    callback(null, JSON.stringify(menuList));
+                });
+            }
+        });
+    },
+    
+    // Get the items on a menu.
+    getItemsForMenu: function (menuUUID, callback) {
+        
+        endpointPath = '/menus/' + menuUUID + '/includes';
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a menu with ID "+ 
+                        menuUUID;                    
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(itemList){
+                    itemList.items = itemList.entities;
+                    delete itemList.entities;
+                    callback(null, JSON.stringify(itemList));
+                });
+            }
+        });
+    },
+    
+    // Items //
+    
+    // Create a new item
+    addNewItem: function (args, callback) {
+
+        var cartID = args.cartUUID;
+        var itemData = args.newValues;
+        itemData.cartID = cartID;
+        
+        endpointPath = "/foodcarts/" + cartID + "/offers/items";
+        
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            body: JSON.stringify(itemData),
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    
+    // Get the details for an item
+    getDetailsForItem: function (itemUUID, callback) {
+        
+        endpointPath = "/items/" + itemUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    
+    // Get the items for a cart
+    getItemsForCart: function (cartUUID, callback) {
+        
+        endpointPath = '/foodcarts/' + cartUUID + '/offers';
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a food cart with ID "+ 
+                        cartUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+                var entities = JSON.parse(response)['entities'];
+                streamlineResponseArray(entities, function(itemList){
+                    itemList.items = itemList.entities;
+                    delete itemList.entities;
+                    callback(null, JSON.stringify(itemList));
+                });
+            }
+        });
+    },
+    
+    // Get the details for an item on a menu
+    getDetailsForItemInMenu: function (args, callback) {
+        
+        endpointPath = "/menus/" + args.menuUUID + "/includes/items/" +
+            args.itemUUID;
+
+        var uri = host + appPath + endpointPath;
+        
+        console.log(uri);
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        makeRequest(options, function (error, response) {
+            if (error) {
+                error.message = "That item appears not to be in this menu.";
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+    
+//    // Update an item
+//    updateDetailsForItem: function (args, callback) {
+//        
+//        endpointPath = "/items/" + args.itemUUID;
+//
+//        var uri = host + appPath + endpointPath;
+//        
+//        var options = {
+//            uri: uri,
+//            body: JSON.stringify(args.newValues),
+//            method: "PUT"
+//        };
+//
+//        return makeRequest(options, function (error, response) {
+//            if (error) {
+//                callback(error, null);
+//            } else {
+//                var entity = JSON.parse(response)['entities'][0];
+//                streamlineResponseEntity(entity, function(streamlinedResponse){
+//                    callback(null, JSON.stringify(streamlinedResponse));
+//                });
+//            }
+//        });
+//        
+//    },
+    
+    // Update an item
+    updateDetailsForItem: function (args, callback) {
+        
+        var itemUUID = args.itemUUID;
+        
+        endpointPath = "/items/" + itemUUID;
+
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a menu item with ID "+ 
+                        itemUUID;                    
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+            
+                var options = {
+                    uri: uri,
+                    body: JSON.stringify(args.newValues),
+                    method: "PUT"
+                };
+        
+                return makeRequest(options, function (error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        var entity = JSON.parse(response)['entities'][0];
+                        streamlineResponseEntity(entity, function(streamlinedResponse){
+                            callback(null, JSON.stringify(streamlinedResponse));
+                        });
+                    }
+                });
+            }
+        });        
+    },
+    
+    // Reviews // 
+    
+    // Create a new review
     addNewReview: function (args, callback) {
         
-        var cartID = args.cartID;
-//        var userID = args.userUUID;
-        var reviewData = args.new_values;        
+        var cartID = args.cartUUID;
+        var reviewData = args.newValues;        
         reviewData.cartID = cartID;
         
         endpointPath = '/foodcarts/' + cartID + '/reviewedIn/reviews';
@@ -540,6 +672,8 @@ module.exports = {
             }
         });
     },
+    
+    // Get review for a cart
     getReviewsForCart: function (cartUUID, callback) {
         
         endpointPath = '/foodcarts/' + cartUUID + '/reviewedIn/reviews';
@@ -563,6 +697,8 @@ module.exports = {
             }
         });
     },
+    
+    // Get details for a review
     getDetailsForReview: function (reviewUUID, callback) {
         
         endpointPath = "/reviews/" + reviewUUID;
@@ -584,15 +720,17 @@ module.exports = {
             }
         });
     },
+    
+    // Update a review
     updateDetailsForReview: function (args, callback) {
         
-        endpointPath = "/reviews/" + args.review_uuid;
+        endpointPath = "/reviews/" + args.reviewUUID;
 
         var uri = host + appPath + endpointPath;
         
         options = {
             uri: uri,
-            body: JSON.stringify(args.new_values),
+            body: JSON.stringify(args.newValues),
             method: "PUT"
         };
 
@@ -609,6 +747,8 @@ module.exports = {
             }
         });
     },
+    
+    // Delete a review
     deleteReview: function (reviewUUID, callback) {
         
         endpointPath = "/reviews/" + reviewUUID;
@@ -630,6 +770,10 @@ module.exports = {
             }
         });
     },
+    
+    // Users //
+    
+    // Get the list of users
     getUserList: function (args, callback) {
         
         endpointPath = '/users';
@@ -653,6 +797,8 @@ module.exports = {
             }
         });
     },
+    
+    // Get a user by ID
     getUser: function (userUUID, callback) {
         
         endpointPath = "/users/" + userUUID;
@@ -665,7 +811,14 @@ module.exports = {
         
         return makeRequest(options, function (error, response) {
             if (error) {
-                callback(error, null);
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find a user with ID "+ 
+                        userUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
             } else {
                 var entity = JSON.parse(response)['entities'][0];
                 streamlineResponseEntity(entity, function(streamlinedResponse){
@@ -674,6 +827,8 @@ module.exports = {
             }
         });
     },
+    
+    // Create a user account
     registerUser: function (userData, callback) {
         
         console.log(userData);
@@ -720,6 +875,8 @@ module.exports = {
             });            
         }
     },
+    
+    // Check that a user is in the data store
     authenticateUser: function (credentials, callback) {
         
         endpointPath = "/token";
@@ -741,6 +898,8 @@ module.exports = {
             }
         });
     },
+    
+    // Delete a user account
     deleteUser: function (userUUID, callback) {
         
         endpointPath = "/users/" + userUUID;
@@ -765,7 +924,8 @@ module.exports = {
     }
 };
 
-
+// Make RESTful requests to the data store. All requests
+// are made through this function.
 function makeRequest(options, callback) {
     
     request(options, function (error, response, body) {
@@ -790,6 +950,8 @@ function makeRequest(options, callback) {
     });
 }
 
+// Remove unwanted properties from arrayed entity data returned by 
+// the data store.
 function streamlineResponseArray(entityArray, callback) {
 
     var entityList = {
@@ -803,6 +965,8 @@ function streamlineResponseArray(entityArray, callback) {
     callback(entityList);
 }
 
+// Removed unwanted properties from an entity returned by 
+// the data store.
 function streamlineResponseEntity(responseData, callback) {
 
     var unwantedProperties = [
@@ -824,7 +988,10 @@ function streamlineResponseEntity(responseData, callback) {
     var arrayLength = unwantedProperties.length;
     for (var i = 0; i < arrayLength; i++) {
         var property = unwantedProperties[i];
-        delete responseData[property];
+        if (property)
+        {
+            delete responseData[property];            
+        }
     }
     callback(responseData);
 }
