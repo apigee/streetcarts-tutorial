@@ -280,7 +280,6 @@ module.exports = {
                 }            
             } else {
                 var entity = JSON.parse(response)['entities'][0];
-                console.log(entity);
                 streamlineResponseEntity(entity, function(menuData){
                     menu = menuData;
                 });
@@ -297,7 +296,6 @@ module.exports = {
                     if (error) {
                         callback(error, null);
                     } else {
-                        console.log(response);
                         var entities = JSON.parse(response)['entities'];
                         streamlineResponseArray(entities, function(itemList) {
                             menu['items'] = itemList.entities.slice();

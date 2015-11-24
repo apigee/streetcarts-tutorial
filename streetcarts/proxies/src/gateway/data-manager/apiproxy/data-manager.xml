@@ -4,7 +4,7 @@
     <CreatedAt>1448243728342</CreatedAt>
     <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1448325994379</LastModifiedAt>
+    <LastModifiedAt>1448333631408</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GenerateAccessToken</Policy>

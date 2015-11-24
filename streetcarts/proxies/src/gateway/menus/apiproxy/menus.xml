@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="20" name="menus">
+<APIProxy revision="2" name="menus">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
     <CreatedAt>1447796241470</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>menus</Description>
     <DisplayName>menus</DisplayName>
-    <LastModifiedAt>1447796241470</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1448333561754</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Delete-Menu-Response</Policy>
         <Policy>Get-MenuID</Policy>
+        <Policy>GetDataManagerKey</Policy>
         <Policy>Quota-1</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>Remove-Item-from-Menu-Response</Policy>
