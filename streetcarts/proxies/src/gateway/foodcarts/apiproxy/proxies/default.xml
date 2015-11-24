@@ -20,11 +20,17 @@
             <Description>Get FoodCart Items</Description>
             <Request>
                 <Step>
-                    <Name>Get-FoodCart-Items-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*/items") and (request.verb = "GET")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Get FoodCart Menus">
             <Description>Get FoodCart Menus</Description>

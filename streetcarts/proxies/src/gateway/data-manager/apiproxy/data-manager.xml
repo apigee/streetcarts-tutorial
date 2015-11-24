@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <APIProxy revision="1" name="data-manager">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447778832150</CreatedAt>
-    <CreatedBy>wwitman@apigee.com</CreatedBy>
+    <CreatedAt>1448243728342</CreatedAt>
+    <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1447780404614</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1448325994379</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GenerateAccessToken</Policy>
         <Policy>Remove-API-Key</Policy>

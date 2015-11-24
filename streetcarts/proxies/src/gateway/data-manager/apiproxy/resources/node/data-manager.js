@@ -511,7 +511,7 @@ module.exports = {
     // Get the items for a cart
     getItemsForCart: function (cartUUID, callback) {
         
-        endpointPath = '/foodcarts/' + cartUUID + '/offers';
+        endpointPath = '/foodcarts/' + cartUUID + '/offers/items';
         var uri = host + appPath + endpointPath;
         
         var options = {

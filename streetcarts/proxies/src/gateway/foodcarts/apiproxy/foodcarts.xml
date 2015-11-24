@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="16" name="foodcarts">
+<APIProxy revision="2" name="foodcarts">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
     <CreatedAt>1447610489958</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>foodcarts</Description>
     <DisplayName>foodcarts</DisplayName>
-    <LastModifiedAt>1447610489958</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1448326093515</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Create-FoodCart-Response</Policy>
         <Policy>Delete-FoodCart-Response</Policy>
         <Policy>Get-FoodCart-Items-Response</Policy>
         <Policy>GetCartId</Policy>
+        <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
@@ -33,4 +34,5 @@
         <TargetEndpoint>default</TargetEndpoint>
         <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>
