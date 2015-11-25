@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="1" name="data-manager">
+<APIProxy revision="2" name="data-manager">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1448243728342</CreatedAt>
+    <CreatedAt>1448392152622</CreatedAt>
     <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1448333631408</LastModifiedAt>
+    <LastModifiedAt>1448414835075</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GenerateAccessToken</Policy>

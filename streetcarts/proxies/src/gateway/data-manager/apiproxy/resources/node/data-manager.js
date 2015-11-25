@@ -890,9 +890,10 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                console.log(response);
-                var message = '{"message":"User found.","statusCode":"200"}';
-                callback(null, message);
+                var entity = JSON.parse(response);
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
             }
         });
     },
