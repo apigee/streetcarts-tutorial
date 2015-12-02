@@ -17,6 +17,7 @@
     "/GET/v1/streetcarts/menus/*/items",
     "/POST/v1/streetcarts/menus/*/items/*",
     "/DELETE/v1/streetcarts/menus/",
+    "/DELETE/v1/streetcarts/items/",
     "/GET/v1/streetcarts/users/*",
     "/GET/v1/streetcarts/foodcarts"
   ],
