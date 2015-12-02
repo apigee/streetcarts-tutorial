@@ -55,11 +55,20 @@
             <Description>Delete Menu Item</Description>
             <Request>
                 <Step>
-                    <Name>Delete-Item-Response</Name>
+                    <Name>SetRestrictedResource</Name>
+                </Step>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>ValidateToken</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{item_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Get All Menu Items">
             <Description>Get All Menu Items</Description>
