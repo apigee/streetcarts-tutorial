@@ -39,6 +39,20 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{user_id}") and (request.verb = "GET")</Condition>
         </Flow>
+        <Flow name="Get Users">
+            <Description>Get all user info.</Description>
+            <Request>
+                <Step>
+                    <Name>SetRestrictedResourcePost</Name>
+                </Step>
+                <Step>
+                    <FaultRules/>
+                    <Name>ValidateToken</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
+        </Flow>
         <Flow name="Update User">
             <Description>Update User</Description>
             <Request>
