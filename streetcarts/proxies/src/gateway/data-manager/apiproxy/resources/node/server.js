@@ -496,6 +496,22 @@ app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     });
 });
 
+app.delete('/items/:uuid', function (req, res) {
+    var itemUUID = req.params.uuid;
+    
+    console.log('DELETE /items/' + itemUUID);
+
+    dataManager.deleteItem(itemUUID, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
 app.post('/users', function (req, res) {
     var userData = req.body;
     

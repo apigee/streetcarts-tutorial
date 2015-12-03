@@ -12,6 +12,7 @@
         <Policy>Delete-Item-Response</Policy>
         <Policy>Get-Item-ID</Policy>
         <Policy>Get-Items-Response</Policy>
+        <Policy>GetDataManagerKey</Policy>
         <Policy>Got-Item-Response</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>

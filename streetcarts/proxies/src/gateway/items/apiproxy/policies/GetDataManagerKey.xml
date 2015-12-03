@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<KeyValueMapOperations async="false" continueOnError="false" enabled="true" name="GetDataManagerKey" mapIdentifier="DATA-MANAGER-API-KEY">
+    <DisplayName>GetDataManagerKey</DisplayName>
+    <Properties/>
+    <ExclusiveCache>false</ExclusiveCache>
+    <ExpiryTimeInSecs>-1</ExpiryTimeInSecs>
+    <Get assignTo="DATA-MANAGER-KEY" index="1">
+        <Key>
+            <Parameter>X-DATA-MANAGER-KEY</Parameter>
+        </Key>
+    </Get>
+    <Scope>organization</Scope>
+</KeyValueMapOperations>
