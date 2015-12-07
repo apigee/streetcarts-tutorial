@@ -170,6 +170,35 @@ module.exports = {
         });
     },
     
+    // Delete an item
+    deleteItem: function (itemUUID, callback) {
+        
+        endpointPath = "/items/" + itemUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find an item with ID "+ 
+                        itemUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
     // Menus //
     
     // Create a new menu
@@ -566,32 +595,6 @@ module.exports = {
         });
     },
     
-//    // Update an item
-//    updateDetailsForItem: function (args, callback) {
-//        
-//        endpointPath = "/items/" + args.itemUUID;
-//
-//        var uri = host + appPath + endpointPath;
-//        
-//        var options = {
-//            uri: uri,
-//            body: JSON.stringify(args.newValues),
-//            method: "PUT"
-//        };
-//
-//        return makeRequest(options, function (error, response) {
-//            if (error) {
-//                callback(error, null);
-//            } else {
-//                var entity = JSON.parse(response)['entities'][0];
-//                streamlineResponseEntity(entity, function(streamlinedResponse){
-//                    callback(null, JSON.stringify(streamlinedResponse));
-//                });
-//            }
-//        });
-//        
-//    },
-    
     // Update an item
     updateDetailsForItem: function (args, callback) {
         
@@ -636,6 +639,36 @@ module.exports = {
                 });
             }
         });        
+    },
+    
+    // Delete an item
+    deleteItem: function (itemUUID, callback) {
+        
+        endpointPath = "/items/" + itemUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                if (error.statusCode == 401) {                
+                    error.message = "Unable to find an item with ID "+ 
+                        itemUUID;
+                    callback(error, null);
+                }
+                else {
+                    callback(error, null);
+                }            
+            } else {
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
     },
     
     // Reviews // 

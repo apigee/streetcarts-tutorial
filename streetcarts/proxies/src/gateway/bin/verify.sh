@@ -1,4 +1,4 @@
-response=`curl -s -o /dev/null -I -w "%{http_code}" https://api.enterprise.apigee.com/v1/organizations/$org -u $username:$password`
+response=`curl -s -o /dev/null -I -w "%{http_code}" $url/v1/organizations/$org -u $username:$password`
 
 if [ $response -eq 401 ]
 then
