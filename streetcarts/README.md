@@ -20,7 +20,7 @@ Maven is used to sync to GitHub and deploy to Edge. To set things up, follow thi
 
 **Tip:** Because the main Maven build script takes a long time to run, it's handy to hack `build_streetcarts.sh` into separate scripts, one for each of the proxies. For example, `build_users.sh`, `build_data_manager.sh`, and so on.
 
-#### Set up and provision
+#### Provision developer apps and products
 
 1. Clone the docs-sandbox .
 2. `cd` to `docs-sandbox/apps/streetcarts/proxies/src/gateway/bin`
@@ -51,6 +51,38 @@ Maven is used to sync to GitHub and deploy to Edge. To set things up, follow thi
    3. `Do you want to invoke? ([y]/n):`
 
        No No No! Say **"n"** to NOT run the tests. The invoke script is probably broken until further notice. You can always run it standalone. 
+
+
+#### Provision data manager API key
+
+The Data Manager needs to validate an API key for each API call it receives. This is protect against someone hitting the Data Manager without going through Edge. 
+
+Here's how to get the api key for YOUR data manager into YOUR key value map -- the map is scoped to your org, so you (as org admin) need to do these steps to provision the API key into a KV map in your org:
+
+1. Copy the Consumer Key from the developer app called `SC-DATA-MANAGER-APP` -- this key is the API key you must provision per the following steps. It is passed with every API call to the data manager.
+
+1. Go to [this SmartDoc page](http://apigee.com/docs/management/apis/post/organizations/%7Borg_name%7D/keyvaluemaps).
+
+2. Call the api to create a key value map in your org, like thi
+
+    `https://api.enterprise.apigee.com/v1/organizations/YOUR ORG NAME/keyvaluemaps`
+
+    Where this is the JSON body:
+
+  ```
+  {   
+   "name" : "DATA-MANAGER-API-KEY",
+   "entry" : [ 
+    {
+     "name" : "X-DATA-MANAGER-KEY",
+     "value" : “THE CONSMER KEY FROM YOUR SC-DATA-MANAGER-APP“
+    }
+   ]
+  }
+  ```
+
+
+
 
 
 #### Developing proxies
