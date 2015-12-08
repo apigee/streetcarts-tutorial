@@ -12,6 +12,9 @@
             <Step>
                 <Name>GetCartId</Name>
             </Step>
+            <Step>
+                <Name>SetRestrictedResource</Name>
+            </Step>
         </Request>
         <Response/>
     </PreFlow>
@@ -19,9 +22,6 @@
         <Flow name="Get FoodCart Items">
             <Description>Get FoodCart Items</Description>
             <Request>
-                <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
                 <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
@@ -36,9 +36,6 @@
             <Description>Get FoodCart Menus</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>
@@ -52,9 +49,6 @@
             <Description>Get a FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>
@@ -67,9 +61,6 @@
         <Flow name="Update FoodCart">
             <Description>Update FoodCart</Description>
             <Request>
-                <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
                 <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
@@ -87,9 +78,6 @@
             <Description>Delete FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>
@@ -106,9 +94,6 @@
             <Description>Get FoodCarts</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>
@@ -122,9 +107,6 @@
             <Description>Create FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
                 </Step>
             </Request>
@@ -135,9 +117,6 @@
             <Description>Create Foodcart Menu</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
                 </Step>
             </Request>
@@ -147,9 +126,6 @@
         <Flow name="Create Cart Item">
             <Description>Create Foodcart Item</Description>
             <Request>
-                <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
                 <Step>
                     <Name>ValidateToken</Name>
                 </Step>
