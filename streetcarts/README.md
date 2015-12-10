@@ -96,9 +96,8 @@ These are the steps -- good luck!
     **Important:** 
 
     Make these  changes in EVERY proxy EXCEPT data-manager and accesstoken.
-        * In the default TargetEndpoint, make sure the default target URL matches your org-name and environment. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net).
 
-        Do not change the `production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
+        * In the default TargetEndpoint, make sure the default target URL matches your org-name and environment. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net). Do not change the 'production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
         
         * In the ProxyEndpoint, make sure the RouteRule for the default TargetEndpoint is your org name. 
          
