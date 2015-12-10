@@ -43,6 +43,8 @@ In the Edge UI, check your org to make sure the proxies were deployed.
 
 ### Ensure you have the required Node.js plugins
 
+**Note: The ```streetcarts_build.sh``` script does the following automatically.**
+
 If this is the first time that you have uploaded the proxies, you have to ensure that you have all of the required Node.js plugins used by the data-manager API proxy.
 
 1. After running maven to deploy this proxy, call [this Edge API](http://apigee.com/docs/management/apis/post/organizations/%7Borg_name%7D/apis/%7Bapi_name%7D/revisions/%7Brevision_num%7D/npm-0) to run npm install on Edge. This is the API called "Manage Node Packaged Modules" under the SmartDocs->API Proxies menu. 
