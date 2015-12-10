@@ -97,9 +97,9 @@ These are the steps -- good luck!
 
     Make these  changes in EVERY proxy EXCEPT data-manager and accesstoken.
 
-        * In the default TargetEndpoint, make sure the default target URL matches your org-name and environment. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net). Do not change the 'production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
+    * In the default TargetEndpoint, make sure the default target URL matches your org-name and environment. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net). Do not change the 'production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
         
-        * In the ProxyEndpoint, make sure the RouteRule for the default TargetEndpoint is your org name. 
+    * In the ProxyEndpoint, make sure the RouteRule for the default TargetEndpoint is your org name. 
          
 6. Think about if the API needs an OAuth token or if just an API key will do. Most of the APIs that let you edit things require a token. The public APIs just need a key.
 7. In your flow along the lines of this example. Be sure to set the condition property appropriately:
