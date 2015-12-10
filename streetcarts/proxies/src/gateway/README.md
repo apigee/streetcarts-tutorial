@@ -58,6 +58,16 @@ If this is the first time that you have uploaded the proxies, you have to ensure
 
 2. Undeploy and then redeploy the data-manager proxy in the Edge UI. 
 
+### Check HTTPTargetConnection in TargetEndpoints
+
+In all proxies *other than* ```accesstoken``` and ```data-manager```:
+
+1. In the proxy editor Navigator, click **default** under Target Endpoints.
+
+2. In the editor pane, scroll to the bottom of the file and make sure the HTTPTargetConnection URL base path is correct. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net). 
+
+Do not change the `production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
+
 
 ### Problems?
 

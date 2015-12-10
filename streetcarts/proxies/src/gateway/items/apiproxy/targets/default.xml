@@ -20,6 +20,6 @@
     </PreFlow>
     <HTTPTargetConnection>
         <Properties/>
-        <URL>http://apptraining-test.apigee.net/v1/streetcarts/data-manager</URL>
+        <URL>http://ORGNAMEREPLACE-ENVNAMEREPLACE.apigee.net/v1/streetcarts/data-manager</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

@@ -81,11 +81,19 @@
                             <goal>replace</goal>
                         </goals>
                         <configuration>
-                            <includes>
-                                <include>${basedir}/target/apiproxy/*/default.xml</include>
+                           <includes>
+                               <include>${basedir}/target/apiproxy/*/default.xml</include>
                             </includes>
-                            <token>ORGNAMEREPLACE</token>
-                            <value>${org}</value>
+                            <replacements>
+                                <replacement>
+                                  <token>ORGNAMEREPLACE</token>
+                                  <value>${org}</value>
+                                </replacement>
+                                <replacement>
+                                  <token>ENVNAMEREPLACE</token>
+                                  <value>${apigee.env}</value>
+                                </replacement>
+                            </replacements>
                         </configuration>
                     </execution>
                 </executions>

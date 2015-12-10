@@ -17,6 +17,6 @@
     </PreFlow>
     <HTTPTargetConnection>
         <Properties/>
-        <URL>http://docfood-test.e2e.apigee.net/v1/streetcarts/data-manager</URL>
+        <URL>http://ORGNAMEREPLACE-ENVNAMEREPLACE.apigee.net/v1/streetcarts/data-manager</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>
