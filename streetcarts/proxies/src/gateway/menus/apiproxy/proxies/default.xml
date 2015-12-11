@@ -89,7 +89,7 @@
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
     <RouteRule name="test">
-        <Condition>organization.name = "wwitman"</Condition>
+        <Condition>organization.name = "ORGNAMEREPLACE"</Condition>
         <TargetEndpoint>default</TargetEndpoint>
     </RouteRule>
     <RouteRule name="production">

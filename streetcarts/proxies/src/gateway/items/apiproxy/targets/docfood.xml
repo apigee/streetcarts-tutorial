@@ -10,6 +10,9 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
+                <Name>GetDataManagerKey</Name>
+            </Step>
+            <Step>
                 <Name>RewriteTargetUrl</Name>
             </Step>
         </Request>
@@ -19,8 +22,4 @@
         <Properties/>
         <URL>http://docfood-test.e2e.apigee.net/v1/streetcarts/data-manager</URL>
     </HTTPTargetConnection>
-    <PostFlow name="PostFlow">
-        <Request/>
-        <Response/>
-    </PostFlow>
 </TargetEndpoint>

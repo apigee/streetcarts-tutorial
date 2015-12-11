@@ -43,6 +43,8 @@ In the Edge UI, check your org to make sure the proxies were deployed.
 
 ### Ensure you have the required Node.js plugins
 
+**Note: The ```streetcarts_build.sh``` script does the following automatically.**
+
 If this is the first time that you have uploaded the proxies, you have to ensure that you have all of the required Node.js plugins used by the data-manager API proxy.
 
 1. After running maven to deploy this proxy, call [this Edge API](http://apigee.com/docs/management/apis/post/organizations/%7Borg_name%7D/apis/%7Bapi_name%7D/revisions/%7Brevision_num%7D/npm-0) to run npm install on Edge. This is the API called "Manage Node Packaged Modules" under the SmartDocs->API Proxies menu. 
@@ -52,7 +54,21 @@ If this is the first time that you have uploaded the proxies, you have to ensure
 
    Note: Be sure to specify the correct revision for your deployed instance of data-manager.
 
+   OR, use the following cURL. For e2e, change the URL host to https://api.e2e.apigee.net.
+
+   ```curl -X POST --header "Content-Type: application/x-www-form-urlencoded" -u {you@apigee.com} -d "command=install" "https://api.enterprise.apigee.com/v1/organizations/{org}/apis/data-manager/revisions/{version_num}/npm"```
+
 2. Undeploy and then redeploy the data-manager proxy in the Edge UI. 
+
+### Check HTTPTargetConnection in TargetEndpoints
+
+In all proxies *other than* ```accesstoken``` and ```data-manager```:
+
+1. In the proxy editor Navigator, click **default** under Target Endpoints.
+
+2. In the editor pane, scroll to the bottom of the file and make sure the HTTPTargetConnection URL base path is correct. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net). 
+
+Do not change the `production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
 
 
 ### Problems?

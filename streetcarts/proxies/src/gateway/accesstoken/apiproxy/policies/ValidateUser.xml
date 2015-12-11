@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Javascript timeLimit="200" async="false" continueOnError="true" enabled="true" name="ValidateUser">
+<Javascript timeLimit="500" async="false" continueOnError="true" enabled="true" name="ValidateUser">
     <DisplayName>ValidateUser</DisplayName>
     <FaultRules/>
     <Properties/>
