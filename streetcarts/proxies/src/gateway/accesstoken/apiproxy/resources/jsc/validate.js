@@ -12,13 +12,13 @@
     'password': password
   };
   
-  var orgname = context.getVariable('organization.name');
-  print("ORGNAME: " + orgname);
+  //var orgname = "context.getVariable('organization.name');"
+  //print("ORGNAME: " + orgname);
   var dmurl = "";
 
   dmurl = "http://ORGNAMEREPLACE-ENVNAMEREPLACE.apigee.net/v1/streetcarts/data-manager/authenticate";
   
-  if (ORGNAMEREPLACE == 'docfood') {
+  if ("ORGNAMEREPLACE" == 'docfood') {
       dmurl = "http://ORGNAMEREPLACE-ENVNAMEREPLACE.e2e.apigee.net/v1/streetcarts/data-manager/authenticate";
   } 
       

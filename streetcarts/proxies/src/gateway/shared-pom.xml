@@ -83,7 +83,7 @@
                         <configuration>
                            <includes>
                                <include>${basedir}/target/apiproxy/*/default.xml</include>
-                               <include>${basedir}/target/apiproxy/accesstoken/resources/jsc/validate.js</include>
+                               <include>${basedir}/target/apiproxy/resources/jsc/validate.js</include>
                             </includes>
                             <replacements>
                                 <replacement>
