@@ -94,6 +94,10 @@
                                   <token>ENVNAMEREPLACE</token>
                                   <value>${apigee.env}</value>
                                 </replacement>
+                                <replacement>
+                                  <token>PROXYHOSTREPLACE</token>
+                                  <value>${proxyhost}</value>
+                                </replacement>
                             </replacements>
                         </configuration>
                     </execution>
@@ -117,6 +121,9 @@
                         <goals>
                             <goal>deploy</goal>
                         </goals>
+                        <configuration>
+                            <param>${proxyhost}</param>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
