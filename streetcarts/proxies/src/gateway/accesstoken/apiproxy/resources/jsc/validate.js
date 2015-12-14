@@ -12,15 +12,8 @@
     'password': password
   };
   
-  var orgname = "context.getVariable('organization.name');"
-  print("ORGNAME: " + orgname);
 
-  dmurl = "http://ORGNAMEREPLACE-ENVNAMEREPLACE.apigee.net/v1/streetcarts/data-manager/authenticate";
-  
-  if (orgname == 'docfood') {
-      dmurl = "http://ORGNAMEREPLACE-ENVNAMEREPLACE.e2e.apigee.net/v1/streetcarts/data-manager/authenticate";
-  } 
-      
+  dmurl = "http://PROXYHOSTREPLACE/v1/streetcarts/data-manager/authenticate";
   
   var bodyStr = JSON.stringify(bodyObj);
   var dmKey = context.getVariable("DATA-MANAGER-KEY");
