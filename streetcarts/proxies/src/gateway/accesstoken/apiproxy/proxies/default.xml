@@ -26,6 +26,9 @@
                     <Name>Remove-API-Key</Name>
                 </Step>
                 <Step>
+                    <Name>GetDataManagerKey</Name>
+                </Step>
+                <Step>
                     <FaultRules/>
                     <Name>ValidateUser</Name>
                 </Step>
