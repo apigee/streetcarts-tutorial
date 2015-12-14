@@ -15,8 +15,8 @@
   var orgname = context.getVariable('organization.name');
   print("ORGNAME: " + orgname);
   var dmurl = "";
-  if (orgname == 'ORGNAMEREPLACE') {
-      dmurl = "http://" + orgname + "-ENVNAMEREPLACE.apigee.net/v1/streetcarts/data-manager/authenticate";
+  if (orgname == 'wwitman') {
+      dmurl = "http://wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate";
   }
   if (orgname == 'docfood') {
       dmurl = "http://docfood-test.e2e.apigee.net/v1/streetcarts/data-manager/authenticate";
@@ -25,7 +25,10 @@
   
   var bodyStr = JSON.stringify(bodyObj);
   var dmKey = context.getVariable("DATA-MANAGER-KEY");
+  print("DMKEY: " + dmKey);
+ 
   var dmurl = "http://wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate";
+  print("DMURL: " + dmurl);
   var headers = {'Content-Type' : 'application/json', 'x-api-key': dmKey};
 
   //-- Call the data manager.
