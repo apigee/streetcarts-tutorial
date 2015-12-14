@@ -12,9 +12,21 @@
     'password': password
   };
   
+  var orgname = context.getVariable('organization.name');
+  print("ORGNAME: " + orgname);
+  var dmurl = "";
+  if (orgname == 'ORGNAMEREPLACE') {
+      dmurl = "http://" + orgname + "-ENVNAMEREPLACE.apigee.net/v1/streetcarts/data-manager/authenticate";
+  }
+  if (orgname == 'docfood') {
+      dmurl = "http://docfood-test.e2e.apigee.net/v1/streetcarts/data-manager/authenticate";
+  }
+      
+  
   var bodyStr = JSON.stringify(bodyObj);
+  var dmKey = context.getVariable("DATA-MANAGER-KEY");
   var dmurl = "http://wwitman-test.apigee.net/v1/streetcarts/data-manager/authenticate";
-  var headers = {'Content-Type' : 'application/json', 'x-api-key': 'nFES3HWNLTOnfv6Ga6AqPtbe86NA48wJ'};
+  var headers = {'Content-Type' : 'application/json', 'x-api-key': dmKey};
 
   //-- Call the data manager.
   var myRequest = new Request(dmurl,"POST",headers, JSON.stringify(bodyObj));

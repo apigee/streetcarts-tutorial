@@ -11,14 +11,12 @@ Unless indicated otherwise, the scripts are in `smartcarts/proxies/src/gateway/b
 
 * `main.sh` provisions products, developer apps, and a developer to your Edge organization. You should only need to do this once, and after that, only if you edit any of these entity files.  
 * `setenv.sh` where you put your Edge account info used by other scripts. 
-* `invoke.sh` CURRENTLY BROKEN tests your APIs. You can always run `invoke.sh` by calling it directly. As you develop your APIs, you'll call `invoke.sh` many many times.
 * `streetcarts-build.sh` runs the Maven sync/deploy operations. Covered in another [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). This one is in `smartcarts/proxies/src/gateway`. 
+* `invoke.sh` is OBSOLETE. DO NOT USE. Recommend using the Postman collection for testing APIs. 
 
-#### Sync and Deploy using Maven
+#### About Sync and Deploy using Maven
 
 Maven is used to sync to GitHub and deploy to Edge. To set things up, follow this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
-
-**Tip:** Because the main Maven build script takes a long time to run, it's handy to hack `build_streetcarts.sh` into separate scripts, one for each of the proxies. For example, `build_users.sh`, `build_data_manager.sh`, and so on.
 
 #### Provision developer apps and products
 
@@ -48,14 +46,13 @@ Maven is used to sync to GitHub and deploy to Edge. To set things up, follow thi
 
        Say "y" if you are running this script for the first time, or if you have run the cleanup. It creates products, developers, and developer apps that are used by the proxy for testing. 
 
-   3. `Do you want to invoke? ([y]/n):`
-
-       No No No! Say **"n"** to NOT run the tests. The invoke script is probably broken until further notice. You can always run it standalone. 
 
 
 #### Provision data manager API key
 
 The Data Manager needs to validate an API key for each API call it receives. This is protect against someone hitting the Data Manager without going through Edge. 
+
+**Note:** If you previously created the KV map, then redeployed everything, you'll have to delete the previous map and recreate it as explained below. 
 
 Here's how to get the api key for YOUR data manager into YOUR key value map -- the map is scoped to your org, so you (as org admin) need to do these steps to provision the API key into a KV map in your org:
 
@@ -63,7 +60,7 @@ Here's how to get the api key for YOUR data manager into YOUR key value map -- t
 
 1. Go to [this SmartDoc page](http://apigee.com/docs/management/apis/post/organizations/%7Borg_name%7D/keyvaluemaps).
 
-2. Call the api to create a key value map in your org, like thi
+2. Call the api to create a key value map in your org, like this:
 
     `https://api.enterprise.apigee.com/v1/organizations/YOUR ORG NAME/keyvaluemaps`
 

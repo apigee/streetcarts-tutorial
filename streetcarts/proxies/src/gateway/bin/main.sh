@@ -23,10 +23,3 @@ read setup
 if [ -z $setup ] || [ "$setup" = "y" ]; then
   source ./setup.sh
 fi
-
-echo -e "\nDo you want to invoke? ([y]/n):"
-read invoke
-
-if [ -z $invoke ] || [ "$invoke" = "y" ]; then
-  source ./invoke.sh
-fi
