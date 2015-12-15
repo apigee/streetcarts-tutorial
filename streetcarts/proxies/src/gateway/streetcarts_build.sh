@@ -40,7 +40,6 @@ fi
 if [ -z "${password}" ]; then
     read -sp "Password: " password
 fi
-
 echo -e "\n";
 if [ -z "${org}" ]; then
     read -p "org: " org
@@ -78,6 +77,7 @@ cd apps/streetcarts/proxies/src/gateway
 
 
 # The -Doptions=clean undeploys and deletes the existing revision
+# -Dproxyhost contains a value that is used by Maven to auto-replace URLs in the proxy config files.
 
 cd accesstoken
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
