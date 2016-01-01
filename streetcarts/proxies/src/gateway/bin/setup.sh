@@ -22,6 +22,10 @@ curl -u $username:$password $url/v1/o/$org/apiproducts \
 curl -u $username:$password $url/v1/o/$org/apiproducts \
   -H "Content-Type: application/json" -X POST -T ./entities/SC-DATA-MANAGER-PRODUCT.json
 
+  echo  -e "\n**** CREATING SC-OWNER-SCOPE-PRODUCT"
+curl -u $username:$password $url/v1/o/$org/apiproducts \
+  -H "Content-Type: application/json" -X POST -T ./entities/SC-OWNER-SCOPE-PRODUCT.json
+
 
 # Create Developer Apps
 
@@ -40,6 +44,11 @@ echo  -e "\n**** CREATING SC-DATA-MANAGER-APP"
 curl -u $username:$password \
   $url/v1/o/$org/developers/will@streetcarts.com/apps \
   -H "Content-Type: application/json" -X POST -T ./entities/SC-DATA-MANAGER-APP.json
+
+  echo  -e "\n**** CREATING SC-OWNER-SCOPE-APP"
+curl -u $username:$password \
+  $url/v1/o/$org/developers/will@streetcarts.com/apps \
+  -H "Content-Type: application/json" -X POST -T ./entities/SC-OWNER-SCOPE-APP.json
 
 
 

@@ -1,0 +1,32 @@
+{
+  "apiResources": [
+    "/**"
+  ],
+  "approvalType": "auto",
+  "attributes": [
+    {
+      "name": "access",
+      "value": "public"
+    }
+  ],
+  "createdAt": 1451421524404,
+  "createdBy": "wwitman@apigee.com",
+  "description": "",
+  "displayName": "SC-OWNER-SCOPE-PRODUCT",
+  "environments": [
+    "test",
+    "prod"
+  ],
+  "lastModifiedAt": 1451682577830,
+  "lastModifiedBy": "wwitman@apigee.com",
+  "name": "SC-OWNER-SCOPE-PRODUCT",
+  "proxies": [
+    "foodcarts"
+  ],
+  "scopes": [
+    "read",
+    "create",
+    "update",
+    "delete"
+  ]
+}
