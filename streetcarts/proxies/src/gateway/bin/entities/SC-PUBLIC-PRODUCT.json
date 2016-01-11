@@ -4,7 +4,7 @@
     "/GET/v1/streetcarts/foodcarts/*/menus/*",
     "/GET/v1/streetcarts/foodcarts/*/menus",
     "/GET/v1/streetcarts/menus/",
-    "/POST/v1/streetcarts/users/",
+    "/POST/v1/streetcarts/users",
     "/"
   ],
   "approvalType" : "auto",
