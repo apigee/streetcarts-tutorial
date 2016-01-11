@@ -1,10 +1,19 @@
 var request = require('request');
 var async = require('async');
+var apigee = require('apigee-access'); 
 
 var host = 'https://api.usergrid.com';
 var appPath = '/docfood/foodcarttest';
-var endpointPath = '';
-var token = '';
+var clientID;
+var clientSecret;
+
+//var orgVault = apigee.getVault('streetcarts', 'docfood');   
+//orgVault.get('docfood-client-id', function(err, secretValue) {
+//    clientID = secretValue;
+//});
+//orgVault.get('docfood-client-secret', function(err, secretValue) {
+//    clientSecret = secretValue;
+//});
 
 module.exports = {
 
@@ -860,12 +869,14 @@ module.exports = {
     },
     
     // Create a user account
-    registerUser: function (userData, callback) {
+    registerUser: function (userData, isOwner, callback) {
         
         console.log(userData);
         
-        endpointPath = '/users';
+        isOwner = true;
         
+        endpointPath = '/users';
+        console.log("username: " + userData.username);
         // Make sure the client sent a username.
         if (!(userData.username)) {
             var errorObject = new Error();
@@ -894,19 +905,25 @@ module.exports = {
             };
             return makeRequest(options, function (error, response) {
                 if (error) {
-                    console.log("Got an error.");
                     callback(error, null);
                 } else {
-                    console.log("Success.");
                     var entity = JSON.parse(response)['entities'][0];
                     streamlineResponseEntity(entity, function(streamlinedResponse){
-                        callback(null, JSON.stringify(streamlinedResponse));
+                        if (isOwner) {
+                            module.exports.addOwner(streamlinedResponse.uuid, function(error, entity){
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    callback(null, JSON.stringify(streamlinedResponse));              
+                                }
+                            });
+                        }
                     });
                 }
             });            
         }
     },
-    
+
     // Check that a user is in the data store
     authenticateUser: function (credentials, callback) {
         
@@ -917,6 +934,28 @@ module.exports = {
         var options = {
             uri: uri,
             body: JSON.stringify(credentials),
+            method: "POST"
+        };
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var entity = JSON.parse(response);
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });
+    },
+
+    // Check that a user is in the data store
+    addOwner: function (userUUID, callback) {
+        
+        endpointPath = "/groups/owners/users/" + userUUID;
+        var uri = host + appPath + endpointPath;
+        
+        var options = {
+            uri: uri,
             method: "POST"
         };
         return makeRequest(options, function (error, response) {
@@ -953,7 +992,99 @@ module.exports = {
                 });
             }
         });
+    },
+    
+    // true if userUUID has permission to create carts.
+    ownsCart: function (userUUID, cartUUID, callback) {
+
+        console.log("user ID: " + userUUID);
+     
+        var pathCartID = cartUUID.replace(/-/g, ".");
+    
+        endpointPath = "/groups/foodcarts/" + pathCartID + "/owners/users";
+        console.log(endpointPath);
+        var uri = host + appPath + endpointPath;
+    
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to find that cart's owners.";
+                callback(error, false);
+            } else {
+                var userEntities = JSON.parse(response)['entities'];
+                
+                if (userEntities.length > 0) {
+                    async.each(userEntities, function(userEntity, callback) {
+                    
+                        var ownerUUID = userEntity.uuid;
+                        if (ownerUUID === userUUID) {
+                            isOwner = true;
+                        }
+                        callback(null, isOwner);
+                    }, function(error) {
+                        if(error) {
+                            callback(error, null);
+                        } else {
+                            callback(null, isOwner);
+                        }
+                    });                
+                } else {
+                    callback(null, isOwner);
+                }            
+            }
+        });
+    },
+    
+    // true if userUUID has permission to edit cart data, create
+    // new carts, and add users as cart editors.
+    isOwner: function (userUUID, callback) {
+
+        console.log("user ID: " + userUUID);
+    
+        endpointPath = "/groups/owners/users";
+        console.log(endpointPath);
+        var uri = host + appPath + endpointPath;
+    
+        var options = {
+            uri: uri,
+            method: "GET"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to find that cart's owners.";
+                callback(error, false);
+            } else {
+                var userEntities = JSON.parse(response)['entities'];
+                
+                if (userEntities.length > 0) {
+                    async.each(userEntities, function(userEntity, callback) {
+                    
+                        var ownerUUID = userEntity.uuid;
+                        if (ownerUUID === userUUID) {
+                            isOwner = true;
+                        }
+                        callback(null, isOwner);
+                    }, function(error) {
+                        if(error) {
+                            callback(error, null);
+                        } else {
+                            callback(null, isOwner);
+                        }
+                    });                
+                } else {
+                    callback(null, isOwner);
+                }            
+            }
+        });
     }
+
 };
 
 // Make RESTful requests to the data store. All requests

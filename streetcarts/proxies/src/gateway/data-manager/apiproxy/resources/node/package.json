@@ -4,6 +4,7 @@
   "description": "Data manager layer for streetcarts.",
   "main": "server.js",
   "dependencies": {
+    "apigee-access": "^1.3.0",
     "async": "^1.5.0",
     "body-parser": "^1.14.1",
     "cors": "^2.5.1",

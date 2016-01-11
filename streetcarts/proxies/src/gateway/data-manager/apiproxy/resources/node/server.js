@@ -2,6 +2,7 @@ var dataManager = require('./data-manager');
 var express = require('express');
 var cors = require('cors');
 var app = express();
+var apigee = require('apigee-access'); 
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
@@ -289,39 +290,79 @@ app.put('/reviews/:uuid', function (req, res) {
 //*** APIs for registered cart owners.
 
 app.post('/foodcarts', function (req, res) {
-    var args = {
-        "newValues": req.body
-    };
+
+    var requestingUser = req.headers['x-user-uuid'];
+
+    if (requestingUser) {
+
+        var isOwner = dataManager.isOwner(requestingUser, function (error, isOwner) {
+            if (error) {
+                res.send(error);
+            }
+            if (isOwner == false) {
+                res.send('User doesn\'t have permission to do that.');
+            }
+            if (isOwner == true) {
+                var args = {
+                    "newValues": req.body
+                };
+                dataManager.addNewCart(args, function (error, data) {
+                    if (error) {
+                        res.send(error);
+                    }
+                    if (data) {
+                        res.set('Content-Type', 'application/json');
+                        res.send(data);
+                    }
+                });
+            }
+        });
     
-    dataManager.addNewCart(args, function (error, data) {
-        if (error) {
-            res.send(error);
-        }
-        if (data) {
-            res.set('Content-Type', 'application/json');
-            res.send(data);
-        }
-    });
+    } else {
+        res.send('User doesn\'t have permission to do that.');
+    }
 });
 
-app.put('/foodcarts/:uuid', function (req, res) {
-    var uuid = req.params.uuid;
-    var args = {
-        "cartUUID": uuid,
-        "newValues": req.body
-    };
-    
-    console.log('PUT /foodcarts/' + uuid);
 
-    dataManager.updateDetailsForCart(args, function (error, data) {
-        if (error) {
-            res.send(error);
-        }
-        if (data) {
-            res.set('Content-Type', 'application/json');
-            res.send(data);
-        }
-    });
+app.put('/foodcarts/:uuid', function (req, res) {
+
+    var cartID = req.params.uuid;
+    var requestingUser = req.headers['x-user-uuid'];
+
+    if (requestingUser) {
+
+        var isCartOwner = dataManager.ownsCart(requestingUser, cartID, function (error, isOwner) {
+            if (error) {
+                res.send(error);
+            }
+            if (isOwner === false) {
+                res.send('User doesn\'t have permission to do that.');
+            }
+            if (isOwner === true) {
+                var uuid = req.params.uuid;
+                var args = {
+                    "cartUUID": uuid,
+                    "newValues": req.body
+                };
+                
+                console.log('PUT /foodcarts/' + uuid);
+            
+                dataManager.updateDetailsForCart(args, function (error, data) {
+                    if (error) {
+                        res.send(error);
+                    }
+                    if (data) {
+                        res.set('Content-Type', 'application/json');
+                        res.send(data);
+                    }
+                });
+            }
+        });
+    
+    } else {
+        res.send('User doesn\'t have permission to do that.');
+    }
+
 });
 
 app.get('/users/:uuid/foodcarts', function (req, res) {
@@ -513,6 +554,8 @@ app.delete('/items/:uuid', function (req, res) {
 });
 
 app.post('/users', function (req, res) {
+//    var isOwner = req.query.isOwner;
+    isOwner = true;
     var userData = req.body;
     
     console.log('POST /users');
@@ -520,7 +563,7 @@ app.post('/users', function (req, res) {
     if (!req.body.email) {
         email = "Not Given";
     }
-    dataManager.registerUser(userData, function (error, data) {
+    dataManager.registerUser(userData, isOwner, function (error, data) {
         if (error) {
             res.send(error);
         }
