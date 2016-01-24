@@ -5,6 +5,7 @@
     <Properties/>
     <Attributes>
         <Attribute display="true" name="USER_UUID" ref="streetcarts.user.id"/>
+        <Attribute display="true" name="USER_BAAS_TOKEN" ref="streetcarts.user.baas.token"/>
     </Attributes>
     <ExpiresIn>-1</ExpiresIn>
     <ExternalAuthorization>false</ExternalAuthorization>

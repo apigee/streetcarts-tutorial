@@ -75,85 +75,61 @@ app.get('/foodcarts/:uuid', function (req, res) {
 app.post('/foodcarts', function (req, res) {
 
     var requestingUser = req.headers['x-user-uuid'];
-
-    if (requestingUser) {
-
-        var isOwner = dataManager.isOwner(requestingUser, function (error, isOwner) {
-            if (error) {
-                res.send(error);
-            }
-            if (isOwner == false) {
-                res.send('User doesn\'t have permission to do that.');
-            }
-            if (isOwner == true) {
-                var args = {
-                    "newValues": req.body
-                };
-                dataManager.addNewCart(args, function (error, data) {
-                    if (error) {
-                        res.send(error);
-                    }
-                    if (data) {
-                        res.set('Content-Type', 'application/json');
-                        res.send(data);
-                    }
-                });
-            }
-        });
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
-    } else {
-        res.send('User doesn\'t have permission to do that.');
-    }
+    var args = {
+        "newValues": req.body,
+        "requestingUserUUID": requestingUser,
+        "baasToken": userBaaSToken
+    };
+    dataManager.addNewCart(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
 });
 
 
 app.put('/foodcarts/:uuid', function (req, res) {
 
-    var cartID = req.params.uuid;
-    var requestingUser = req.headers['x-user-uuid'];
-
-    if (requestingUser) {
-
-        var isCartOwner = dataManager.ownsCart(requestingUser, cartID, function (error, isOwner) {
-            if (error) {
-                res.send(error);
-            }
-            if (isOwner === false) {
-                res.send('User doesn\'t have permission to do that.');
-            }
-            if (isOwner === true) {
-                var uuid = req.params.uuid;
-                var args = {
-                    "cartUUID": uuid,
-                    "newValues": req.body
-                };
-                
-                console.log('PUT /foodcarts/' + uuid);
-            
-                dataManager.updateDetailsForCart(args, function (error, data) {
-                    if (error) {
-                        res.send(error);
-                    }
-                    if (data) {
-                        res.set('Content-Type', 'application/json');
-                        res.send(data);
-                    }
-                });
-            }
-        });
+    var cartUUID = req.params.uuid;
     
-    } else {
-        res.send('User doesn\'t have permission to do that.');
-    }
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
+    console.log('PUT /foodcarts/' + cartUUID);
+    console.log('requesting user: ' + userBaaSToken);
+    
+    var args = {
+        "cartUUID": cartUUID,
+        "newValues": req.body,
+        "baasToken": userBaaSToken
+    };
+    
+    dataManager.updateDetailsForCart(args, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
 
 });
+
 
 app.delete('/foodcarts/:uuid', function (req, res) {
     var cartUUID = req.params.uuid;
     
     console.log('DELETE /foodcarts/' + cartUUID);
 
-    dataManager.deleteCart(cartUUID, function (error, data) {
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
+    dataManager.deleteCart(cartUUID, userBaaSToken, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -184,11 +160,14 @@ app.post('/foodcarts/:uuid/reviews', function (req, res) {
     var uuid = req.params.uuid;
     var reviewData = req.body;
     
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
     console.log('POST /foodcarts/' + uuid + '/reviews');
     
     var args = {
         "cartUUID": uuid,
-        "newValues": reviewData
+        "newValues": reviewData,
+        "baasToken": userBaaSToken
     };
 
     dataManager.addNewReview(args, function (error, data) {
@@ -238,10 +217,12 @@ app.post('/foodcarts/:uuid/items', function (req, res) {
     var uuid = req.params.uuid;
     
     console.log('POST /foodcarts/' + uuid + '/items');
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
     var args = {
         "cartUUID": uuid,
-        "newValues": req.body
+        "newValues": req.body,
+        "baasToken": userBaaSToken
     };
     dataManager.addNewItem(args, function (error, data) {
         if (error) {
@@ -256,12 +237,15 @@ app.post('/foodcarts/:uuid/items', function (req, res) {
 
 app.post('/foodcarts/:uuid/menus', function (req, res) {
     var uuid = req.params.uuid;
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
     console.log('POST /foodcarts/' + uuid + '/menus');
+    console.log('requesting user: ' + userBaaSToken);
     
     var args = {
         "cartUUID": uuid,
-        "newValues": req.body
+        "newValues": req.body,
+        "baasToken": userBaaSToken
     };
 
     dataManager.addNewMenu(args, function (error, data) {
@@ -297,10 +281,13 @@ app.put('/items/:uuid', function (req, res) {
     var uuid = req.params.uuid;
     
     console.log('PUT /items/' + uuid);
+
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
     var args = {
         "itemUUID": uuid,
-        "newValues": req.body
+        "newValues": req.body,
+        "baasToken": userBaaSToken
     };
     dataManager.updateDetailsForItem(args, function (error, data) {
         if (error) {
@@ -318,7 +305,9 @@ app.delete('/items/:uuid', function (req, res) {
     
     console.log('DELETE /items/' + itemUUID);
 
-    dataManager.deleteItem(itemUUID, function (error, data) {
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
+    dataManager.deleteItem(itemUUID, userBaaSToken, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -422,11 +411,14 @@ app.get('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
 app.post('/menus/:uuid/items', function (req, res) {
     var uuid = req.params.uuid;
     
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
     console.log('POST /menus/' + uuid + '/items');
     
     var args = {
         "menuUUID": uuid,
-        "newValues": req.body
+        "newValues": req.body,
+        "baasToken": userBaaSToken
     };
 
     dataManager.addNewItemToMenu(args, function (error, data) {
@@ -446,11 +438,15 @@ app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
 
     console.log('PUT /menus/' + menuUUID + '/items/' + itemUUID);
 
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
     var args = {
         "menuUUID": menuUUID,
-        "itemUUID": itemUUID
+        "itemUUID": itemUUID,
+        "baasToken": userBaaSToken
     };
-    dataManager.addItemToMenu(args, function (error, data) {
+    
+    dataManager.addExistingItemToMenu(args, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -464,12 +460,14 @@ app.put('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
 app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     var menuUUID = req.params.menu_uuid;
     var itemUUID = req.params.item_uuid;
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
     console.log('DELETE /menus/' + menuUUID + '/items/' + itemUUID);
-    
+        
     var args = {
         "menuUUID": menuUUID,
-        "itemUUID": itemUUID
+        "itemUUID": itemUUID,
+        "baasToken": userBaaSToken
     };    
     dataManager.removeItemFromMenu(args, function (error, data) {
         if (error) {
@@ -571,10 +569,11 @@ app.post('/users', function (req, res) {
 
 app.delete('/users/:uuid', function (req, res) {
     var uuid = req.params.uuid;
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
     console.log('DELETE /users/' + uuid);
-    
-    dataManager.deleteUser(uuid, function (error, data) {
+
+    dataManager.deleteUser(uuid, userBaaSToken, function (error, data) {
         if (error) {
             res.send(error);
         }
@@ -606,10 +605,13 @@ app.get('/reviews/:uuid', function (req, res) {
 app.put('/reviews/:uuid', function (req, res) {
     var reviewUUID = req.params.uuid;
     console.log('PUT /reviews/' + reviewUUID);
+
+    var userBaaSToken = req.headers['x-user-baas-token'];
     
     var args = {
         "reviewUUID": reviewUUID,
-        "newValues": req.body
+        "newValues": req.body,
+        "baasToken": userBaaSToken
     };
     
     dataManager.updateDetailsForReview(args, function (error, data) {
@@ -629,7 +631,15 @@ app.delete('/reviews/:uuid', function (req, res) {
     
     console.log('DELETE /reviews/' + reviewUUID);
 
-    dataManager.deleteReview(reviewUUID, function (error, data) {
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
+    var args = {
+        "newValues": req.body,
+        "requestingUserUUID": requestingUser,
+        "baasToken": userBaaSToken
+    };
+
+    dataManager.deleteReview(reviewUUID, baasToken, function (error, data) {
         if (error) {
             res.send(error);
         }

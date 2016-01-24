@@ -34,9 +34,14 @@
     if (responseObj.statusCode && responseObj.statusCode == 400){
         context.setVariable("streetcarts.user.valid", "false");
     } else if (responseObj.access_token) {
+        
         var userId = responseObj.user.uuid;
+        var userBaaSToken = responseObj.access_token;
         context.setVariable("streetcarts.user.valid", "true");
         context.setVariable("streetcarts.user.id", userId);
+        context.setVariable("streetcarts.user.baas.token", userBaaSToken);
+        print("baas token: " + userBaaSToken);
+        
     } else {
         context.setVariable("streetcarts.user.valid", "false");
     }

@@ -22,23 +22,65 @@ module.exports = {
     // Create a new cart.
     addNewCart: function (args, callback) {
         
-        endpointPath = '/foodcarts';
+        var userBaasToken = args.baasToken;
+        var tokenParam = "?access_token=" + userBaasToken;
+        
+        endpointPath = '/foodcarts' + tokenParam;
         
         var uri = host + appPath + endpointPath;
-
+        var cartInfo = args.newValues;
+        
+        console.log("Adding new cart: " + uri);
+        
+        var ownerUUID;
+        
+        // Make sure we have an ownerID in the cart entity.
+        if (cartInfo.hasOwnProperty("ownerID") 
+            && cartInfo.ownerID !== null
+            && cartInfo.ownerID !== "") {
+            ownerUUID = cartInfo.ownerID; 
+        } else {
+            ownerUUID = args.requestingUserUUID;
+            cartInfo.ownerID = ownerUUID;
+        }
+        
         var options = {
             uri: uri,
             body: JSON.stringify(args.newValues),
             method: "POST"
         };
         
-        return makeRequest(options, function (error, response) {
+        return makeRequest(options, function (error, newCartResponse) {
             if (error) {
                 callback(error, null);
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+                var cart = JSON.parse(newCartResponse)['entities'][0];
+                
+                module.exports.createCartOwnerUserGroup(cart.uuid,
+                    function(error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        var groupEntity = response.entities[0];
+                        var groupPath = groupEntity.path;
+                        var groupName = groupEntity.name;
+                        
+                        module.exports.secureCartOwnerUserGroup(cart.uuid,
+                            groupPath, function(error, response) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                module.exports.addUserToGroup(ownerUUID, groupPath, 
+                                    function(error, response) {
+                                    if (error) {
+                                        callback(error, null);
+                                    } else {
+                                        callback(null, JSON.stringify(cart));
+                                    }
+                                });                                    
+                            }
+                        });
+                    }
                 });
             }
         });
@@ -49,6 +91,8 @@ module.exports = {
         
         endpointPath = '/foodcarts';
         var uri = host + appPath + endpointPath;
+        
+        console.log("Getting the cart list: " + uri);
         
         var options = {
             uri: uri,
@@ -74,6 +118,8 @@ module.exports = {
         
         endpointPath = "/foodcarts/" + cartUUID;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Getting a cart: " + uri);
         
         var options = {
             uri: uri,
@@ -105,6 +151,8 @@ module.exports = {
         endpointPath = '/users/' + userUUID + '/owns';
         var uri = host + appPath + endpointPath;
         
+        console.log("Getting carts owned by user: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -127,9 +175,13 @@ module.exports = {
     // Update a cart
     updateDetailsForCart: function (args, callback) {
         
-        endpointPath = "/foodcarts/" + args.cartUUID;
-
+        var userBaasToken = args.baasToken;
+        var tokenParam = "?access_token=" + userBaasToken;
+        
+        endpointPath = "/foodcarts/" + args.cartUUID + tokenParam;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Updated foodcart: " + uri);
         
         options = {
             uri: uri,
@@ -150,10 +202,14 @@ module.exports = {
     },
     
     // Delete a cart
-    deleteCart: function (cartUUID, callback) {
+    deleteCart: function (cartUUID, userBaasToken, callback) {
         
-        endpointPath = "/foodcarts/" + cartUUID;
+        var tokenParam = "?access_token=" + userBaasToken;
+        
+        endpointPath = "/foodcarts/" + cartUUID + tokenParam;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Deleting a cart: " + uri);
         
         var options = {
             uri: uri,
@@ -179,46 +235,20 @@ module.exports = {
         });
     },
     
-    // Delete an item
-    deleteItem: function (itemUUID, callback) {
-        
-        endpointPath = "/items/" + itemUUID;
-        var uri = host + appPath + endpointPath;
-        
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                if (error.statusCode == 401) {                
-                    error.message = "Unable to find an item with ID "+ 
-                        itemUUID;
-                    callback(error, null);
-                }
-                else {
-                    callback(error, null);
-                }            
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
     // Menus //
     
     // Create a new menu
     addNewMenu: function (args, callback) {
-        var cartID = args.cartUUID;
+        var cartUUID = args.cartUUID;
         var menuData = args.newValues;
-        menuData.cartID = cartID;
+        var baasToken = args.baasToken;
+        menuData.cartID = cartUUID;
+        var tokenParam = "?access_token=" + baasToken
         
-        endpointPath = "/foodcarts/" + cartID + "/publishes/menus";
-        
+        endpointPath = "/foodcarts/" + cartUUID + "/publishes/menus" + tokenParam;        
         var uri = host + appPath + endpointPath;
+
+        console.log("Adding a new menu: " + uri + "\n" + JSON.stringify(menuData));
         
         var options = {
             uri: uri,
@@ -230,10 +260,37 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
+            
+                var menu = JSON.parse(response)['entities'][0];
+                var pathCartID = cartUUID.replace(/-/g, ".");                
+                var roleName = pathCartID + "-menus-manager";
+                
+                var permissionsList = 
+                { permissions: [
+                    { permission : "get,put,delete:/menus/" + menu.uuid },
+                    { permission : "get,put,post,delete:/menus/" + menu.uuid +
+                        "/includes/*" }
+                    ]
+                };
+                async.each(permissionsList.permissions, function(permission, callback) {
+                    module.exports.assignPermissionsToRole(roleName, permission, 
+                        function(error, response) {
+                        if (error) {
+                            console.log(error);
+                            callback(error, null);
+                        } else {
+                            callback();
+                        }
+                    });
+                }, function(error) {
+                    if(error) {
+                        callback(error, null);
+                    } else {
+                        streamlineResponseEntity(menu, function(streamlinedResponse){
+                            callback(null, JSON.stringify(streamlinedResponse));
+                        });
+                    }
+                });                
             }
         });
     },
@@ -245,6 +302,8 @@ module.exports = {
         
         endpointPath = '/menus';
         var uri = host + appPath + endpointPath;
+        
+        console.log("Getting a list of menus: " + uri);
         
         var options = {
             uri: uri,
@@ -301,6 +360,8 @@ module.exports = {
         endpointPath = '/menus/' + menuUUID;
         var uri = host + appPath + endpointPath;
         
+        console.log("Getting a menu: " + uri);
+        
         var options = {
             uri: uri,
             method: "GET"
@@ -347,12 +408,15 @@ module.exports = {
     },
     
     // Add an existing item to a menu
-    addItemToMenu: function (args, callback) {
+    addExistingItemToMenu: function (args, callback) {
 
+        var tokenParam = "?access_token=" + args.baasToken;
         endpointPath = "/menus/" + args.menuUUID + 
-            "/includes/items/" + args.itemUUID;
+            "/includes/items/" + args.itemUUID + tokenParam;
         
         var uri = host + appPath + endpointPath;
+        
+        console.log("Adding an item to a menu: " + uri);
         
         var options = {
             uri: uri,
@@ -374,15 +438,17 @@ module.exports = {
     // Create an item and add it to a menu
     addNewItemToMenu: function (args, callback) {
 
+        var tokenParam = "?access_token=" + args.baasToken;
         var cartID = args.newValues.cartID;
         var itemData = args.newValues;
         itemData.cartID = cartID;
 
         endpointPath = "/menus/" + args.menuUUID + 
-            "/includes/items ";
-        
+            "/includes/items" + tokenParam;
         var uri = host + appPath + endpointPath;
-        console.log(uri);
+        
+        console.log("Adding a new item to a menu: " + uri + "\n" + JSON.stringify(itemData));
+        
         var options = {
             uri: uri,
             body: JSON.stringify(itemData),
@@ -404,10 +470,13 @@ module.exports = {
     // Remove an item from a menu
     removeItemFromMenu: function (args, callback) {
 
+        var tokenParam = "?access_token=" + args.baasToken;
         endpointPath = "/menus/" + args.menuUUID + 
-            "/includes/items/" + args.itemUUID;
+            "/includes/items/" + args.itemUUID + tokenParam;
         
         var uri = host + appPath + endpointPath;
+        
+        console.log("Removing an item from a menu: " + uri);
         
         var options = {
             uri: uri,
@@ -431,7 +500,9 @@ module.exports = {
         
         endpointPath = '/foodcarts/' + cartUUID + '/publishes';
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Getting the menus for a cart: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -463,7 +534,9 @@ module.exports = {
         
         endpointPath = '/menus/' + menuUUID + '/includes';
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Getting the items on a menu: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -495,14 +568,17 @@ module.exports = {
     // Create a new item
     addNewItem: function (args, callback) {
 
-        var cartID = args.cartUUID;
+        var tokenParam = "?access_token=" + args.baasToken;
+        var cartUUID = args.cartUUID;
         var itemData = args.newValues;
-        itemData.cartID = cartID;
+        itemData.cartID = cartUUID;
         
-        endpointPath = "/foodcarts/" + cartID + "/offers/items";
+        endpointPath = "/foodcarts/" + cartUUID + "/offers/items" + tokenParam;
         
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Adding a new item: " + uri + "\n" + JSON.stringify(itemData));
+
         var options = {
             uri: uri,
             body: JSON.stringify(itemData),
@@ -513,9 +589,24 @@ module.exports = {
             if (error) {
                 callback(error, null);
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+                var item = JSON.parse(response)['entities'][0];
+                var pathCartID = cartUUID.replace(/-/g, ".");                
+                var roleName = pathCartID + "-menus-manager";
+                
+                var body = {
+                    permission : "get,put,delete:/menus/*/includes/" + item.uuid,
+                    permission : "get,put,delete:/items/" + item.uuid
+                };
+                
+                module.exports.assignPermissionsToRole(roleName, body, 
+                    function(error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        streamlineResponseEntity(item, function(streamlinedResponse){
+                            callback(null, JSON.stringify(streamlinedResponse));
+                        });
+                    }
                 });
             }
         });
@@ -526,6 +617,8 @@ module.exports = {
         
         endpointPath = "/items/" + itemUUID;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Getting details for an items: " + uri);
         
         var options = {
             uri: uri,
@@ -549,7 +642,9 @@ module.exports = {
         
         endpointPath = '/foodcarts/' + cartUUID + '/offers/items';
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Getting the items for a cart: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -557,8 +652,9 @@ module.exports = {
         
         return makeRequest(options, function (error, response) {
             if (error) {
+                console.log(error);
                 if (error.statusCode == 401) {                
-                    error.message = "Unable to find a food cart with ID "+ 
+                    error.message = "Unable to find items for food cart "+ 
                         cartUUID;
                     callback(error, null);
                 }
@@ -584,7 +680,7 @@ module.exports = {
 
         var uri = host + appPath + endpointPath;
         
-        console.log(uri);
+        console.log("Getting the details for an item in a menu: " + uri);
         
         var options = {
             uri: uri,
@@ -607,11 +703,14 @@ module.exports = {
     // Update an item
     updateDetailsForItem: function (args, callback) {
         
+        var tokenParam = "?access_token=" + args.baasToken;
         var itemUUID = args.itemUUID;
         
-        endpointPath = "/items/" + itemUUID;
-
+        endpointPath = "/items/" + itemUUID + tokenParam;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Updating the details for an item: " + uri + "\n" + 
+            JSON.stringify(args.newValues));
         
         var options = {
             uri: uri,
@@ -651,11 +750,14 @@ module.exports = {
     },
     
     // Delete an item
-    deleteItem: function (itemUUID, callback) {
+    deleteItem: function (itemUUID, baasToken, callback) {
         
-        endpointPath = "/items/" + itemUUID;
+        var tokenParam = "?access_token=" + baasToken;
+        var endpointPath = "/items/" + itemUUID + tokenParam;
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Deleting an item: " + uri);
+
         var options = {
             uri: uri,
             method: "DELETE"
@@ -685,15 +787,15 @@ module.exports = {
     // Create a new review
     addNewReview: function (args, callback) {
         
-        var cartID = args.cartUUID;
+        var tokenParam = "?access_token=" + args.baasToken;
+        var cartUUID = args.cartUUID;
         var reviewData = args.newValues;        
-        reviewData.cartID = cartID;
+        reviewData.cartID = cartUUID;
         
-        endpointPath = '/foodcarts/' + cartID + '/reviewedIn/reviews';
-        
+        endpointPath = '/foodcarts/' + cartUUID + '/reviewedIn/reviews' + tokenParam;
         var uri = host + appPath + endpointPath;
-        console.log(uri);
-        console.log(reviewData);
+        
+        console.log("Adding a new review: " + uri + "\n" + JSON.stringify(reviewData));
         
         var options = {
             uri: uri,
@@ -718,7 +820,9 @@ module.exports = {
         
         endpointPath = '/foodcarts/' + cartUUID + '/reviewedIn/reviews';
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Getting the reviews for a cart: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -743,7 +847,9 @@ module.exports = {
         
         endpointPath = "/reviews/" + reviewUUID;
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Getting the details for a review: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -764,9 +870,11 @@ module.exports = {
     // Update a review
     updateDetailsForReview: function (args, callback) {
         
-        endpointPath = "/reviews/" + args.reviewUUID;
-
+        var tokenParam = "?access_token=" + args.baasToken;
+        endpointPath = "/reviews/" + args.reviewUUID + tokenParam;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Updating a review: " + uri + "\n" + JSON.stringify(args.newValues));
         
         options = {
             uri: uri,
@@ -789,11 +897,14 @@ module.exports = {
     },
     
     // Delete a review
-    deleteReview: function (reviewUUID, callback) {
+    deleteReview: function (reviewUUID, baasToken, callback) {
         
-        endpointPath = "/reviews/" + reviewUUID;
+        var tokenParam = "?access_token=" + baasToken;
+        endpointPath = "/reviews/" + reviewUUID + tokenParam;
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Deleting a review: " + uri);
+
         var options = {
             uri: uri,
             method: "DELETE"
@@ -818,7 +929,9 @@ module.exports = {
         
         endpointPath = '/users';
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Getting the list of users: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -843,6 +956,8 @@ module.exports = {
         
         endpointPath = "/users/" + userUUID;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Getting a user's info: " + uri);
         
         var options = {
             uri: uri,
@@ -871,12 +986,12 @@ module.exports = {
     // Create a user account
     registerUser: function (userData, isOwner, callback) {
         
-        console.log(userData);
-        
         isOwner = true;
         
         endpointPath = '/users';
-        console.log("username: " + userData.username);
+        
+        console.log("Preparing to register a user");
+        
         // Make sure the client sent a username.
         if (!(userData.username)) {
             var errorObject = new Error();
@@ -898,6 +1013,9 @@ module.exports = {
         else {
             // Try to create the user account.
             var uri = host + appPath + endpointPath;
+
+            console.log("Registering a user: " + uri + "\n" + JSON.stringify(userData));
+            
             var options = {
                 uri: uri,
                 body: JSON.stringify(userData),
@@ -929,6 +1047,9 @@ module.exports = {
         
         endpointPath = "/token";
         var uri = host + appPath + endpointPath;
+
+        console.log("Authenticating a user: " + uri + "\n" + JSON.stringify(credentials));
+
         credentials.grant_type = "password";
         
         var options = {
@@ -948,12 +1069,18 @@ module.exports = {
         });
     },
 
-    // Check that a user is in the data store
+    // Utility functions used to manage owner status for 
+    // authorization.
+
+    // Adds userUUID to the group of users who can create
+    // carts.
     addOwner: function (userUUID, callback) {
         
         endpointPath = "/groups/owners/users/" + userUUID;
         var uri = host + appPath + endpointPath;
-        
+
+        console.log("Adding an owner user: " + uri);
+
         var options = {
             uri: uri,
             method: "POST"
@@ -971,10 +1098,12 @@ module.exports = {
     },
     
     // Delete a user account
-    deleteUser: function (userUUID, callback) {
+    deleteUser: function (userUUID, baasToken, callback) {
         
         endpointPath = "/users/" + userUUID;
         var uri = host + appPath + endpointPath;
+        
+        console.log("Deleting a user: " + uri);
         
         var options = {
             uri: uri,
@@ -997,14 +1126,13 @@ module.exports = {
     // true if userUUID has permission to create carts.
     ownsCart: function (userUUID, cartUUID, callback) {
 
-        console.log("user ID: " + userUUID);
-     
         var pathCartID = cartUUID.replace(/-/g, ".");
     
         endpointPath = "/groups/foodcarts/" + pathCartID + "/owners/users";
-        console.log(endpointPath);
         var uri = host + appPath + endpointPath;
-    
+
+        console.log("Verifying that a user owns a cart: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -1044,12 +1172,11 @@ module.exports = {
     // new carts, and add users as cart editors.
     isOwner: function (userUUID, callback) {
 
-        console.log("user ID: " + userUUID);
-    
-        endpointPath = "/groups/owners/users";
-        console.log(endpointPath);
+        endpointPath = "/groups/27f46f8a-b304-11e5-ac2e-2b595e5b208a/users";
         var uri = host + appPath + endpointPath;
-    
+
+        console.log("Verifying that a user is an owner user: " + uri);
+
         var options = {
             uri: uri,
             method: "GET"
@@ -1065,7 +1192,7 @@ module.exports = {
                 
                 if (userEntities.length > 0) {
                     async.each(userEntities, function(userEntity, callback) {
-                    
+
                         var ownerUUID = userEntity.uuid;
                         if (ownerUUID === userUUID) {
                             isOwner = true;
@@ -1083,14 +1210,272 @@ module.exports = {
                 }            
             }
         });
-    }
+    },
+    
+    createCartOwnerUserGroup: function (cartUUID, callback) {
+        
+        var pathCartID = cartUUID.replace(/-/g, ".");
+        
+        var groupPath = "foodcarts/" + pathCartID + "/owners";
+        var groupTitle = "/foodcarts/" + cartUUID + "/owners";
+        
+        var body = {
+            path : groupPath,
+            title : groupTitle
+        };
+        
+        endpointPath = "/groups";
+        var uri = host + appPath + endpointPath;
+        
+        console.log("Creating a user group for owners of a cart: " + uri);
+    
+        var options = {
+            uri: uri,
+            method: "POST",
+            body: JSON.stringify(body)
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to add owner group for that foodcart.";
+                callback(error, false);
+            } else {
+                callback(null, JSON.parse(response));
+            }
+        });
+        
+    },
+    
+    secureCartOwnerUserGroup: function (cartUUID, groupPath, callback) {
 
+        console.log("Securing a cart's owner user group: cart " + cartUUID + ", group " + groupPath);
+        
+        module.exports.createCartManagerRole(cartUUID, function(error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var managerRoleName = response.name;
+                module.exports.assignRoleToGroup(managerRoleName, groupPath, 
+                function(error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        module.exports.createMenuManagerRole(cartUUID, 
+                            function(error, menuManagerResponse) {
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                managerRoleName = menuManagerResponse.name;
+                                var menuManagerRoleName = menuManagerResponse.name;
+                                module.exports.assignRoleToGroup(menuManagerRoleName, groupPath, 
+                                    function(error, response) {
+                                    if (error) {
+                                        callback(error, null);
+                                    } else {
+                                        callback(null, response);                                        
+                                    }
+                                });
+                            }                
+                        });                                            
+                    }
+                });
+            }                
+        });
+    },
+
+    createCartManagerRole: function (cartUUID, callback) {
+        
+        var pathCartID = cartUUID.replace(/-/g, ".");
+        
+        var roleName = pathCartID + "-manager";
+        var roleTitle = "/foodcarts/" + cartUUID + "/manager";
+        
+        var body = {
+            name : roleName,
+            title : roleTitle
+        };
+        
+        endpointPath = "/roles";
+        var uri = host + appPath + endpointPath;
+
+        console.log("Creating a cart manager role: " + uri);
+    
+        var options = {
+            uri: uri,
+            method: "POST",
+            body: JSON.stringify(body)
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to add cart manager role for that foodcart.";
+                callback(error, false);
+            } else {
+                
+                var role = JSON.parse(response).entities[0];
+                var roleUUID = JSON.parse(response).entities[0].uuid;
+                
+                var permissionsList = {
+                    permission : "get,put,post,delete:/foodcarts/" + cartUUID
+                };
+                
+                module.exports.assignPermissionsToRole(roleUUID, permissionsList, 
+                    function(error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        callback(null, role);
+                    }
+                });
+            }
+        });
+    },
+    
+    createMenuManagerRole: function (cartUUID, callback) {
+        
+        var pathCartID = cartUUID.replace(/-/g, ".");
+        
+        var roleName = pathCartID + "-menus-manager";
+        var roleTitle = "/foodcarts/" + cartUUID + "/menus/manager";
+        
+        var body = {
+            name : roleName,
+            title : roleTitle
+        };
+        
+        endpointPath = "/roles";
+        var uri = host + appPath + endpointPath;
+
+        console.log("Creating a menu manager role: " + uri);
+    
+        var options = {
+            uri: uri,
+            method: "POST",
+            body: JSON.stringify(body)
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to add cart manager role for that foodcart.";
+                callback(error, false);
+            } else {
+                
+                var role = JSON.parse(response).entities[0];
+                var roleName = role.name;
+                
+                var permissionsList = {
+                    permissions: [
+                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + "/offers/*" },
+                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + "/publishes/*" }
+                    ]
+                };
+                async.each(permissionsList.permissions, function(permission, callback) {
+                    module.exports.assignPermissionsToRole(roleName, permission, 
+                        function(error, response) {
+                        if (error) {
+                            console.log(error);
+                            callback(error, null);
+                        } else {
+                            callback();
+                        }
+                    });
+                }, function(error) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        callback(null, role);
+                    }
+                });              
+            }
+        });
+    },
+    
+    assignPermissionsToRole: function (roleName, permission, callback) {
+        
+        endpointPath = "/roles/" + roleName + "/permissions";
+        var uri = host + appPath + endpointPath;
+        
+        console.log("Assigning permissions to a role: " + uri);
+        
+        var options = {
+            uri: uri,
+            method: "POST",
+            body: JSON.stringify(permission)
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to assign permissions to role.";
+                callback(error, false);
+            } else {
+                callback(null, JSON.parse(response));
+            }
+        });        
+    },
+    
+    assignRoleToGroup: function (roleName, groupPath, callback) {
+        
+        endpointPath = "/roles/" + roleName + "/groups/" + groupPath;
+        var uri = host + appPath + endpointPath;
+        
+        console.log("Assigning a role to a group: " + uri);
+        
+        var options = {
+            uri: uri,
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to assign role to group.";
+                callback(error, false);
+            } else {
+                callback(null, JSON.parse(response));
+            }
+        });        
+    },    
+    
+    addUserToGroup: function (userUUID, groupPath, callback) {
+        
+        endpointPath = "/groups/" + groupPath + "/users/" + userUUID;
+        var uri = host + appPath + endpointPath;
+
+        console.log("Adding a user to a group: " + uri);
+
+        var options = {
+            uri: uri,
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                console.log(error);
+                error.message = "Unable to add person to the group.";
+                callback(error, false);
+            } else {
+                var entity = JSON.parse(response);
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }
+        });        
+    }
 };
+
+// General utility functions.
 
 // Make RESTful requests to the data store. All requests
 // are made through this function.
 function makeRequest(options, callback) {
-    
+
+    console.log("Making a data store API request: " + JSON.stringify(options));
+
     request(options, function (error, response, body) {
         
         var errorObject = new Error();
@@ -1117,6 +1502,8 @@ function makeRequest(options, callback) {
 // the data store.
 function streamlineResponseArray(entityArray, callback) {
 
+    console.log("Streamlining a response array: " + JSON.stringify(entityArray));
+    
     var entityList = {
         entities:[]
     };
@@ -1131,6 +1518,8 @@ function streamlineResponseArray(entityArray, callback) {
 // Removed unwanted properties from an entity returned by 
 // the data store.
 function streamlineResponseEntity(responseData, callback) {
+    
+    console.log("Streamlining a response entity: " + JSON.stringify(responseData));
 
     var unwantedProperties = [
         "action",
