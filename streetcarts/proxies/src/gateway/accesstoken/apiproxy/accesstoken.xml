@@ -9,6 +9,7 @@
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GenerateToken</Policy>
+        <Policy>GetDataManagerKey</Policy>
         <Policy>InvalidUserFault</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>

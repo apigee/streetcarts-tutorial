@@ -4,13 +4,16 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>Spike-Arrest-1</Name>
+                <Name>Spike-Arrest</Name>
             </Step>
             <Step>
-                <Name>Quota-1</Name>
+                <Name>Quota</Name>
             </Step>
             <Step>
                 <Name>Get-MenuID</Name>
+            </Step>
+            <Step>
+                <Name>SetRestrictedResource</Name>
             </Step>
         </Request>
         <Response/>
@@ -18,11 +21,7 @@
     <Flows>
         <Flow name="Remove Item from Menu">
             <Description>Remove Item from Menu</Description>
-            <Request>
-                <Step>
-                    <Name>Remove-Item-from-Menu-Response</Name>
-                </Step>
-            </Request>
+            <Request></Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "DELETE")</Condition>
         </Flow>
@@ -59,24 +58,21 @@
             <Description>Delete Menu</Description>
             <Request>
                 <Step>
-                    <Name>Delete-Menu-Response</Name>
+                    <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "DELETE")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Add Menu Item to Menu">
             <Description>Add Menu Item to Menu</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*/items") and (request.verb = "POST")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items") and (request.verb = "POST")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">

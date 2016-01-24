@@ -8,15 +8,13 @@
     <LastModifiedAt>1448333561754</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Delete-Menu-Response</Policy>
         <Policy>Get-MenuID</Policy>
         <Policy>GetDataManagerKey</Policy>
-        <Policy>Quota-1</Policy>
+        <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
-        <Policy>Remove-Item-from-Menu-Response</Policy>
         <Policy>RewriteTargetUrl</Policy>
         <Policy>SetRestrictedResource</Policy>
-        <Policy>Spike-Arrest-1</Policy>
+        <Policy>Spike-Arrest</Policy>
         <Policy>ValidateToken</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>

@@ -8,20 +8,14 @@
     <LastModifiedAt>1447784251762</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Create-Item-Response</Policy>
-        <Policy>Delete-Item-Response</Policy>
         <Policy>Get-Item-ID</Policy>
-        <Policy>Get-Items-Response</Policy>
         <Policy>GetDataManagerKey</Policy>
-        <Policy>Got-Item-Response</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
         <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>Update-Item-Response</Policy>
         <Policy>ValidateToken</Policy>
-        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>

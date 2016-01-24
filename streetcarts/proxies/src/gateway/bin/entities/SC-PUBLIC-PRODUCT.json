@@ -1,9 +1,13 @@
 {
   "apiResources": [
     "",
-    "/GET/v1/streetcarts/foodcarts/*/menus/*",
+    "/GET/v1/streetcarts/foodcarts",
+    "/GET/v1/streetcarts/foodcarts/*",
+    "/GET/v1/streetcarts/foodcarts/*/items",
     "/GET/v1/streetcarts/foodcarts/*/menus",
-    "/GET/v1/streetcarts/menus/",
+    "/GET/v1/streetcarts/menus/*",
+    "/GET/v1/streetcarts/menus/*/items",
+    "/GET/v1/streetcarts/items/*",
     "/POST/v1/streetcarts/users",
     "/"
   ],

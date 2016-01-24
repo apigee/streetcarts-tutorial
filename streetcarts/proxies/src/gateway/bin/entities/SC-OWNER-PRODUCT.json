@@ -1,16 +1,17 @@
 {
   "apiResources": [
+    "/PUT/v1/streetcarts/foodcarts/*",
     "/POST/v1/streetcarts/foodcarts",
-    "/PUT/v1/streetcarts/foodcarts",
     "/GET/v1/streetcarts/foodcarts",
     "/GET/v1/streetcarts/foodcarts/*",
+    "/DELETE/v1/streetcarts/foodcarts/*",
     "/POST/v1/streetcarts/foodcarts/*/menus",
     "/GET/v1/streetcarts/foodcarts/*/menus",
     "/POST/v1/streetcarts/foodcarts/*/items",
     "/POST/v1/streetcarts/menus",
     "/GET/v1/streetcarts/menus/*",
     "/PUT/v1/streetcarts/menus/*",
-    "/DELETE/v1/streetcarts/menus/",
+    "/DELETE/v1/streetcarts/menus/*",
     "/POST/v1/streetcarts/menus/*/items",
     "/GET/v1/streetcarts/menus/*/items/*",
     "/GET/v1/streetcarts/menus/*/items",
@@ -19,7 +20,6 @@
     "/POST/v1/streetcarts/items",
     "/PUT/v1/streetcarts/items/*",
     "/POST/v1/streetcarts/users",
-    "/GET/v1/streetcarts/users",
     "/GET/v1/streetcarts/users/*",
     "/PUT/v1/streetcarts/users/*",
     "/POST/v1/streetcarts/accesstoken"

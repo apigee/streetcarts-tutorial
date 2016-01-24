@@ -53,21 +53,11 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
         </Flow>
-        <Flow name="Update User">
-            <Description>Update User</Description>
-            <Request>
-                <Step>
-                    <Name>Update-User-Response</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
-        </Flow>
         <Flow name="Delete User">
             <Description>Delete User</Description>
             <Request>
                 <Step>
-                    <Name>Delete-User</Name>
+                    <Name>ValidateToken</Name>
                 </Step>
             </Request>
             <Response/>

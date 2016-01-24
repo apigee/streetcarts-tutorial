@@ -8,9 +8,6 @@
     <LastModifiedAt>1448326093515</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Create-FoodCart-Response</Policy>
-        <Policy>Delete-FoodCart-Response</Policy>
-        <Policy>Get-FoodCart-Items-Response</Policy>
         <Policy>GetCartId</Policy>
         <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
@@ -18,7 +15,6 @@
         <Policy>RewriteTargetUrl</Policy>
         <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>Update-FoodCart-Response</Policy>
         <Policy>ValidateToken</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>

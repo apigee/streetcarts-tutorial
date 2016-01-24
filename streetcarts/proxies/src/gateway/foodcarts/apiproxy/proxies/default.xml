@@ -62,13 +62,7 @@
             <Description>Update FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
@@ -78,13 +72,7 @@
             <Description>Delete FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
@@ -135,9 +123,16 @@
         </Flow>
         <Flow name="Get Menu Items">
             <Description/>
-            <Request/>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+            </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/menus/*/items") and (request.verb = "GET")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/menus/{menu_id}/items") and (request.verb = "GET")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">

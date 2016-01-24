@@ -25,9 +25,6 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Got-Item-Response</Name>
-                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
@@ -39,13 +36,7 @@
                     <Name>SetRestrictedResource</Name>
                 </Step>
                 <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
@@ -58,43 +49,11 @@
                     <Name>SetRestrictedResource</Name>
                 </Step>
                 <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
                     <Name>ValidateToken</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{item_id}") and (request.verb = "DELETE")</Condition>
-        </Flow>
-        <Flow name="Get All Menu Items">
-            <Description>Get All Menu Items</Description>
-            <Request>
-                <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
-                </Step>
-                <Step>
-                    <Name>Get-Items-Response</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>request.verb="GET"</Condition>
-        </Flow>
-        <Flow name="Create Menu Item">
-            <Description>Create Menu Item</Description>
-            <Request>
-                <Step>
-                    <Name>Create-Item-Response</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>request.verb="POST"</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">
