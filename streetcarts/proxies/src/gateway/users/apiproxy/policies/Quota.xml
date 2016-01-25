@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Quota async="false" continueOnError="false" enabled="true" name="Quota">
     <DisplayName>Quota</DisplayName>
-    <Interval>1</Interval>
-    <TimeUnit>hour</TimeUnit>
-    <Allow count="10000"/>
+    <Interval ref="apiproduct.developer.quota.interval">1</Interval>
+    <TimeUnit ref="apiproduct.developer.quota.timeunit">hour</TimeUnit>
+    <Allow count="200" countRef="apiproduct.developer.quota.limit"/>
 </Quota>
