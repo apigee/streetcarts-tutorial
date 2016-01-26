@@ -216,7 +216,7 @@ module.exports = {
             method: "DELETE"
         };
         
-        return makeRequest(options, function (error, response) {
+        return makeRequest(options, function (error, cartDeleteResponse) {
             if (error) {
                 if (error.statusCode == 401) {                
                     error.message = "Unable to find a food cart with ID "+ 
@@ -225,11 +225,21 @@ module.exports = {
                 }
                 else {
                     callback(error, null);
-                }            
+                }
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+                module.exports.deleteCartOwnerUserGroup(cartUUID, function (error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {                        
+                        module.exports.removeCartSecurity(cartUUID, function (error, response) {
+                            if (error) {
+                                console.log(error);
+                                callback(error, null);
+                            } else {
+                                callback(null, cartDeleteResponse);
+                            }
+                        });
+                    }
                 });
             }
         });
@@ -1246,7 +1256,35 @@ module.exports = {
         });
         
     },
+
+    deleteCartOwnerUserGroup: function (cartUUID, callback) {
+        
+        var pathCartID = cartUUID.replace(/-/g, ".");
+        
+        var groupPath = "foodcarts/" + pathCartID + "/owners";
+        
+        endpointPath = "/groups/" + groupPath;
+        var uri = host + appPath + endpointPath;
+        
+        console.log("Deleting a user group for owners of a cart: " + uri);
     
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to delete owner group for that foodcart.";
+                callback(error, false);
+            } else {
+                callback(null, JSON.parse(response));
+            }
+        });
+        
+    },
+
     secureCartOwnerUserGroup: function (cartUUID, groupPath, callback) {
 
         console.log("Securing a cart's owner user group: cart " + cartUUID + ", group " + groupPath);
@@ -1333,6 +1371,54 @@ module.exports = {
         });
     },
     
+    removeCartSecurity: function (cartUUID, callback) {
+
+        console.log("Removing roles and permissions for cart: " + cartUUID);
+        
+        module.exports.deleteCartManagerRole(cartUUID, function(error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                module.exports.deleteMenuManagerRole(cartUUID, 
+                    function(error, menuManagerResponse) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        callback(null, response);
+                    }
+                });                                            
+            }                
+        });
+    },
+
+    deleteCartManagerRole: function (cartUUID, callback) {
+        
+        var pathCartID = cartUUID.replace(/-/g, ".");
+        
+        var roleName = pathCartID + "-manager";
+        
+        endpointPath = "/roles/" + roleName;
+        var uri = host + appPath + endpointPath;
+
+        console.log("Deleting a cart manager role: " + uri);
+    
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to delete cart manager role for that foodcart.";
+                callback(error, false);
+            } else {
+                var role = JSON.parse(response).entities[0];
+                callback(null, role);
+            }
+        });
+    },
+    
     createMenuManagerRole: function (cartUUID, callback) {
         
         var pathCartID = cartUUID.replace(/-/g, ".");
@@ -1389,6 +1475,33 @@ module.exports = {
                         callback(null, role);
                     }
                 });              
+            }
+        });
+    },
+    
+    deleteMenuManagerRole: function (cartUUID, callback) {
+        
+        var pathCartID = cartUUID.replace(/-/g, ".");
+        
+        var roleName = pathCartID + "-menus-manager";
+        
+        endpointPath = "/roles/" + roleName;
+        var uri = host + appPath + endpointPath;
+
+        console.log("Deleting a menu manager role: " + uri);
+    
+        var options = {
+            uri: uri,
+            method: "DELETE"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            var isOwner = false;
+            if (error) {
+                error.message = "Unable to delete cart manager role for that foodcart.";
+                callback(error, false);
+            } else {                
+                callback(null, response);
             }
         });
     },
