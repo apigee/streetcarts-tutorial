@@ -206,43 +206,120 @@ module.exports = {
         
         var tokenParam = "?access_token=" + userBaasToken;
         
-        endpointPath = "/foodcarts/" + cartUUID + tokenParam;
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Deleting a cart: " + uri);
-        
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, cartDeleteResponse) {
+        // Get a list of the items so they can be deleted 
+        // after the cart is deleted.
+        module.exports.getItemsForCart(cartUUID, function(error, items) {
             if (error) {
-                if (error.statusCode == 401) {                
-                    error.message = "Unable to find a food cart with ID "+ 
-                        cartUUID;
-                    callback(error, null);
-                }
-                else {
-                    callback(error, null);
-                }
+                callback(error, null);
             } else {
-                module.exports.deleteCartOwnerUserGroup(cartUUID, function (error, response) {
+                // Get a list of the menus so they can be deleted 
+                // after the cart is deleted.
+                var cartItems = JSON.parse(items).items;
+                
+                module.exports.getMenusForCart(cartUUID, function(error, menus) {
                     if (error) {
                         callback(error, null);
-                    } else {                        
-                        module.exports.removeCartSecurity(cartUUID, function (error, response) {
+                    } else {
+                    
+                        var cartMenus = JSON.parse(menus).menus;
+                        
+                        // Delete the cart.
+                        endpointPath = "/foodcarts/" + cartUUID + tokenParam;
+                        var uri = host + appPath + endpointPath;
+                        
+                        console.log("Deleting a cart: " + uri);
+                        
+                        var options = {
+                            uri: uri,
+                            method: "DELETE"
+                        };
+                        return makeRequest(options, function (error, cartDeleteResponse) {
                             if (error) {
-                                console.log(error);
-                                callback(error, null);
+                                if (error.statusCode == 401) {                
+                                    error.message = "Unable to find a food cart with ID "+ 
+                                        cartUUID;
+                                    callback(error, null);
+                                }
+                                else {
+                                    callback(error, null);
+                                }
                             } else {
-                                callback(null, cartDeleteResponse);
+                                
+                                // Now that we've deleted the cart, delete the
+                                // menus and items created for it.
+                                module.exports.deleteMenusAndItems(cartMenus, 
+                                    cartItems, userBaasToken, function (error, response) {                                    
+                                    if (error) {
+                                        callback(error, null);
+                                    } else {
+                                        // Delete the user group for the cart's owners
+                                        module.exports.deleteCartOwnerUserGroup(cartUUID, 
+                                            function (error, response) {
+                                            if (error) {
+                                                callback(error, null);
+                                            } else {
+                                                // Delete the roles and permissions that 
+                                                // protected access to the cart.
+                                                module.exports.removeCartSecurity(cartUUID, 
+                                                function (error, response) {
+                                                    if (error) {
+                                                        console.log(error);
+                                                        callback(error, null);
+                                                    } else {
+                                                        callback(null, cartDeleteResponse);
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                                
                             }
                         });
                     }
                 });
             }
         });
+    },
+    
+    // Delete arrays of menus and items, probably to clean
+    // up after deletion of a foodcart.
+    deleteMenusAndItems: function (menus, items, baasToken, callback) {
+
+        // Delete the items
+        if (items.length > 0) {
+            async.each(items, function(item, callback) {
+
+                module.exports.deleteItem(item.uuid, baasToken, function (error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        callback();
+                    }
+                });
+            }, function(error) {
+                callback(error, null);
+            });
+        } else {
+        
+            // Delete the menus
+           if (menus.length > 0) {
+               async.each(menus, function(menu, callback) {
+   
+                   module.exports.deleteMenu(menu.uuid, baasToken, function (error, response) {
+                       if (error) {
+                           callback(error, null);
+                       } else {
+                           callback();
+                       }
+                   });
+               }, function(error) {
+                   callback(error, null);
+               });                
+           } else {
+               callback();
+           }
+        }
     },
     
     // Menus //
@@ -277,7 +354,7 @@ module.exports = {
                 
                 var permissionsList = 
                 { permissions: [
-                    { permission : "get,put,delete:/menus/" + menu.uuid },
+                    { permission : "get,put,post,delete:/menus/" + menu.uuid },
                     { permission : "get,put,post,delete:/menus/" + menu.uuid +
                         "/includes/*" }
                     ]
@@ -447,31 +524,57 @@ module.exports = {
     
     // Create an item and add it to a menu
     addNewItemToMenu: function (args, callback) {
+    
+        console.log("Add new item to menu: " + JSON.stringify(args));
+        var item = args.newValues;
+        var cartUUID = item.cartID;
+        args.cartUUID = cartUUID;
 
-        var tokenParam = "?access_token=" + args.baasToken;
-        var cartID = args.newValues.cartID;
-        var itemData = args.newValues;
-        itemData.cartID = cartID;
-
-        endpointPath = "/menus/" + args.menuUUID + 
-            "/includes/items" + tokenParam;
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Adding a new item to a menu: " + uri + "\n" + JSON.stringify(itemData));
-        
-        var options = {
-            uri: uri,
-            body: JSON.stringify(itemData),
-            method: "POST"
-        };
-        
-        return makeRequest(options, function (error, response) {
+        module.exports.addNewItem(args, function (error, response) {
             if (error) {
                 callback(error, null);
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+                var item = JSON.parse(response)['entities'][0];
+                var itemUUID = item.uuid;
+                var menuUUID = args.menuUUID;
+                var tokenParam = "?access_token=" + args.baasToken;
+        
+                endpointPath = "/menus/" + menuUUID + "/includes/items/" + itemUUID + tokenParam;
+                var uri = host + appPath + endpointPath;
+        
+                console.log("Adding a new item to a menu: " + uri);
+                
+                var options = {
+                    uri: uri,
+                    method: "POST"
+                };
+        
+                return makeRequest(options, function (error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        var item = JSON.parse(response)['entities'][0];
+                        var pathCartID = cartUUID.replace(/-/g, ".");
+                        var roleName = pathCartID + "-menus-manager";
+                        
+                        var permissionsList = {
+                            permissions: [
+                                { permission : "get,put,post,delete:/menus/" + menuUUID + 
+                                    "/includes/" + item.uuid }
+                            ]
+                        };
+                        module.exports.assignPermissionsToRole(roleName, permissionsList, 
+                            function(error, response) {
+                            if (error) {
+                                console.log(error);
+                                callback(error, null);
+                            } else {
+                                streamlineResponseEntity(item, function(streamlinedResponse){
+                                    callback(null, JSON.stringify(streamlinedResponse));
+                                });
+                            }
+                        });
+                    }
                 });
             }
         });
@@ -603,14 +706,19 @@ module.exports = {
                 var pathCartID = cartUUID.replace(/-/g, ".");                
                 var roleName = pathCartID + "-menus-manager";
                 
-                var body = {
-                    permission : "get,put,delete:/menus/*/includes/" + item.uuid,
-                    permission : "get,put,delete:/items/" + item.uuid
+                var permissionsList = {
+                    permissions: [
+                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + 
+                            "/offers/" + item.uuid },
+                        { permission : "get,put,post,delete:/menus/*/includes/" + item.uuid },
+                        { permission : "get,put,post,delete:/items/" + item.uuid }
+                    ]
                 };
-                
-                module.exports.assignPermissionsToRole(roleName, body, 
+
+                module.exports.assignPermissionsToRole(roleName, permissionsList, 
                     function(error, response) {
                     if (error) {
+                        console.log(error);
                         callback(error, null);
                     } else {
                         streamlineResponseEntity(item, function(streamlinedResponse){
@@ -773,7 +881,7 @@ module.exports = {
             method: "DELETE"
         };
         
-        return makeRequest(options, function (error, response) {
+        return makeRequest(options, function (error, itemDeleteResponse) {
             if (error) {
                 if (error.statusCode == 401) {                
                     error.message = "Unable to find an item with ID "+ 
@@ -784,10 +892,25 @@ module.exports = {
                     callback(error, null);
                 }            
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
+                var cartUUID = JSON.parse(itemDeleteResponse).entities[0].cartID; 
+                console.log("Delete item, cart UUID: " + cartUUID);
+                var pathCartID = cartUUID.replace(/-/g, ".");                
+                var roleName = pathCartID + "-menus-manager";
+                
+                var permissionsList = {
+                    permissions: [
+                        { permission : "get,put,post,delete:/menus/*/includes/" + itemUUID },
+                        { permission : "get,put,post,delete:/items/" + itemUUID }
+                    ]
+                };
+                module.exports.deletePermissionsFromRole(roleName, permissionsList, 
+                    function(error, response) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        callback(null, itemDeleteResponse);
+                    }
+                });            
             }
         });
     },
@@ -1353,10 +1476,12 @@ module.exports = {
             } else {
                 
                 var role = JSON.parse(response).entities[0];
-                var roleUUID = JSON.parse(response).entities[0].uuid;
+                var roleUUID = role.uuid;
                 
-                var permissionsList = {
-                    permission : "get,put,post,delete:/foodcarts/" + cartUUID
+                var permissionsList = { 
+                    permissions: [
+                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID }
+                    ]
                 };
                 
                 module.exports.assignPermissionsToRole(roleUUID, permissionsList, 
@@ -1458,23 +1583,15 @@ module.exports = {
                         { permission : "get,put,post,delete:/foodcarts/" + cartUUID + "/publishes/*" }
                     ]
                 };
-                async.each(permissionsList.permissions, function(permission, callback) {
-                    module.exports.assignPermissionsToRole(roleName, permission, 
-                        function(error, response) {
-                        if (error) {
-                            console.log(error);
-                            callback(error, null);
-                        } else {
-                            callback();
-                        }
-                    });
-                }, function(error) {
+                module.exports.assignPermissionsToRole(roleName, permissionsList, 
+                    function(error, response) {
                     if (error) {
+                        console.log(error);
                         callback(error, null);
                     } else {
                         callback(null, role);
                     }
-                });              
+                });
             }
         });
     },
@@ -1506,28 +1623,68 @@ module.exports = {
         });
     },
     
-    assignPermissionsToRole: function (roleName, permission, callback) {
-        
+    assignPermissionsToRole: function (roleName, permissionsList, callback) {
+
         endpointPath = "/roles/" + roleName + "/permissions";
         var uri = host + appPath + endpointPath;
         
         console.log("Assigning permissions to a role: " + uri);
         
-        var options = {
-            uri: uri,
-            method: "POST",
-            body: JSON.stringify(permission)
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
+        async.each(permissionsList.permissions, function(permission, callback) {
+            var options = {
+                uri: uri,
+                method: "POST",
+                body: JSON.stringify(permission)
+            };
+            return makeRequest(options, function (error, response) {
+                var isOwner = false;
+                if (error) {
+                    error.message = "Unable to assign permissions to role.";
+                    callback(error, false);
+                } else {
+                    callback(null, JSON.parse(response));
+                }
+            });
+        }, function(error) {
             if (error) {
-                error.message = "Unable to assign permissions to role.";
-                callback(error, false);
+                callback(error, null);
             } else {
-                callback(null, JSON.parse(response));
+                    callback(null, JSON.stringify(permissionsList));
             }
-        });        
+        });
+    },
+
+    deletePermissionsFromRole: function (roleName, permissionsList, callback) {
+        
+        endpointPath = "/roles/" + roleName + "/permissions";
+        
+        async.each(permissionsList.permissions, function(permission, callback) {
+        
+            var uri = host + appPath + endpointPath + "?permission=" + permission.permission;
+            console.log("Deleting permissions from role: " + uri);
+        
+            
+            var options = {
+                uri: uri,
+                method: "DELETE"
+            };
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    console.log(error);
+                    error.message = "Unable to assign permissions to role.";
+                    callback(error, false);
+                } else {
+                    console.log(JSON.parse(response));
+                    callback(null, JSON.parse(response));
+                }
+            });
+        }, function(error) {
+            if (error) {
+                callback(error, null);
+            } else {
+                callback(null, JSON.stringify(permissionsList));
+            }
+        });
     },
     
     assignRoleToGroup: function (roleName, groupPath, callback) {
