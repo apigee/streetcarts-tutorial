@@ -13,7 +13,7 @@ var dataStoreClientToken = '';
 
 module.exports = {
 
-    // Carts //
+    // Functions supporting the foodcarts proxy //
 
     /**
      * Creates a new foodcart entity in the data store.
@@ -148,7 +148,7 @@ module.exports = {
     },
 
     /**
-     * Gets all of the foodcart's owned by the specified
+     * Gets all of the foodcarts owned by the specified
      * user.
      */
     getCartsOwnedByUser: function (userUUID, callback) {
@@ -178,8 +178,7 @@ module.exports = {
     },
     
     /**
-     * Updates the details for the foodcart specified
-     * in the args.
+     * Updates the details for the specified foodcart.
      */
     updateDetailsForCart: function (args, callback) {
         
@@ -338,7 +337,7 @@ module.exports = {
         }
     },
     
-    // Menus //
+    // Functions supporting the menus proxy //
     
     /**
      * Adds a new menu for a foodcart.
@@ -373,6 +372,7 @@ module.exports = {
                 var pathCartID = cartUUID.replace(/-/g, ".");                
                 var roleName = pathCartID + "-menus-manager";
                 
+                // Permissions to set in API BaaS.
                 var permissionsList = 
                 { permissions: [
                     { permission : "get,put,post,delete:/menus/" + menu.uuid },
@@ -463,7 +463,7 @@ module.exports = {
     },
     
     /**
-     * Gets the menu specified by its UUID.
+     * Gets the specified menu.
      */
     getMenu: function (menuUUID, callback) {
 
@@ -550,7 +550,9 @@ module.exports = {
         });
     },
     
-    // Create an item and add it to a menu
+    /**
+     * Creates a menu item and adds it to a menu.
+     */
     addNewItemToMenu: function (args, callback) {
     
         console.log("Add new item to menu: " + JSON.stringify(args));
@@ -585,6 +587,7 @@ module.exports = {
                         var pathCartID = cartUUID.replace(/-/g, ".");
                         var roleName = pathCartID + "-menus-manager";
                         
+                        // Permissions to set in API BaaS.
                         var permissionsList = {
                             permissions: [
                                 { permission : "get,put,post,delete:/menus/" + menuUUID + 
@@ -607,8 +610,10 @@ module.exports = {
             }
         });
     },
-    
-    // Remove an item from a menu
+
+    /**
+     * Removes the specified menu item from the specified menu.
+     */
     removeItemFromMenu: function (args, callback) {
 
         var tokenParam = "?access_token=" + args.baasToken;
@@ -636,7 +641,9 @@ module.exports = {
         });
     },
     
-    // Get the menus for a cart
+    /**
+     * Gets an array of all menus for a foodcart.
+     */
     getMenusForCart: function (cartUUID, callback) {
         
         endpointPath = '/foodcarts/' + cartUUID + '/publishes';
@@ -670,7 +677,9 @@ module.exports = {
         });
     },
     
-    // Get the items on a menu.
+    /**
+     * Gets an array of the menu items on a menu.
+     */
     getItemsForMenu: function (menuUUID, callback) {
         
         endpointPath = '/menus/' + menuUUID + '/includes';
@@ -704,9 +713,12 @@ module.exports = {
         });
     },
     
-    // Items //
+    // Functions supporting the items proxy //
     
-    // Create a new item
+    /**
+     * Creates a new menu item for a foodcart (doesn't
+     * add the item to a menu).
+     */
     addNewItem: function (args, callback) {
 
         var tokenParam = "?access_token=" + args.baasToken;
@@ -731,9 +743,13 @@ module.exports = {
                 callback(error, null);
             } else {
                 var item = JSON.parse(response)['entities'][0];
+                
+                // Now that the item is created, control access to it
+                // by adding item-specific permissions to API BaaS.
                 var pathCartID = cartUUID.replace(/-/g, ".");                
                 var roleName = pathCartID + "-menus-manager";
                 
+                // Permissions to set in API BaaS.
                 var permissionsList = {
                     permissions: [
                         { permission : "get,put,post,delete:/foodcarts/" + cartUUID + 
@@ -758,7 +774,9 @@ module.exports = {
         });
     },
     
-    // Get the details for an item
+    /**
+     * Gets details for the specified menu item.
+     */
     getDetailsForItem: function (itemUUID, callback) {
         
         endpointPath = "/items/" + itemUUID;
@@ -783,7 +801,9 @@ module.exports = {
         });
     },
     
-    // Get the items for a cart
+    /**
+     * Gets the list of items for the specified foodcart.
+     */
     getItemsForCart: function (cartUUID, callback) {
         
         endpointPath = '/foodcarts/' + cartUUID + '/offers/items';
@@ -818,7 +838,9 @@ module.exports = {
         });
     },
     
-    // Get the details for an item on a menu
+    /**
+     * Gets the details for the specified menu item and menu.
+     */
     getDetailsForItemInMenu: function (args, callback) {
         
         endpointPath = "/menus/" + args.menuUUID + "/includes/items/" +
@@ -846,7 +868,9 @@ module.exports = {
         });
     },
     
-    // Update an item
+    /**
+     * Updates the information about the specified menu item.
+     */
     updateDetailsForItem: function (args, callback) {
         
         var tokenParam = "?access_token=" + args.baasToken;
@@ -895,7 +919,9 @@ module.exports = {
         });        
     },
     
-    // Delete an item
+    /**
+     * Deletes data about the specified menu item.
+     */
     deleteItem: function (itemUUID, baasToken, callback) {
         
         var tokenParam = "?access_token=" + baasToken;
@@ -920,11 +946,14 @@ module.exports = {
                     callback(error, null);
                 }            
             } else {
-                var cartUUID = JSON.parse(itemDeleteResponse).entities[0].cartID; 
-                console.log("Delete item, cart UUID: " + cartUUID);
-                var pathCartID = cartUUID.replace(/-/g, ".");                
+                var cartUUID = JSON.parse(itemDeleteResponse).entities[0].cartID;
+                
+                // Now that the menu is deleted, clean up by removing 
+                // permissions settings specific to the item.
+                var pathCartID = cartUUID.replace(/-/g, ".");
                 var roleName = pathCartID + "-menus-manager";
                 
+                // Permissions to delete from API BaaS.
                 var permissionsList = {
                     permissions: [
                         { permission : "get,put,post,delete:/menus/*/includes/" + itemUUID },
@@ -943,9 +972,11 @@ module.exports = {
         });
     },
     
-    // Reviews // 
+    // Functions supporting the reviews proxy // 
     
-    // Create a new review
+    /**
+     * Creates a new foodcart review.
+     */
     addNewReview: function (args, callback) {
         
         var tokenParam = "?access_token=" + args.baasToken;
@@ -976,7 +1007,9 @@ module.exports = {
         });
     },
     
-    // Get review for a cart
+    /**
+     * Gets reviews for the specified foodcart.
+     */
     getReviewsForCart: function (cartUUID, callback) {
         
         endpointPath = '/foodcarts/' + cartUUID + '/reviewedIn/reviews';
@@ -1003,7 +1036,9 @@ module.exports = {
         });
     },
     
-    // Get details for a review
+    /**
+     * Get details for the specified foodcart review.
+     */
     getDetailsForReview: function (reviewUUID, callback) {
         
         endpointPath = "/reviews/" + reviewUUID;
@@ -1028,7 +1063,9 @@ module.exports = {
         });
     },
     
-    // Update a review
+    /**
+     * Update information about the specified foodcart review.
+     */
     updateDetailsForReview: function (args, callback) {
         
         var tokenParam = "?access_token=" + args.baasToken;
@@ -1057,7 +1094,9 @@ module.exports = {
         });
     },
     
-    // Delete a review
+    /**
+     * Delete the specified foodcart review.
+     */
     deleteReview: function (reviewUUID, baasToken, callback) {
         
         var tokenParam = "?access_token=" + baasToken;
@@ -1083,9 +1122,11 @@ module.exports = {
         });
     },
     
-    // Users //
+    // Functions supporting the users proxy. //
     
-    // Get the list of users
+    /**
+     * Gets a list of all StreetCarts registered users.
+     */
     getUserList: function (args, callback) {
         
         endpointPath = '/users';
@@ -1112,7 +1153,9 @@ module.exports = {
         });
     },
     
-    // Get a user by ID
+    /**
+     * Gets information about the specified user.
+     */
     getUser: function (userUUID, callback) {
         
         endpointPath = "/users/" + userUUID;
@@ -1144,9 +1187,16 @@ module.exports = {
         });
     },
     
-    // Create a user account
+    /**
+     * Registers a user by creating user entity for them in the 
+     * data store.
+     */
     registerUser: function (userData, isOwner, callback) {
-        
+
+        // Eventually, we might differentiate between users
+        // who are foodcart owners and those who are just
+        // registered. Currently, everyone gets owner status,
+        // including the ability to create new foodcarts.
         isOwner = true;
         
         endpointPath = '/users';
@@ -1202,17 +1252,23 @@ module.exports = {
             });            
         }
     },
-
-    // Check that a user is in the data store
+    
+    /**
+     * Authenticate a user with API BaaS using their username 
+     * and password. On a successful authentication, API BaaS
+     * returns JSON that includes an access token. This token
+     * is copied into the Edge-generated token for use with
+     * subsequent requests by that user to BaaS.
+     */
     authenticateUser: function (credentials, callback) {
         
         endpointPath = "/token";
-        var uri = host + appPath + endpointPath;
-
-        console.log("Authenticating a user: " + uri + "\n" + JSON.stringify(credentials));
-
         credentials.grant_type = "password";
+        var uri = host + appPath + endpointPath;
         
+        console.log("Authenticating a user: " + uri + "\n" + 
+            JSON.stringify(credentials));
+
         var options = {
             uri: uri,
             body: JSON.stringify(credentials),
@@ -1229,8 +1285,10 @@ module.exports = {
             }
         });
     },
-
-    // Delete a user account
+    
+    /**
+     * Deletes the specified user account from the data store.
+     */
     deleteUser: function (userUUID, baasToken, callback) {
         
         endpointPath = "/users/" + userUUID;
@@ -1265,8 +1323,8 @@ module.exports = {
 // Functions to manage security.
 
 /**
- * Adds userUUID to the group of users who can create
- * carts.
+ * Adds the specified user to the group of users who can create
+ * foodcarts.
  */
 function addOwner (userUUID, callback) {
     
@@ -1291,11 +1349,13 @@ function addOwner (userUUID, callback) {
     });
 }
 
-
-// true if userUUID has permission to edit cart data, create
-// new carts, and add users as cart editors.
+/**
+ * true if the specified user has permission to edit cart data, create
+ * new carts, and add users as cart editors.
+ */
 function isOwner (userUUID, callback) {
 
+    // API BaaS path pointing to users of the "owners" user group.
     endpointPath = "/groups/27f46f8a-b304-11e5-ac2e-2b595e5b208a/users";
     var uri = host + appPath + endpointPath;
 
@@ -1315,8 +1375,11 @@ function isOwner (userUUID, callback) {
             var userEntities = JSON.parse(response)['entities'];
             
             if (userEntities.length > 0) {
-                async.each(userEntities, function(userEntity, callback) {
 
+                // Check the specified user's UUID against the 
+                // UUID of the user found in the group. If they match
+                // then specified user is an owner.
+                async.each(userEntities, function(userEntity, callback) {
                     var ownerUUID = userEntity.uuid;
                     if (ownerUUID === userUUID) {
                         isOwner = true;
@@ -1336,6 +1399,15 @@ function isOwner (userUUID, callback) {
     });
 }
 
+/**
+ * Creates an "owners" API BaaS user group for the specified foodcart.
+ * The user who creates the cart is automatically added to this
+ * group.
+ * 
+ * Through a role and permissions assigned to this group, users in 
+ * the group are able to update and delete the foodcart that corresponds
+ * to the group.
+ */
 function createCartOwnerUserGroup (cartUUID, callback) {
     
     // Get an "application client" token to pass for authorization.
@@ -1348,8 +1420,10 @@ function createCartOwnerUserGroup (cartUUID, callback) {
             callback(error);
         } else {
         
-            var pathCartID = cartUUID.replace(/-/g, ".");
-            
+            // Construct the group's path and title with the 
+            // foodcart's UUID, ensuring the those values will be 
+            // unique.
+            var pathCartID = cartUUID.replace(/-/g, ".");            
             var groupPath = "foodcarts/" + pathCartID + "/owners";
             var groupTitle = "/foodcarts/" + cartUUID + "/owners";
             
@@ -1383,6 +1457,10 @@ function createCartOwnerUserGroup (cartUUID, callback) {
     
 }
 
+/**
+ * Deletes the "owners" API BaaS user group. This function would
+ * be called when the foodcart is being deleted.
+ */
 function deleteCartOwnerUserGroup (cartUUID, callback) {
     
     // Get an "application client" token to pass for authorization.
@@ -1397,8 +1475,7 @@ function deleteCartOwnerUserGroup (cartUUID, callback) {
         
             var pathCartID = cartUUID.replace(/-/g, ".");
             
-            var groupPath = "foodcarts/" + pathCartID + "/owners";
-            
+            var groupPath = "foodcarts/" + pathCartID + "/owners";            
             endpointPath = "/groups/" + groupPath + '?access_token=' + dataStoreClientToken;
             var uri = host + appPath + endpointPath;
             
@@ -1421,25 +1498,41 @@ function deleteCartOwnerUserGroup (cartUUID, callback) {
     });
 }
 
+/**
+ * Applies security settings to the specified cart's owner user group.
+ * 
+ */
 function secureCartOwnerUserGroup (cartUUID, groupPath, callback) {
 
     console.log("Securing a cart's owner user group: cart " + cartUUID + ", group " + groupPath);
     
+    // Create the cart manager role that will include permissions
+    // granting access to update and delete the cart.
     createCartManagerRole(cartUUID, function(error, response) {
         if (error) {
             callback(error, null);
         } else {
             var managerRoleName = response.name;
+            
+            // Assign the new manager role to the "owners" user
+            // group so that the group's members have owner access.
             assignRoleToGroup(managerRoleName, groupPath, 
             function(error, response) {
                 if (error) {
                     callback(error, null);
                 } else {
+                
+                    // Create the menu manager role that will include
+                    // permissions granting access to create, update, and 
+                    // delete menu items and menus for this foodcart.
                     createMenuManagerRole(cartUUID, 
                         function(error, menuManagerResponse) {
                         if (error) {
                             callback(error, null);
                         } else {
+                        
+                            // Assign the new menu manager role to the 
+                            // foodcart's "owners" group.
                             managerRoleName = menuManagerResponse.name;
                             var menuManagerRoleName = menuManagerResponse.name;
                             assignRoleToGroup(menuManagerRoleName, groupPath, 
@@ -1458,6 +1551,11 @@ function secureCartOwnerUserGroup (cartUUID, groupPath, callback) {
     });
 }
 
+/**
+ * Creates the manager role for the specified foodcart. This role
+ * includes permissions that allow users to update and delete 
+ * the foodcart.
+ */
 function createCartManagerRole (cartUUID, callback) {
     
     // Get an "application client" token to pass for authorization.
@@ -1500,6 +1598,7 @@ function createCartManagerRole (cartUUID, callback) {
                     var role = JSON.parse(response).entities[0];
                     var roleUUID = role.uuid;
                     
+                    // Permissions to set in API BaaS.
                     var permissionsList = { 
                         permissions: [
                             { permission : "get,put,post,delete:/foodcarts/" + cartUUID }
@@ -1521,16 +1620,21 @@ function createCartManagerRole (cartUUID, callback) {
 }
 
 /**
- * 
+ * Deletes the roles that grant access for updating/deleting
+ * foodcarts, menus, and menu items for the specified foodcart. 
+ * For example, this is called when the foodcart is deleted. 
  */
 function removeCartSecurity (cartUUID, callback) {
 
     console.log("Removing roles and permissions for cart: " + cartUUID);
     
+    // Delete the role with permissions for the foodcart.
     deleteCartManagerRole(cartUUID, function(error, response) {
         if (error) {
             callback(error, null);
         } else {
+            // Delete the role with permissions for the foodcart's
+            // menus and menu items.
             deleteMenuManagerRole(cartUUID, 
                 function(error, menuManagerResponse) {
                 if (error) {
@@ -1606,9 +1710,10 @@ function createMenuManagerRole (cartUUID, callback) {
             console.log(error);
             callback(error);
         } else {
-        
-             var pathCartID = cartUUID.replace(/-/g, ".");
-             
+            
+            // Construct the role's name using the foodcart's 
+            // UUID to ensure its uniqueness.
+             var pathCartID = cartUUID.replace(/-/g, ".");             
              var roleName = pathCartID + "-menus-manager";
              var roleTitle = "/foodcarts/" + cartUUID + "/menus/manager";
              
@@ -1637,6 +1742,7 @@ function createMenuManagerRole (cartUUID, callback) {
                      var role = JSON.parse(response).entities[0];
                      var roleName = role.name;
                      
+                    // Permissions to set in API BaaS.
                      var permissionsList = {
                          permissions: [
                              { permission : "get,put,post,delete:/foodcarts/" + 
@@ -1645,6 +1751,7 @@ function createMenuManagerRole (cartUUID, callback) {
                                 cartUUID + "/publishes/*" }
                          ]
                      };
+                     // Assign these permissions to the new role.
                      assignPermissionsToRole(roleName, permissionsList, 
                          function(error, response) {
                          if (error) {
@@ -1678,7 +1785,6 @@ function deleteMenuManagerRole (cartUUID, callback) {
         } else {
         
             var pathCartID = cartUUID.replace(/-/g, ".");
-            
             var roleName = pathCartID + "-menus-manager";
             
             endpointPath = "/roles/" + roleName + 
@@ -1705,7 +1811,7 @@ function deleteMenuManagerRole (cartUUID, callback) {
 }
 
 /**
- * Assign permissions to a user role. For example, this function would be
+ * Adds permissions to a user role. For example, this function would be
  * called when a menu item is being added for a foodcart. The new permissions
  * would control access to the item, allowing PUT or DELETE access only to 
  * users in the role.
@@ -1727,6 +1833,8 @@ function assignPermissionsToRole (roleName, permissionsList, callback) {
             var uri = host + appPath + endpointPath + '?access_token=' + dataStoreClientToken;
             console.log("Assigning permissions to a role: " + uri);
     
+            // Loop through the list of permissions, POSTing each to the specified
+            // role in API BaaS.
             async.each(permissionsList.permissions, function(permission, callback) {
                 var options = {
                     uri: uri,
@@ -1753,7 +1861,7 @@ function assignPermissionsToRole (roleName, permissionsList, callback) {
 }
 
 /**
- * Remove permissions from a user role. For example, this function would 
+ * Removes permissions from a user role. For example, this function would 
  * be called when a menu item is being deleted in order to clean up
  * permission that controlled access to that item.
  */
@@ -1772,11 +1880,12 @@ function deletePermissionsFromRole (roleName, permissionsList, callback) {
             endpointPath = "/roles/" + roleName + "/permissions" + 
                 '?access_token=' + dataStoreClientToken;
            
+            // Loops through the list of permissions, deleting each permission
+            // from the role in API BaaS.
             async.each(permissionsList.permissions, function(permission, callback) {
            
                var uri = host + appPath + endpointPath + "&permission=" + permission.permission;
                console.log("Deleting permissions from role: " + uri);
-           
                
                var options = {
                    uri: uri,
@@ -1844,7 +1953,7 @@ function assignRoleToGroup (roleName, groupPath, callback) {
 }
 
 /**
- * Add the specified user to a BaaS user group. For example, this is 
+ * Adds the specified user to a BaaS user group. For example, this is 
  * called when adding a user to a cart owners group when creating
  * a foodcart. 
  */
@@ -1889,8 +1998,10 @@ function addUserToGroup (userUUID, groupPath, callback) {
 
 // General utility functions.
 
-// Make RESTful requests to the data store. All requests
-// are made through this function.
+/**
+ * Makes a request to the API BaaS data store API. All requests
+ * are made through this function.
+ */
 function makeRequest(options, callback) {
 
     console.log("Making a data store API request: " + JSON.stringify(options));
@@ -2024,7 +2135,7 @@ function getDataStoreClientToken(callback) {
 }
 
 /**
- * Remove unwanted properties from arrayed entity data returned by 
+ * Removes unwanted properties from arrayed entity data returned by 
  * the data store.
  */
 function streamlineResponseArray(entityArray, callback) {
@@ -2043,13 +2154,19 @@ function streamlineResponseArray(entityArray, callback) {
 }
 
 /**
- * Removed unwanted properties from an entity returned by 
- * the data store.
+ * Removes unwanted properties from JSON returned by 
+ * the data store. API BaaS responses contain several properties
+ * that are probably not of interest (or not useful) to a client of 
+ * the Edge-based StreetCarts API.
+ * 
+ * The properties removed here would be useful a client application
+ * (and app developer) interacting directly with API BaaS.
  */
 function streamlineResponseEntity(responseData, callback) {
     
     console.log("Streamlining a response entity: " + JSON.stringify(responseData));
 
+    // The properties to remove from the JSON.
     var unwantedProperties = [
         "action",
         "application",
