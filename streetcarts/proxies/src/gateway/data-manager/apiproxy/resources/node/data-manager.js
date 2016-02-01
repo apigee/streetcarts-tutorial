@@ -4,22 +4,24 @@ var apigee = require('apigee-access');
 
 var host = 'https://api.usergrid.com';
 var appPath = '/docfood/foodcarttest';
-var clientID;
-var clientSecret;
-
-//var orgVault = apigee.getVault('streetcarts', 'docfood');   
-//orgVault.get('docfood-client-id', function(err, secretValue) {
-//    clientID = secretValue;
-//});
-//orgVault.get('docfood-client-secret', function(err, secretValue) {
-//    clientSecret = secretValue;
-//});
+var edgeVault = 'streetcarts';
+var edgeVaultScope = 'environment';
+var dataStoreIdEntry = 'datastore-client-id';
+var dataStoreSecretEntry = 'datastore-client-secret';
+var dataStoreTokenEntry = 'datastore-client-token';
+var dataStoreClientToken = '';
 
 module.exports = {
 
     // Carts //
 
-    // Create a new cart.
+    /**
+     * Creates a new foodcart entity in the data store.
+     * Along with creating the entity, this function
+     * sets up user groups and permissions needed to 
+     * control PUT/POST/DELETE access to the foodcart so that
+     * only the cart's owner(s) can make changes to it.
+     */
     addNewCart: function (args, callback) {
         
         var userBaasToken = args.baasToken;
@@ -56,7 +58,7 @@ module.exports = {
             } else {
                 var cart = JSON.parse(newCartResponse)['entities'][0];
                 
-                module.exports.createCartOwnerUserGroup(cart.uuid,
+                createCartOwnerUserGroup(cart.uuid,
                     function(error, response) {
                     if (error) {
                         callback(error, null);
@@ -65,12 +67,12 @@ module.exports = {
                         var groupPath = groupEntity.path;
                         var groupName = groupEntity.name;
                         
-                        module.exports.secureCartOwnerUserGroup(cart.uuid,
+                        secureCartOwnerUserGroup(cart.uuid,
                             groupPath, function(error, response) {
                             if (error) {
                                 callback(error, null);
                             } else {
-                                module.exports.addUserToGroup(ownerUUID, groupPath, 
+                                addUserToGroup(ownerUUID, groupPath, 
                                     function(error, response) {
                                     if (error) {
                                         callback(error, null);
@@ -85,8 +87,10 @@ module.exports = {
             }
         });
     },
-    
-    // Get the list of carts
+
+    /**
+     * Gets a list of all the foodcarts in the data store.
+     */
     getCartList: function (args, callback) {
         
         endpointPath = '/foodcarts';
@@ -113,7 +117,9 @@ module.exports = {
         });
     },
     
-    // Get a cart by ID
+    /**
+     * Get a single foodcart using the cart's UUID.
+     */
     getCart: function (cartUUID, callback) {
         
         endpointPath = "/foodcarts/" + cartUUID;
@@ -137,15 +143,14 @@ module.exports = {
                     callback(error, null);
                 }            
             } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
             }
         });
     },
-    
-    // Get carts owned by a user
+
+    /**
+     * Gets all of the foodcart's owned by the specified
+     * user.
+     */
     getCartsOwnedByUser: function (userUUID, callback) {
         
         endpointPath = '/users/' + userUUID + '/owns';
@@ -172,7 +177,10 @@ module.exports = {
         });
     },
     
-    // Update a cart
+    /**
+     * Updates the details for the foodcart specified
+     * in the args.
+     */
     updateDetailsForCart: function (args, callback) {
         
         var userBaasToken = args.baasToken;
@@ -201,7 +209,12 @@ module.exports = {
         });
     },
     
-    // Delete a cart
+    /**
+     * Deletes the entity representing a foodcart. This function deletes
+     * the foodcart entity and all menus and menu items created for the 
+     * foodcart. Finally, it removes user groups, roles, and permissions 
+     * associated with the foodcart. 
+     */
     deleteCart: function (cartUUID, userBaasToken, callback) {
         
         var tokenParam = "?access_token=" + userBaasToken;
@@ -253,14 +266,14 @@ module.exports = {
                                         callback(error, null);
                                     } else {
                                         // Delete the user group for the cart's owners
-                                        module.exports.deleteCartOwnerUserGroup(cartUUID, 
+                                        deleteCartOwnerUserGroup(cartUUID, 
                                             function (error, response) {
                                             if (error) {
                                                 callback(error, null);
                                             } else {
                                                 // Delete the roles and permissions that 
                                                 // protected access to the cart.
-                                                module.exports.removeCartSecurity(cartUUID, 
+                                                removeCartSecurity(cartUUID, 
                                                 function (error, response) {
                                                     if (error) {
                                                         console.log(error);
@@ -282,8 +295,11 @@ module.exports = {
         });
     },
     
-    // Delete arrays of menus and items, probably to clean
-    // up after deletion of a foodcart.
+    /**
+     * Deletes the specified menus and menu items. This is useful for
+     * cleaning up after deleting a foodcart by deleting all of the
+     * menus and items associated with it.
+     */
     deleteMenusAndItems: function (menus, items, baasToken, callback) {
 
         // Delete the items
@@ -324,7 +340,9 @@ module.exports = {
     
     // Menus //
     
-    // Create a new menu
+    /**
+     * Adds a new menu for a foodcart.
+     */
     addNewMenu: function (args, callback) {
         var cartUUID = args.cartUUID;
         var menuData = args.newValues;
@@ -349,6 +367,9 @@ module.exports = {
             } else {
             
                 var menu = JSON.parse(response)['entities'][0];
+                
+                // Create a user role with the permissions needed 
+                // to control access to the new menu. 
                 var pathCartID = cartUUID.replace(/-/g, ".");                
                 var roleName = pathCartID + "-menus-manager";
                 
@@ -360,7 +381,7 @@ module.exports = {
                     ]
                 };
                 async.each(permissionsList.permissions, function(permission, callback) {
-                    module.exports.assignPermissionsToRole(roleName, permission, 
+                    assignPermissionsToRole(roleName, permission, 
                         function(error, response) {
                         if (error) {
                             console.log(error);
@@ -382,7 +403,9 @@ module.exports = {
         });
     },
     
-    // Get a list of all menus
+    /**
+     * Gets a list of all the menus in the data store.
+     */
     getMenuList: function (args, callback) {
         
         var menuList = [];
@@ -439,7 +462,9 @@ module.exports = {
         });
     },
     
-    // Get a menu by its ID
+    /**
+     * Gets the menu specified by its UUID.
+     */
     getMenu: function (menuUUID, callback) {
 
         var menu;
@@ -494,7 +519,10 @@ module.exports = {
         });
     },
     
-    // Add an existing item to a menu
+    /**
+     * Associates an existing menu item with the 
+     * specified menu.
+     */
     addExistingItemToMenu: function (args, callback) {
 
         var tokenParam = "?access_token=" + args.baasToken;
@@ -563,7 +591,7 @@ module.exports = {
                                     "/includes/" + item.uuid }
                             ]
                         };
-                        module.exports.assignPermissionsToRole(roleName, permissionsList, 
+                        assignPermissionsToRole(roleName, permissionsList, 
                             function(error, response) {
                             if (error) {
                                 console.log(error);
@@ -715,7 +743,7 @@ module.exports = {
                     ]
                 };
 
-                module.exports.assignPermissionsToRole(roleName, permissionsList, 
+                assignPermissionsToRole(roleName, permissionsList, 
                     function(error, response) {
                     if (error) {
                         console.log(error);
@@ -903,7 +931,7 @@ module.exports = {
                         { permission : "get,put,post,delete:/items/" + itemUUID }
                     ]
                 };
-                module.exports.deletePermissionsFromRole(roleName, permissionsList, 
+                deletePermissionsFromRole(roleName, permissionsList, 
                     function(error, response) {
                     if (error) {
                         callback(error, null);
@@ -1161,7 +1189,7 @@ module.exports = {
                     var entity = JSON.parse(response)['entities'][0];
                     streamlineResponseEntity(entity, function(streamlinedResponse){
                         if (isOwner) {
-                            module.exports.addOwner(streamlinedResponse.uuid, function(error, entity){
+                            addOwner(streamlinedResponse.uuid, function(error, entity){
                                 if (error) {
                                     callback(error, null);
                                 } else {
@@ -1202,34 +1230,6 @@ module.exports = {
         });
     },
 
-    // Utility functions used to manage owner status for 
-    // authorization.
-
-    // Adds userUUID to the group of users who can create
-    // carts.
-    addOwner: function (userUUID, callback) {
-        
-        endpointPath = "/groups/owners/users/" + userUUID;
-        var uri = host + appPath + endpointPath;
-
-        console.log("Adding an owner user: " + uri);
-
-        var options = {
-            uri: uri,
-            method: "POST"
-        };
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response);
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
-    
     // Delete a user account
     deleteUser: function (userUUID, baasToken, callback) {
         
@@ -1254,489 +1254,638 @@ module.exports = {
                 });
             }
         });
-    },
+    },    
     
-    // true if userUUID has permission to create carts.
-    ownsCart: function (userUUID, cartUUID, callback) {
+};
 
-        var pathCartID = cartUUID.replace(/-/g, ".");
+// The following are utility functions called from within this
+// module.
+
+
+// Functions to manage security.
+
+/**
+ * Adds userUUID to the group of users who can create
+ * carts.
+ */
+function addOwner (userUUID, callback) {
     
-        endpointPath = "/groups/foodcarts/" + pathCartID + "/owners/users";
-        var uri = host + appPath + endpointPath;
+    endpointPath = "/groups/owners/users/" + userUUID;
+    var uri = host + appPath + endpointPath;
 
-        console.log("Verifying that a user owns a cart: " + uri);
+    console.log("Adding an owner user: " + uri);
 
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to find that cart's owners.";
-                callback(error, false);
-            } else {
-                var userEntities = JSON.parse(response)['entities'];
-                
-                if (userEntities.length > 0) {
-                    async.each(userEntities, function(userEntity, callback) {
-                    
-                        var ownerUUID = userEntity.uuid;
-                        if (ownerUUID === userUUID) {
-                            isOwner = true;
-                        }
-                        callback(null, isOwner);
-                    }, function(error) {
-                        if(error) {
-                            callback(error, null);
-                        } else {
-                            callback(null, isOwner);
-                        }
-                    });                
-                } else {
+    var options = {
+        uri: uri,
+        method: "POST"
+    };
+    return makeRequest(options, function (error, response) {
+        if (error) {
+            callback(error, null);
+        } else {
+            var entity = JSON.parse(response);
+            streamlineResponseEntity(entity, function(streamlinedResponse){
+                callback(null, JSON.stringify(streamlinedResponse));
+            });
+        }
+    });
+}
+
+
+// true if userUUID has permission to edit cart data, create
+// new carts, and add users as cart editors.
+function isOwner (userUUID, callback) {
+
+    endpointPath = "/groups/27f46f8a-b304-11e5-ac2e-2b595e5b208a/users";
+    var uri = host + appPath + endpointPath;
+
+    console.log("Verifying that a user is an owner user: " + uri);
+
+    var options = {
+        uri: uri,
+        method: "GET"
+    };
+    
+    return makeRequest(options, function (error, response) {
+        var isOwner = false;
+        if (error) {
+            error.message = "Unable to find that cart's owners.";
+            callback(error, false);
+        } else {
+            var userEntities = JSON.parse(response)['entities'];
+            
+            if (userEntities.length > 0) {
+                async.each(userEntities, function(userEntity, callback) {
+
+                    var ownerUUID = userEntity.uuid;
+                    if (ownerUUID === userUUID) {
+                        isOwner = true;
+                    }
                     callback(null, isOwner);
-                }            
-            }
-        });
-    },
-    
-    // true if userUUID has permission to edit cart data, create
-    // new carts, and add users as cart editors.
-    isOwner: function (userUUID, callback) {
-
-        endpointPath = "/groups/27f46f8a-b304-11e5-ac2e-2b595e5b208a/users";
-        var uri = host + appPath + endpointPath;
-
-        console.log("Verifying that a user is an owner user: " + uri);
-
-        var options = {
-            uri: uri,
-            method: "GET"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to find that cart's owners.";
-                callback(error, false);
-            } else {
-                var userEntities = JSON.parse(response)['entities'];
-                
-                if (userEntities.length > 0) {
-                    async.each(userEntities, function(userEntity, callback) {
-
-                        var ownerUUID = userEntity.uuid;
-                        if (ownerUUID === userUUID) {
-                            isOwner = true;
-                        }
+                }, function(error) {
+                    if(error) {
+                        callback(error, null);
+                    } else {
                         callback(null, isOwner);
-                    }, function(error) {
-                        if(error) {
-                            callback(error, null);
-                        } else {
-                            callback(null, isOwner);
-                        }
-                    });                
-                } else {
-                    callback(null, isOwner);
-                }            
-            }
-        });
-    },
-    
-    createCartOwnerUserGroup: function (cartUUID, callback) {
-        
-        var pathCartID = cartUUID.replace(/-/g, ".");
-        
-        var groupPath = "foodcarts/" + pathCartID + "/owners";
-        var groupTitle = "/foodcarts/" + cartUUID + "/owners";
-        
-        var body = {
-            path : groupPath,
-            title : groupTitle
-        };
-        
-        endpointPath = "/groups";
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Creating a user group for owners of a cart: " + uri);
-    
-        var options = {
-            uri: uri,
-            method: "POST",
-            body: JSON.stringify(body)
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to add owner group for that foodcart.";
-                callback(error, false);
-            } else {
-                callback(null, JSON.parse(response));
-            }
-        });
-        
-    },
-
-    deleteCartOwnerUserGroup: function (cartUUID, callback) {
-        
-        var pathCartID = cartUUID.replace(/-/g, ".");
-        
-        var groupPath = "foodcarts/" + pathCartID + "/owners";
-        
-        endpointPath = "/groups/" + groupPath;
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Deleting a user group for owners of a cart: " + uri);
-    
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to delete owner group for that foodcart.";
-                callback(error, false);
-            } else {
-                callback(null, JSON.parse(response));
-            }
-        });
-        
-    },
-
-    secureCartOwnerUserGroup: function (cartUUID, groupPath, callback) {
-
-        console.log("Securing a cart's owner user group: cart " + cartUUID + ", group " + groupPath);
-        
-        module.exports.createCartManagerRole(cartUUID, function(error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                var managerRoleName = response.name;
-                module.exports.assignRoleToGroup(managerRoleName, groupPath, 
-                function(error, response) {
-                    if (error) {
-                        callback(error, null);
-                    } else {
-                        module.exports.createMenuManagerRole(cartUUID, 
-                            function(error, menuManagerResponse) {
-                            if (error) {
-                                callback(error, null);
-                            } else {
-                                managerRoleName = menuManagerResponse.name;
-                                var menuManagerRoleName = menuManagerResponse.name;
-                                module.exports.assignRoleToGroup(menuManagerRoleName, groupPath, 
-                                    function(error, response) {
-                                    if (error) {
-                                        callback(error, null);
-                                    } else {
-                                        callback(null, response);                                        
-                                    }
-                                });
-                            }                
-                        });                                            
                     }
-                });
-            }                
-        });
-    },
-
-    createCartManagerRole: function (cartUUID, callback) {
-        
-        var pathCartID = cartUUID.replace(/-/g, ".");
-        
-        var roleName = pathCartID + "-manager";
-        var roleTitle = "/foodcarts/" + cartUUID + "/manager";
-        
-        var body = {
-            name : roleName,
-            title : roleTitle
-        };
-        
-        endpointPath = "/roles";
-        var uri = host + appPath + endpointPath;
-
-        console.log("Creating a cart manager role: " + uri);
-    
-        var options = {
-            uri: uri,
-            method: "POST",
-            body: JSON.stringify(body)
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to add cart manager role for that foodcart.";
-                callback(error, false);
+                });                
             } else {
-                
-                var role = JSON.parse(response).entities[0];
-                var roleUUID = role.uuid;
-                
-                var permissionsList = { 
-                    permissions: [
-                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID }
-                    ]
-                };
-                
-                module.exports.assignPermissionsToRole(roleUUID, permissionsList, 
-                    function(error, response) {
-                    if (error) {
-                        callback(error, null);
-                    } else {
-                        callback(null, role);
-                    }
-                });
-            }
-        });
-    },
-    
-    removeCartSecurity: function (cartUUID, callback) {
+                callback(null, isOwner);
+            }            
+        }
+    });
+}
 
-        console.log("Removing roles and permissions for cart: " + cartUUID);
-        
-        module.exports.deleteCartManagerRole(cartUUID, function(error, response) {
-            if (error) {
-                callback(error, null);
-            } else {
-                module.exports.deleteMenuManagerRole(cartUUID, 
-                    function(error, menuManagerResponse) {
-                    if (error) {
-                        callback(error, null);
-                    } else {
-                        callback(null, response);
-                    }
-                });                                            
-            }                
-        });
-    },
+function createCartOwnerUserGroup (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
 
-    deleteCartManagerRole: function (cartUUID, callback) {
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
         
-        var pathCartID = cartUUID.replace(/-/g, ".");
+            var pathCartID = cartUUID.replace(/-/g, ".");
+            
+            var groupPath = "foodcarts/" + pathCartID + "/owners";
+            var groupTitle = "/foodcarts/" + cartUUID + "/owners";
+            
+            var body = {
+                path : groupPath,
+                title : groupTitle
+            };
+            
+            endpointPath = "/groups" + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Creating a user group for owners of a cart: " + uri);
         
-        var roleName = pathCartID + "-manager";
-        
-        endpointPath = "/roles/" + roleName;
-        var uri = host + appPath + endpointPath;
-
-        console.log("Deleting a cart manager role: " + uri);
-    
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to delete cart manager role for that foodcart.";
-                callback(error, false);
-            } else {
-                var role = JSON.parse(response).entities[0];
-                callback(null, role);
-            }
-        });
-    },
-    
-    createMenuManagerRole: function (cartUUID, callback) {
-        
-        var pathCartID = cartUUID.replace(/-/g, ".");
-        
-        var roleName = pathCartID + "-menus-manager";
-        var roleTitle = "/foodcarts/" + cartUUID + "/menus/manager";
-        
-        var body = {
-            name : roleName,
-            title : roleTitle
-        };
-        
-        endpointPath = "/roles";
-        var uri = host + appPath + endpointPath;
-
-        console.log("Creating a menu manager role: " + uri);
-    
-        var options = {
-            uri: uri,
-            method: "POST",
-            body: JSON.stringify(body)
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to add cart manager role for that foodcart.";
-                callback(error, false);
-            } else {
-                
-                var role = JSON.parse(response).entities[0];
-                var roleName = role.name;
-                
-                var permissionsList = {
-                    permissions: [
-                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + "/offers/*" },
-                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + "/publishes/*" }
-                    ]
-                };
-                module.exports.assignPermissionsToRole(roleName, permissionsList, 
-                    function(error, response) {
-                    if (error) {
-                        console.log(error);
-                        callback(error, null);
-                    } else {
-                        callback(null, role);
-                    }
-                });
-            }
-        });
-    },
-    
-    deleteMenuManagerRole: function (cartUUID, callback) {
-        
-        var pathCartID = cartUUID.replace(/-/g, ".");
-        
-        var roleName = pathCartID + "-menus-manager";
-        
-        endpointPath = "/roles/" + roleName;
-        var uri = host + appPath + endpointPath;
-
-        console.log("Deleting a menu manager role: " + uri);
-    
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to delete cart manager role for that foodcart.";
-                callback(error, false);
-            } else {                
-                callback(null, response);
-            }
-        });
-    },
-    
-    assignPermissionsToRole: function (roleName, permissionsList, callback) {
-
-        endpointPath = "/roles/" + roleName + "/permissions";
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Assigning permissions to a role: " + uri);
-        
-        async.each(permissionsList.permissions, function(permission, callback) {
             var options = {
                 uri: uri,
                 method: "POST",
-                body: JSON.stringify(permission)
+                body: JSON.stringify(body)
             };
+            
             return makeRequest(options, function (error, response) {
-                var isOwner = false;
                 if (error) {
-                    error.message = "Unable to assign permissions to role.";
+                    console.log(error);
+                    error.message = "Unable to add owner group for that foodcart.";
                     callback(error, false);
                 } else {
                     callback(null, JSON.parse(response));
                 }
             });
-        }, function(error) {
-            if (error) {
-                callback(error, null);
-            } else {
-                    callback(null, JSON.stringify(permissionsList));
-            }
-        });
-    },
+        }
+    });
+    
+}
 
-    deletePermissionsFromRole: function (roleName, permissionsList, callback) {
+function deleteCartOwnerUserGroup (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
         
-        endpointPath = "/roles/" + roleName + "/permissions";
-        
-        async.each(permissionsList.permissions, function(permission, callback) {
-        
-            var uri = host + appPath + endpointPath + "?permission=" + permission.permission;
-            console.log("Deleting permissions from role: " + uri);
-        
+            var pathCartID = cartUUID.replace(/-/g, ".");
             
+            var groupPath = "foodcarts/" + pathCartID + "/owners";
+            
+            endpointPath = "/groups/" + groupPath + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Deleting a user group for owners of a cart: " + uri);
+        
             var options = {
                 uri: uri,
                 method: "DELETE"
             };
+            
             return makeRequest(options, function (error, response) {
                 if (error) {
-                    console.log(error);
-                    error.message = "Unable to assign permissions to role.";
+                    error.message = "Unable to delete owner group for that foodcart.";
                     callback(error, false);
                 } else {
-                    console.log(JSON.parse(response));
                     callback(null, JSON.parse(response));
                 }
             });
-        }, function(error) {
-            if (error) {
-                callback(error, null);
-            } else {
-                callback(null, JSON.stringify(permissionsList));
-            }
-        });
-    },
-    
-    assignRoleToGroup: function (roleName, groupPath, callback) {
-        
-        endpointPath = "/roles/" + roleName + "/groups/" + groupPath;
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Assigning a role to a group: " + uri);
-        
-        var options = {
-            uri: uri,
-            method: "POST"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                error.message = "Unable to assign role to group.";
-                callback(error, false);
-            } else {
-                callback(null, JSON.parse(response));
-            }
-        });        
-    },    
-    
-    addUserToGroup: function (userUUID, groupPath, callback) {
-        
-        endpointPath = "/groups/" + groupPath + "/users/" + userUUID;
-        var uri = host + appPath + endpointPath;
+        }
+    });
+}
 
-        console.log("Adding a user to a group: " + uri);
+function secureCartOwnerUserGroup (cartUUID, groupPath, callback) {
 
-        var options = {
-            uri: uri,
-            method: "POST"
-        };
+    console.log("Securing a cart's owner user group: cart " + cartUUID + ", group " + groupPath);
+    
+    createCartManagerRole(cartUUID, function(error, response) {
+        if (error) {
+            callback(error, null);
+        } else {
+            var managerRoleName = response.name;
+            assignRoleToGroup(managerRoleName, groupPath, 
+            function(error, response) {
+                if (error) {
+                    callback(error, null);
+                } else {
+                    createMenuManagerRole(cartUUID, 
+                        function(error, menuManagerResponse) {
+                        if (error) {
+                            callback(error, null);
+                        } else {
+                            managerRoleName = menuManagerResponse.name;
+                            var menuManagerRoleName = menuManagerResponse.name;
+                            assignRoleToGroup(menuManagerRoleName, groupPath, 
+                                function(error, response) {
+                                if (error) {
+                                    callback(error, null);
+                                } else {
+                                    callback(null, response);                                        
+                                }
+                            });
+                        }                
+                    });                                            
+                }
+            });
+        }                
+    });
+}
+
+function createCartManagerRole (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
         
-        return makeRequest(options, function (error, response) {
-            var isOwner = false;
-            if (error) {
-                console.log(error);
-                error.message = "Unable to add person to the group.";
-                callback(error, false);
-            } else {
-                var entity = JSON.parse(response);
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+            var pathCartID = cartUUID.replace(/-/g, ".");
+            
+            var roleName = pathCartID + "-manager";
+            var roleTitle = "/foodcarts/" + cartUUID + "/manager";
+            
+            var body = {
+                name : roleName,
+                title : roleTitle
+            };
+            
+            endpointPath = "/roles" + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+    
+            console.log("Creating a cart manager role: " + uri);
+        
+            var options = {
+                uri: uri,
+                method: "POST",
+                body: JSON.stringify(body)
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    error.message = "Unable to add cart manager role for that foodcart.";
+                    callback(error, false);
+                } else {
+                    
+                    var role = JSON.parse(response).entities[0];
+                    var roleUUID = role.uuid;
+                    
+                    var permissionsList = { 
+                        permissions: [
+                            { permission : "get,put,post,delete:/foodcarts/" + cartUUID }
+                        ]
+                    };
+                    
+                    assignPermissionsToRole(roleUUID, permissionsList, 
+                        function(error, response) {
+                        if (error) {
+                            callback(error, null);
+                        } else {
+                            callback(null, role);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+/**
+ * 
+ */
+function removeCartSecurity (cartUUID, callback) {
+
+    console.log("Removing roles and permissions for cart: " + cartUUID);
+    
+    deleteCartManagerRole(cartUUID, function(error, response) {
+        if (error) {
+            callback(error, null);
+        } else {
+            deleteMenuManagerRole(cartUUID, 
+                function(error, menuManagerResponse) {
+                if (error) {
+                    callback(error, null);
+                } else {
+                    callback(null, response);
+                }
+            });                                            
+        }                
+    });
+}
+
+/**
+ * Delete the cart manager user role. This role would
+ * contain permissions for changing and deleting 
+ * information about a foodcart. This function would be 
+ * called when the foodcart is being deleted.
+ */
+function deleteCartManagerRole (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            var pathCartID = cartUUID.replace(/-/g, ".");
+            
+            var roleName = pathCartID + "-manager";
+            
+            endpointPath = "/roles/" + roleName + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+    
+            console.log("Deleting a cart manager role: " + uri);
+        
+            var options = {
+                uri: uri,
+                method: "DELETE"
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    error.message = "Unable to delete cart manager role for that foodcart.";
+                    callback(error, false);
+                } else {
+                    var role = JSON.parse(response).entities[0];
+                    callback(null, role);
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Create the menus-manager user role for a foodcart. The
+ * role will contain permissions that control access for
+ * adding, changing, and deleting menu items and menus. 
+ * This function would be called when a foodcart is 
+ * being created.
+ */
+function createMenuManagerRole (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+             var pathCartID = cartUUID.replace(/-/g, ".");
+             
+             var roleName = pathCartID + "-menus-manager";
+             var roleTitle = "/foodcarts/" + cartUUID + "/menus/manager";
+             
+             var body = {
+                 name : roleName,
+                 title : roleTitle
+             };
+             
+             endpointPath = "/roles" + '?access_token=' + dataStoreClientToken;
+             var uri = host + appPath + endpointPath;
+     
+             console.log("Creating a menu manager role: " + uri);
+         
+             var options = {
+                 uri: uri,
+                 method: "POST",
+                 body: JSON.stringify(body)
+             };
+             
+             return makeRequest(options, function (error, response) {
+                 if (error) {
+                     error.message = "Unable to add menu manager role for that foodcart.";
+                     callback(error, false);
+                 } else {
+                     
+                     var role = JSON.parse(response).entities[0];
+                     var roleName = role.name;
+                     
+                     var permissionsList = {
+                         permissions: [
+                             { permission : "get,put,post,delete:/foodcarts/" + 
+                                cartUUID + "/offers/*" },
+                             { permission : "get,put,post,delete:/foodcarts/" + 
+                                cartUUID + "/publishes/*" }
+                         ]
+                     };
+                     assignPermissionsToRole(roleName, permissionsList, 
+                         function(error, response) {
+                         if (error) {
+                             console.log(error);
+                             callback(error, null);
+                         } else {
+                             callback(null, role);
+                         }
+                     });
+                 }
+             });
+         }
+    });
+}
+
+/**
+ * Delete the menu-manager user role that contains permissions for
+ * adding, changing, and deleting menu items and menus. This 
+ * function would be called when a foodcart is being deleted.
+ */
+function deleteMenuManagerRole (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            var pathCartID = cartUUID.replace(/-/g, ".");
+            
+            var roleName = pathCartID + "-menus-manager";
+            
+            endpointPath = "/roles/" + roleName + 
+                '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+    
+            console.log("Deleting a menu manager role: " + uri);
+        
+            var options = {
+                uri: uri,
+                method: "DELETE"
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    error.message = "Unable to delete menu manager role for that foodcart.";
+                    callback(error, false);
+                } else {                
+                    callback(null, response);
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Assign permissions to a user role. For example, this function would be
+ * called when a menu item is being added for a foodcart. The new permissions
+ * would control access to the item, allowing PUT or DELETE access only to 
+ * users in the role.
+ */
+function assignPermissionsToRole (roleName, permissionsList, callback) {
+
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            endpointPath = "/roles/" + roleName + "/permissions";
+            
+            var uri = host + appPath + endpointPath + '?access_token=' + dataStoreClientToken;
+            console.log("Assigning permissions to a role: " + uri);
+    
+            async.each(permissionsList.permissions, function(permission, callback) {
+                var options = {
+                    uri: uri,
+                    method: "POST",
+                    body: JSON.stringify(permission)
+                };
+                return makeRequest(options, function (error, response) {
+                    if (error) {
+                        error.message = "Unable to assign permissions to role.";
+                        callback(error, false);
+                    } else {
+                        callback(null, JSON.parse(response));
+                    }
                 });
-            }
-        });        
-    }
-};
+            }, function(error) {
+                if (error) {
+                    callback(error, null);
+                } else {
+                    callback(null, JSON.stringify(permissionsList));
+                }
+            });                
+        }        
+    });
+}
+
+/**
+ * Remove permissions from a user role. For example, this function would 
+ * be called when a menu item is being deleted in order to clean up
+ * permission that controlled access to that item.
+ */
+function deletePermissionsFromRole (roleName, permissionsList, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            endpointPath = "/roles/" + roleName + "/permissions" + 
+                '?access_token=' + dataStoreClientToken;
+           
+            async.each(permissionsList.permissions, function(permission, callback) {
+           
+               var uri = host + appPath + endpointPath + "&permission=" + permission.permission;
+               console.log("Deleting permissions from role: " + uri);
+           
+               
+               var options = {
+                   uri: uri,
+                   method: "DELETE"
+               };
+               return makeRequest(options, function (error, response) {
+                   if (error) {
+                       console.log(error);
+                       error.message = "Unable to delete permissions from role.";
+                       callback(error, false);
+                   } else {
+                       console.log(JSON.parse(response));
+                       callback(null, JSON.parse(response));
+                   }
+               });
+           }, function(error) {
+               if (error) {
+                   callback(error, null);
+               } else {
+                   callback(null, JSON.stringify(permissionsList));
+               }
+           });
+           }
+    });
+}
+
+/**
+ * Assigns a user role to a user group. For example, this is 
+ * used to assign a role with owner permissions to a foodcart
+ * owners group.
+ */
+function assignRoleToGroup (roleName, groupPath, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            endpointPath = "/roles/" + roleName + "/groups/" + groupPath + 
+                '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Assigning a role to a group: " + uri);
+            
+            var options = {
+                uri: uri,
+                method: "POST"
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    error.message = "Unable to assign role to group.";
+                    callback(error, false);
+                } else {
+                    callback(null, JSON.parse(response));
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Add the specified user to a BaaS user group. For example, this is 
+ * called when adding a user to a cart owners group when creating
+ * a foodcart. 
+ */
+function addUserToGroup (userUUID, groupPath, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+    
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            endpointPath = "/groups/" + groupPath + "/users/" + 
+                userUUID + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Adding a user to a group: " + uri);
+            
+            var options = {
+                uri: uri,
+                method: "POST"
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    console.log(error);
+                    error.message = "Unable to add person to the group.";
+                    callback(error, false);
+                } else {
+                    var entity = JSON.parse(response);
+                    streamlineResponseEntity(entity, function(streamlinedResponse){
+                     callback(null, JSON.stringify(streamlinedResponse));
+                    });
+                }
+            });
+        }
+    });
+}
 
 // General utility functions.
 
@@ -1768,8 +1917,116 @@ function makeRequest(options, callback) {
     });
 }
 
-// Remove unwanted properties from arrayed entity data returned by 
-// the data store.
+/**
+ * Authenticates with the API BaaS data store using the 
+ * BaaS organization client ID and secret. This level
+ * of authorization grants full access to BaaS features.
+ */
+function authenticateAsDataStoreClient(callback) {
+
+    var orgVault = apigee.getVault(edgeVault, edgeVaultScope);
+
+    orgVault.get(dataStoreIdEntry, function(error, idValue) {
+        var clientID;
+        var clientSecret;
+        
+        if (error) {
+            callback(error);
+        } else {
+            clientID = idValue;
+            console.log('Just got client ID: ' + clientID);
+            orgVault.get(dataStoreSecretEntry, function(error, secretValue) {
+                if (error) {
+                    
+                } else {
+                    clientSecret = secretValue;
+                    console.log('Just got client secret: ' + clientSecret);
+                    
+                    console.log('Client ID: ' + clientID);
+                    console.log('Client secret: ' + clientSecret);
+                    
+                    endpointPath = "/token";
+                    var uri = host + appPath + endpointPath;
+                
+                    console.log("Authenticating as a data store client: " + uri);
+                
+                    var authBody = {
+                        "grant_type" : "client_credentials",
+                        "client_id" : clientID, 
+                        "client_secret" : clientSecret
+                    };
+                
+                    var options = {
+                        uri: uri,
+                        body: JSON.stringify(authBody),
+                        method: "POST"
+                    };
+                    
+                    return makeRequest(options, function (error, response) {
+                        if (error) {
+                            console.log(error);
+                            error.message = "Unable to authenticate as client.";
+                            callback(error, null);
+                        } else {
+                            var clientToken = JSON.parse(response).access_token;
+                            console.log('Client access token: ' + clientToken);
+                            callback(null, clientToken);
+                        }
+                    });
+                }
+            });            
+        }
+    });    
+}
+
+/**
+ * Gets an "application client" API BaaS auth token
+ * for use in performing certain operations with the 
+ * data store, including changes to user groups, roles,
+ * and permissions.
+ * 
+ * This function is designed to get a token from the Edge
+ * vault (secure store) and if there is no token there, 
+ * it gets one by authenticating with BaaS. When authenticating,
+ * the function uses the BaaS organization client ID and
+ * secret, which were stored in the vault as a step in 
+ * setting up StreetCarts. 
+ * 
+ * However, there currently appears to be no way to refresh
+ * a vault entry using the apigee-access Node.js module (after 
+ * a token is retrieved by authenticating), so this code just 
+ * generates a token on each call.
+ */
+function getDataStoreClientToken(callback) {
+
+    var orgVault = apigee.getVault(edgeVault, edgeVaultScope);
+
+    orgVault.get(dataStoreTokenEntry, function(error, clientToken) {
+        if (error) {
+            callback(error);
+        } else {
+            console.log('client token: ' + clientToken);            
+            if (clientToken === '')
+            {
+                authenticateAsDataStoreClient( function(error, authToken) {
+                    if (error) {
+                        console.log(error);
+                        callback(error, null);
+                    } else {
+                        console.log('client token update: ' + authToken);
+                        clientToken = authToken;
+                        callback(null, clientToken);
+                    }
+                });
+            }    
+        }
+    });
+}
+
+/**
+ * Remove unwanted properties from arrayed entity data returned by 
+ * the data store.
+ */
 function streamlineResponseArray(entityArray, callback) {
 
     console.log("Streamlining a response array: " + JSON.stringify(entityArray));
@@ -1785,8 +2042,10 @@ function streamlineResponseArray(entityArray, callback) {
     callback(entityList);
 }
 
-// Removed unwanted properties from an entity returned by 
-// the data store.
+/**
+ * Removed unwanted properties from an entity returned by 
+ * the data store.
+ */
 function streamlineResponseEntity(responseData, callback) {
     
     console.log("Streamlining a response entity: " + JSON.stringify(responseData));
