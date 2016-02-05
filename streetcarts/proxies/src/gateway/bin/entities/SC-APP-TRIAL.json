@@ -1,0 +1,14 @@
+
+{
+ "name" : "sc-app-trial",
+ "apiProducts": [ "SC-PRODUCT-TRIAL"],
+ "keyExpiresIn" : "100000000000",
+ "scopes": [],   
+ "attributes" : [ 
+  {
+   "name" : "DisplayName",
+   "value" : "SC-APP-TRIAL"
+  } 
+ ],
+ "callbackUrl" : "http://streetcarts.com"
+}

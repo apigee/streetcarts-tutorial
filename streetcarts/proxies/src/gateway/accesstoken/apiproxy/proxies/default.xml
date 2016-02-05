@@ -17,9 +17,6 @@
             <Description/>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
                 <Step>

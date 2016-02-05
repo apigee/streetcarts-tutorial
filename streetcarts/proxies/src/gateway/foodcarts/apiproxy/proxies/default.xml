@@ -9,12 +9,6 @@
             <Step>
                 <Name>Quota</Name>
             </Step>
-            <Step>
-                <Name>GetCartId</Name>
-            </Step>
-            <Step>
-                <Name>SetRestrictedResource</Name>
-            </Step>
         </Request>
         <Response/>
     </PreFlow>
@@ -62,7 +56,7 @@
             <Description>Update FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
             <Response/>
@@ -72,7 +66,7 @@
             <Description>Delete FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
             <Response/>
@@ -95,7 +89,7 @@
             <Description>Create FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
             <Response/>
@@ -105,7 +99,7 @@
             <Description>Create Foodcart Menu</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
             <Response/>
@@ -115,7 +109,7 @@
             <Description>Create Foodcart Item</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
             <Response/>
