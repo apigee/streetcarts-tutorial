@@ -5,7 +5,7 @@
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>menus</Description>
     <DisplayName>menus</DisplayName>
-    <LastModifiedAt>1454952968048</LastModifiedAt>
+    <LastModifiedAt>1454968247997</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GetDataManagerKey</Policy>
@@ -27,4 +27,5 @@
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
     </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>

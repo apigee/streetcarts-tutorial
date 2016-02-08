@@ -16,8 +16,8 @@
         <Response/>
     </PreFlow>
     <Flows>
-        <Flow name="Get Menu Item">
-            <Description>Get Menu Item</Description>
+        <Flow name="Get Menu Item By ID">
+            <Description>Get Menu Item By ID</Description>
             <Request>
                 <Step>
                     <Name>Verify-API-Key</Name>
@@ -27,29 +27,23 @@
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{item_id}") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Update Menu Item">
             <Description>Update Menu Item</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "PUT")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{item_id}") and (request.verb = "PUT")</Condition>
         </Flow>
         <Flow name="Delete Menu Item">
             <Description>Delete Menu Item</Description>
             <Request>
                 <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
             <Response/>

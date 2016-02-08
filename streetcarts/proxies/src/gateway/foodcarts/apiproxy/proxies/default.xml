@@ -53,7 +53,7 @@
             <Description>Update FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>Validate-Token-Owner-Access</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
             <Response/>
@@ -73,7 +73,7 @@
             <Description>Create Foodcart Menu</Description>
             <Request>
                 <Step>
-                    <Name>Validate-Token-Owner-Access</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
             <Response/>
@@ -96,7 +96,7 @@
             <Description>Create Foodcart Item</Description>
             <Request>
                 <Step>
-                    <Name>Validate-Token-Owner-Access</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
             <Response/>

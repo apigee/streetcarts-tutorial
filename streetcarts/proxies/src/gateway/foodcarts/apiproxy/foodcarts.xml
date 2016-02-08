@@ -5,7 +5,7 @@
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>foodcarts</Description>
     <DisplayName>foodcarts</DisplayName>
-    <LastModifiedAt>1454949717423</LastModifiedAt>
+    <LastModifiedAt>1454967950143</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GetDataManagerKey</Policy>
