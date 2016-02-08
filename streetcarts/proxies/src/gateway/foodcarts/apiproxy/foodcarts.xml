@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="4" name="foodcarts">
+<APIProxy revision="1" name="foodcarts">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1453848732843</CreatedAt>
+    <CreatedAt>1454686858791</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>foodcarts</Description>
     <DisplayName>foodcarts</DisplayName>
-    <LastModifiedAt>1453848732843</LastModifiedAt>
+    <LastModifiedAt>1454949717423</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GetDataManagerKey</Policy>
@@ -27,4 +27,5 @@
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
     </TargetEndpoints>
+    <validate>false</validate>
 </APIProxy>
