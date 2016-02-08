@@ -120,7 +120,7 @@ module.exports = {
     /**
      * Get a single foodcart using the cart's UUID.
      */
-    getCart: function (cartUUID, callback) {
+     getCart: function (cartUUID, callback) {
         
         endpointPath = "/foodcarts/" + cartUUID;
         var uri = host + appPath + endpointPath;
@@ -139,11 +139,12 @@ module.exports = {
                         cartUUID;
                     callback(error, null);
                 }
-                else {
-                    callback(error, null);
-                }            
             } else {
-            }
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }            
         });
     },
 
