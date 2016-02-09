@@ -28,9 +28,9 @@
     "items",
     "accesstoken"
   ],
-  "quota": "1000",
+  "quota": "1000000",
   "quotaInterval": "1",
-  "quotaTimeUnit": "day",
+  "quotaTimeUnit": "second",
   "scopes": [
     "owner.read",
     "owner.create",
