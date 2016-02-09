@@ -7,16 +7,6 @@
         <Response/>
     </PreFlow>
     <Flows>
-        <Flow name="GenerateToken">
-            <Description/>
-            <Request>
-                <Step>
-                    <Name>GenerateAccessToken</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/token") and (request.verb = "POST")</Condition>
-        </Flow>
         <Flow name="GetFlow">
             <Description/>
             <Request>
