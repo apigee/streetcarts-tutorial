@@ -9,9 +9,12 @@ We can auto-deploy the latest versions of our StreetCarts proxies using Maven. T
    
    Then add Maven to your ~/.bash_profile so that the ```mvn``` command is recognized. For example, in ~/.bash_profile, add: 
    
-   ```export PATH=/Users/ApigeeCorporation/development/apache-maven-3.3.3/bin:$PATH```
+   ```bash
+   export PATH=/Users/ApigeeCorporation/development/apache-maven-3.3.3/bin:$PATH
+   ```
 
    pointing to wherever you've stashed Maven.
+
 3. Make sure you have the ```git``` command-line tool installed. In a terminal window, run ```which git```. If no path is returned, you need to install it.
 
 ### Git the latest API proxy updates
@@ -19,9 +22,9 @@ We can auto-deploy the latest versions of our StreetCarts proxies using Maven. T
 The script does an automatic pull to get the latest from the repo. Your local changes should remain intact.
 
 If git prompts you for credentials, you can configure it to either use SSH or set up a credential keychain. For info and troubleshooting, see the following topics:
-- https://help.github.com/articles/caching-your-github-password-in-git/
-- http://olivierlacan.com/posts/why-is-git-https-not-working-on-github/
 
+* https://help.github.com/articles/caching-your-github-password-in-git/
+* http://olivierlacan.com/posts/why-is-git-https-not-working-on-github/
 
 ### Run the script
 
@@ -33,11 +36,15 @@ If git prompts you for credentials, you can configure it to either use SSH or se
 
    If you want to pass all that on the command line:
 
-   ```./streetcarts_build.sh  -u sfoo@apigee.com -p PWORD -o myorg -e https://api.enterprise.apigee.com```
+   ```bash
+   ./streetcarts_build.sh  -u sfoo@apigee.com -p PWORD -o myorg -e https://api.enterprise.apigee.com
+   ```
 
    Use the -h option for help:
 
-   ```./streetcarts_build.sh  -h```
+   ```bash
+   ./streetcarts_build.sh  -h
+   ```
 
 In the Edge UI, check your org to make sure the proxies were deployed.
 
@@ -56,7 +63,8 @@ If this is the first time that you have uploaded the proxies, you have to ensure
 
    OR, use the following cURL. For e2e, change the URL host to https://api.e2e.apigee.net.
 
-   ```curl -X POST --header "Content-Type: application/x-www-form-urlencoded" -u {you@apigee.com} -d "command=install" "https://api.enterprise.apigee.com/v1/organizations/{org}/apis/data-manager/revisions/{version_num}/npm"```
+   ```curl -X POST --header "Content-Type: application/x-www-form-urlencoded" -u {you@apigee.com} -d "command=install" "https://api.enterprise.apigee.com/v1/organizations/{org}/apis/data-manager/revisions/{version_num}/npm"
+   ```
 
 2. Undeploy and then redeploy the data-manager proxy in the Edge UI. 
 
