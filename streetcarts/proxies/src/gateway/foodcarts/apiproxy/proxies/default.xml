@@ -6,9 +6,6 @@
             <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
-            <Step>
-                <Name>Quota</Name>
-            </Step>
         </Request>
         <Response/>
     </PreFlow>
@@ -21,6 +18,9 @@
                 </Step>
                 <Step>
                     <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
@@ -35,6 +35,9 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "GET")</Condition>
@@ -44,6 +47,9 @@
             <Request>
                 <Step>
                     <Name>Validate-Token-Owner-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
@@ -55,6 +61,9 @@
                 <Step>
                     <Name>Validate-Token-Manager-Access</Name>
                 </Step>
+                <Step>
+                    <Name>Spike-Arrest</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "PUT")</Condition>
@@ -65,6 +74,9 @@
                 <Step>
                     <Name>Validate-Token-Owner-Access</Name>
                 </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "DELETE")</Condition>
@@ -74,6 +86,9 @@
             <Request>
                 <Step>
                     <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
@@ -88,6 +103,9 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/menus") and (request.verb = "GET")</Condition>
@@ -97,6 +115,9 @@
             <Request>
                 <Step>
                     <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
@@ -110,6 +131,9 @@
                 </Step>
                 <Step>
                     <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>

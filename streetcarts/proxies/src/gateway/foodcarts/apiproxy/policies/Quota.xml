@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Quota async="false" continueOnError="false" enabled="true" name="Quota">
     <DisplayName>Quota</DisplayName>
-    <Interval ref="apiproduct.developer.quota.interval">1</Interval>
-    <TimeUnit ref="apiproduct.developer.quota.timeunit">hour</TimeUnit>
-    <Allow count="200" countRef="apiproduct.developer.quota.limit"/>
+    <Interval ref="verifyapikey.Verify-API-Key.apiproduct.developer.quota.interval">1</Interval>
+    <TimeUnit ref="verifyapikey.Verify-API-Key.apiproduct.developer.quota.timeunit">hour</TimeUnit>
+    <Allow count="200" countRef="verifyapikey.Verify-API-Key.apiproduct.developer.quota.limit"/>
+    <Identifier ref="verifyapikey.Verify-API-Key.client_id"/>
 </Quota>
