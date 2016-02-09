@@ -1,8 +1,6 @@
 {
   "apiResources": [
-    "/*",
-    "/",
-    "/**"
+    "/"
   ],
   "approvalType": "auto",
   "attributes": [
