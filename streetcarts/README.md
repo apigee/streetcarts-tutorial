@@ -37,11 +37,11 @@ Here are the prompts you'll see when you run `main.sh`:
 
 1. `Do you want to cleanup entities? ([y]/n):`
 
-       Say "y" if you want to remove the products, developers, and developer apps that this script creates. I usually say "y" to this. It's probably a good idea to always select this. It doesn't hurt. But you only have to do it if you changed one of the entities and want to recreate them. 
+    Say "y" if you want to remove the products, developers, and developer apps that this script creates. I usually say "y" to this. It's probably a good idea to always select this. It doesn't hurt. But you only have to do it if you changed one of the entities and want to recreate them. 
 
-   2. `Do you want to add entities? ([y]/n):`
+2. `Do you want to add entities? ([y]/n):`
 
-       Say "y" if you are running this script for the first time, or if you have run the cleanup. It creates products, developers, and developer apps that are used by the proxy for testing. 
+    Say "y" if you are running this script for the first time, or if you have run the cleanup. It creates products, developers, and developer apps that are used by the proxy for testing. 
 
 
 ### Provision data manager API key
