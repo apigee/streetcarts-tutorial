@@ -7,6 +7,15 @@ Follow these instructions to set up StreetCarts on Edge.
 
 Use Maven to deploy the proxies. For details, see this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
 
+The basic steps are:
+
+1. Change directory to: `docs-sandbox/apps/streetcarts/proxies/src/gateway`
+2. `chmod 755 *.sh`
+3. `./streetcarts_build.sh`
+
+Follow the prompts. 
+
+
 ### Deploy products, apps, and developers
 
 You must deploy the product, app, and developer entities. These entities provide the keys used for API key and OAuth validation. 
