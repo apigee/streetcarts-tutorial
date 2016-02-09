@@ -7,6 +7,15 @@ Follow these instructions to set up StreetCarts on Edge.
 
 Use Maven to deploy the proxies. For details, see this [README](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway). 
 
+The basic steps are:
+
+1. Change directory to: `docs-sandbox/apps/streetcarts/proxies/src/gateway`
+2. `chmod 755 *.sh`
+3. `./streetcarts_build.sh`
+
+Follow the prompts. 
+
+
 ### Deploy products, apps, and developers
 
 You must deploy the product, app, and developer entities. These entities provide the keys used for API key and OAuth validation. 
@@ -28,11 +37,11 @@ Here are the prompts you'll see when you run `main.sh`:
 
 1. `Do you want to cleanup entities? ([y]/n):`
 
-       Say "y" if you want to remove the products, developers, and developer apps that this script creates. I usually say "y" to this. It's probably a good idea to always select this. It doesn't hurt. But you only have to do it if you changed one of the entities and want to recreate them. 
+    Say "y" if you want to remove the products, developers, and developer apps that this script creates. I usually say "y" to this. It's probably a good idea to always select this. It doesn't hurt. But you only have to do it if you changed one of the entities and want to recreate them. 
 
-   2. `Do you want to add entities? ([y]/n):`
+2. `Do you want to add entities? ([y]/n):`
 
-       Say "y" if you are running this script for the first time, or if you have run the cleanup. It creates products, developers, and developer apps that are used by the proxy for testing. 
+    Say "y" if you are running this script for the first time, or if you have run the cleanup. It creates products, developers, and developer apps that are used by the proxy for testing. 
 
 
 ### Provision data manager API key
