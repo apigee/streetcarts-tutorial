@@ -98,10 +98,6 @@ Some of the proxies require an OAuth token. Using the Postman collection, you ge
 
 
 
-### About the Authenticate API calls
-
-
-
 
 
 
