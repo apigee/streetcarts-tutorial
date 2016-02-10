@@ -15,9 +15,6 @@
             <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
-            <Step>
-                <Name>Quota</Name>
-            </Step>
         </Request>
         <Response/>
     </PreFlow>
@@ -27,6 +24,9 @@
             <Request>
                 <Step>
                     <Name>Validate-Admin-Token</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
@@ -38,6 +38,9 @@
                 <Step>
                     <Name>Validate-Admin-Token</Name>
                 </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{user_id}") and (request.verb = "GET")</Condition>
@@ -47,6 +50,9 @@
             <Request>
                 <Step>
                     <Name>Validate-Admin-Token</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
@@ -62,6 +68,9 @@
                 <Step>
                     <FaultRules/>
                     <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
