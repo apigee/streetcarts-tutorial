@@ -20,6 +20,6 @@
     </PreFlow>
     <HTTPTargetConnection>
         <Properties/>
-        <URL>http://docs-test.apigee.net/v1/streetcarts/data-manager</URL>
+        <URL>http://PROXYHOSTREPLACE/v1/streetcarts/data-manager</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>
