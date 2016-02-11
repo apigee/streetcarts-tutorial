@@ -27,7 +27,7 @@ You run the scripts here using Node.js, so you'll need to have:
 
 ## Configuring Edge and API BaaS for StreetCarts
 
-1. After you've deployed StreetCarts to an Edge organization/environment, **edit bootstrap-config.json**, replacing placeholders with values from your own Edge and API BaaS configuration. This is a one-time task you'd do for each deployment.
+1. After you've deployed StreetCarts to an Edge organization/environment, **edit streetcarts-config.json**, replacing placeholders with values from your own Edge and API BaaS configuration. This is a one-time task you'd do for each deployment.
 
  Replace the following keys:
 
@@ -51,12 +51,12 @@ You run the scripts here using Node.js, so you'll need to have:
 2. **Add the vault and vault entries** StreetCarts will need for some requests to API BaaS by running the following command in the `seed` directory. This script uses the Edge management API, so requires your Edge credentials.
 
  ```
-node streetcarts-bootstrap configure-edge /path/to/streetcarts-config.json <edge-account-email-or-username> <edge-password>
+node streetcarts-config-seed configure-edge /path/to/streetcarts-config.json <edge-account-email-or-username> <edge-password>
 ```
 2. **Add user groups, roles, and permissions** StreetCarts will need for role-based security by running the following command in the `seed` directory. This script uses the API BaaS API and authenticates with the client ID and secret in streetcarts-config.json.
 
  ```
-node streetcarts-bootstrap configure-baas /path/to/streetcarts-config.json
+node streetcarts-config-seed configure-baas /path/to/streetcarts-config.json
 ```
 
 ## Seeding API BaaS with StreetCarts data
@@ -68,11 +68,11 @@ The script uses the StreetCarts API to add the data. Using the script, you'll ad
 1. **Add user data** by running the following with the users.json file in the `data` directory.
 
  ```
-node streetcarts-bootstrap register-users /path/to/users.json
+node streetcarts-config-seed register-users /path/to/streetcarts-config.json /path/to/users.json
 ```
 
 2. **Add foodcart data** by running the following with the combined-seed-data.json and users.json files in the `data` directory. 
 
  ```
-node streetcarts-bootstrap create-foodcarts /path/to/combined-seed-data.json /path/to/users.json
+node streetcarts-config-seed create-foodcarts /path/to/streetcarts-config.json /path/to/combined-seed-data.json /path/to/users.json
 ```

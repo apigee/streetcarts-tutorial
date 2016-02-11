@@ -1,7 +1,7 @@
 {
     "foodcarts": [
     {
-        "name": "The Grilled Cheese Grill",
+        "cartName": "The Grilled Cheese Grill",
         "url": "http://grilledcheesegrill.com/",
         "location": {
             "address": "1027 NE Alberta St",
@@ -40,7 +40,7 @@
         ]
     },
     {
-        "name": "The Whole Bowl",
+        "cartName": "The Whole Bowl",
         "url": "http://www.thewholebowl.com/what.html/",
         "location": {
             "address": "1100 NW Glisan St",
@@ -82,7 +82,7 @@
         ]
     },
     {
-        "name": "Korean Twist on 5th",
+        "cartName": "Korean Twist on 5th",
         "url": "",
         "location": {
             "address": "",
@@ -118,7 +118,7 @@
         ]
     },
     {
-        "name": "Honkin' Huge Burritos!",
+        "cartName": "Honkin' Huge Burritos!",
         "url": "http://www.honkinhuge.com/",
         "location": {
             "address": "",
@@ -160,7 +160,7 @@
         ]
     },
     {
-        "name": "El Cubo de Cuba",
+        "cartName": "El Cubo de Cuba",
         "url": "http://www.facebook.com/profile.php?id=100001488674001#!/profile.php?id=100001488674001",
         "location": {
             "address": "",

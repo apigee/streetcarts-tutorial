@@ -4,12 +4,6 @@ var querystring = require('querystring');
 var request = require('request');
 var sleep = require('sleep');
 
-// Parts of URL for accessing StreetCarts API.
-//var orgName = 'apptraining';
-//var envName = 'test';
-//var domain = 'apigee.net';
-//var appName = 'streetcarts';
-
 module.exports = {
 
     createVaults: function (configOptions, callback) {

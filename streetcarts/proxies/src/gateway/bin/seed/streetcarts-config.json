@@ -8,12 +8,12 @@
         "apiVersion": "v1",
         "clientCredentials": [
             {
-                "name": "SC-PUBLIC-APP",
+                "devAppName": "SC-PUBLIC-APP",
                 "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-PUBLIC-APP",
                 "consumerSecret": ""
             },
             {
-                "name": "SC-OWNER-APP",
+                "devAppName": "SC-OWNER-APP",
                 "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-OWNER-APP",
                 "consumerSecret": "CONSUMER SECRET FROM STREETCARTS SC-OWNER-APP"
             }
