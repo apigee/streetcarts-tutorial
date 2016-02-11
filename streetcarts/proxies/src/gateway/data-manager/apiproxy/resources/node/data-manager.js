@@ -137,13 +137,14 @@ module.exports = {
                 if (error.statusCode == 401) {
                     error.message = "Unable to find a food cart with ID "+ 
                         cartUUID;
-                    callback(error, null);
                 }
-                else {
-                    callback(error, null);
-                }            
+                callback(error, null);
             } else {
-            }
+                var entity = JSON.parse(response)['entities'][0];
+                streamlineResponseEntity(entity, function(streamlinedResponse){
+                    callback(null, JSON.stringify(streamlinedResponse));
+                });
+            }            
         });
     },
 
