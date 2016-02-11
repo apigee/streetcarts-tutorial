@@ -1,0 +1,20 @@
+{
+  "name": "streetcarts-seeder",
+  "version": "0.0.1",
+  "description": "Populates StreetCarts data store with seed data.",
+  "main": "streetcarts-seeder.js",
+  "dependencies": {
+    "async": "^1.5.0",
+    "fs": "^0.0.2",
+    "querystring": "^0.2.0",
+    "request": "^2.65.0",
+    "sleep": "^3.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Steve Traut",
+  "license": "ISC"
+}

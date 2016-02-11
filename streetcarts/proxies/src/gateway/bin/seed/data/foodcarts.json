@@ -1,0 +1,85 @@
+[{
+    "name": "The Grilled Cheese Grill",
+    "url": "http://grilledcheesegrill.com/",
+    "location": {
+        "address": "1027 NE Alberta St",
+        "city": " Portland",
+        "region": "OR",
+        "country": "US",
+        "postalCode": "97211",    
+        "latitude": 45.559216,
+        "longitude": -122.654941,
+        "shortAddress": "NE 11th and Alberta"
+    },
+    "phone": "503 206 8959",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem placerat, vehicula urna eu, commodo turpis. Curabitur placerat facilisis euismod. Nam aliquet ipsum at libero rutrum dignissim. Nam commodo dui eget ligula luctus, condimentum placerat mi porta. Phasellus in sapien nec nunc tincidunt pulvinar. Vestibulum porta dictum orci ac posuere. Duis tristique tempus dolor id dignissim. Duis ornare lacus nisi, et aliquam augue venenatis ut. In hac habitasse platea dictumst. Vivamus sit amet nisl non erat vestibulum blandit.",
+    "hours": "Tues-Thurs: 11:30-9; Friday, Saturday: 11:30-late; Sunday: 11:30-8; closed Mondays"
+},
+{
+    "name": "The Whole Bowl",
+    "url": "http://www.thewholebowl.com/what.html/",
+    "location": {
+        "address": "1100 NW Glisan St",
+        "city": " Portland",
+        "region": "OR",
+        "country": "US",
+        "postalCode": "97211",    
+        "latitude": 45.526292,
+        "longitude": -122.682486,
+        "shortAddress": "SW 9th and Alder"
+    },
+    "phone": "503-757-BOWL",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem placerat, vehicula urna eu, commodo turpis. Curabitur placerat facilisis euismod. Nam aliquet ipsum at libero rutrum dignissim. Nam commodo dui eget ligula luctus, condimentum placerat mi porta. Phasellus in sapien nec nunc tincidunt pulvinar. Vestibulum porta dictum orci ac posuere. Duis tristique tempus dolor id dignissim. Duis ornare lacus nisi, et aliquam augue venenatis ut. In hac habitasse platea dictumst. Vivamus sit amet nisl non erat vestibulum blandit.",
+    "hours": "Tues-Thurs: 11:30-9; Friday, Saturday: 11:30-late; Sunday: 11:30-8; closed Mondays"
+},
+{
+    "name": "Korean Twist on 5th",
+    "url": "",
+    "location": {
+        "address": "",
+        "city": " Portland",
+        "region": "OR",
+        "country": "US",
+        "postalCode": "",    
+        "latitude": 45.520675,
+        "longitude": -122.681730,
+        "shortAddress": "SW 5th and Oak"
+    },
+    "phone": "503 810 8968",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem placerat, vehicula urna eu, commodo turpis. Curabitur placerat facilisis euismod. Nam aliquet ipsum at libero rutrum dignissim. Nam commodo dui eget ligula luctus, condimentum placerat mi porta. Phasellus in sapien nec nunc tincidunt pulvinar. Vestibulum porta dictum orci ac posuere. Duis tristique tempus dolor id dignissim. Duis ornare lacus nisi, et aliquam augue venenatis ut. In hac habitasse platea dictumst. Vivamus sit amet nisl non erat vestibulum blandit.",
+    "hours": "Monday thorough Saturday, lunchtime"
+},
+{
+    "name": "Honkin' Huge Burritos!",
+    "url": "http://www.honkinhuge.com/",
+    "location": {
+        "address": "",
+        "city": " Portland",
+        "region": "OR",
+        "country": "US",
+        "postalCode": "",    
+        "latitude": 45.519119,
+        "longitude": -122.679438,
+        "shortAddress": "Pioneer Courthouse Square – Downtown Portland"
+    },
+    "phone": "",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem placerat, vehicula urna eu, commodo turpis. Curabitur placerat facilisis euismod. Nam aliquet ipsum at libero rutrum dignissim. Nam commodo dui eget ligula luctus, condimentum placerat mi porta. Phasellus in sapien nec nunc tincidunt pulvinar. Vestibulum porta dictum orci ac posuere. Duis tristique tempus dolor id dignissim. Duis ornare lacus nisi, et aliquam augue venenatis ut. In hac habitasse platea dictumst. Vivamus sit amet nisl non erat vestibulum blandit.",
+    "hours": "Weekdays at lunchtime"
+},
+{
+    "name": "El Cubo de Cuba",
+    "url": "http://www.facebook.com/profile.php?id=100001488674001#!/profile.php?id=100001488674001",
+    "location": {
+        "address": "",
+        "city": " Portland",
+        "region": "OR",
+        "country": "US",
+        "postalCode": "",    
+        "latitude": 45.519119,
+        "longitude": -122.679438,
+        "shortAddress": "SW 10th and Alder"
+    },
+    "phone": "503 894 1525",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem placerat, vehicula urna eu, commodo turpis. Curabitur placerat facilisis euismod. Nam aliquet ipsum at libero rutrum dignissim. Nam commodo dui eget ligula luctus, condimentum placerat mi porta. Phasellus in sapien nec nunc tincidunt pulvinar. Vestibulum porta dictum orci ac posuere. Duis tristique tempus dolor id dignissim. Duis ornare lacus nisi, et aliquam augue venenatis ut. In hac habitasse platea dictumst. Vivamus sit amet nisl non erat vestibulum blandit.",
+    "hours": "Tues-Fri, 11:30am-7pm; Sat/Sun, 12-7pm"
+}]

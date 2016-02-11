@@ -1,0 +1,90 @@
+[{
+    "itemName": "Big Bowl",
+    "description": "Comforting and healthy medley of brown rice, red and black beans, fresh avocado, salsa, black olives, sour cream, Tillamook cheddar, cilantro, Tali Sauce and trace amounts of attitude.",
+    "price": 6,
+    "cartID": "676bbe6a-6b9d-11e5-b714-15889d18d0b0"    
+},
+{
+    "itemName": "Bambino Bowl",
+    "description": "Comforting and healthy medley of brown rice, red and black beans, fresh avocado, salsa, black olives, sour cream, Tillamook cheddar, cilantro, Tali Sauce and trace amounts of attitude.",
+    "price": 5,
+    "cartID": "676bbe6a-6b9d-11e5-b714-15889d18d0b0"    
+},
+{
+    "itemName": "Cookie",
+    "description": "They're cookies.",
+    "price": 1,
+    "cartID": "676bbe6a-6b9d-11e5-b714-15889d18d0b0"
+},
+{
+    "itemName": "Small Burrito",
+    "description": "",
+    "price": 6,
+    "cartID": "6775826a-6b9d-11e5-a6ae-f110923f1e50"
+},
+{
+    "itemName": "Medium Burrito",
+    "description": "",
+    "price": 7,
+    "cartID": "6775826a-6b9d-11e5-a6ae-f110923f1e50"
+},
+{
+    "itemName": "Honkin' Huge Burrito",
+    "description": "",
+    "price": 8,
+    "cartID": "6775826a-6b9d-11e5-a6ae-f110923f1e50"
+},
+{
+    "itemName": "The Mondo",
+    "description": "Tillamook Pepperjack, Avocado, Fresh Red Onion and Roasted Red Peppers on Portland French Bakery Multigrain Wheat",
+    "price": 7,
+    "cartID": "6766b55a-6b9d-11e5-9621-25cf35c25a04"
+},
+{
+    "itemName": "The Moondog",
+    "description": "Provolone, Hard Salami and Pepperoni, and Chopped Olives and Peppers on Sourdough.",
+    "price": 7,
+    "cartID": "6766b55a-6b9d-11e5-9621-25cf35c25a04"
+},
+{
+    "itemName": "The Gabby",
+    "description": "Four Cheeses on Portland French Bakery White Bread. Tillamook Cheddar,Swiss, Mozzarella, and Colby Jack Cheese.",
+    "price": 6,
+    "cartID": "6766b55a-6b9d-11e5-9621-25cf35c25a04"
+},
+{
+    "itemName": "Cuban Sandwich",
+    "description": "classic grilled sandwich with thinly sliced mojo marinated pork, ham, baby Swiss cheese and a pickle. Served with tostones, maduros or sweet potato fries",
+    "price": 7,
+    "cartID": "6779ef3a-6b9d-11e5-b8d2-030c269c9c5e"
+},
+{
+    "itemName": "Cubo de Puerco",
+    "description": "Mojo Marinated Pork.  Served with rice and black beans, and your choice of tostones, maduros or sweet potato fries. Gluten and Dairy free",
+    "price": 8,
+    "cartID": "6779ef3a-6b9d-11e5-b8d2-030c269c9c5e"
+},
+{
+    "itemName": "Cubo de Pollo",
+    "description": "Guava Marinated Chicken.  Served with rice and black beans, and your choice of tostones, maduros or sweet potato fries. Gluten and Dairy free",
+    "price": 8,
+    "cartID": "6779ef3a-6b9d-11e5-b8d2-030c269c9c5e"
+},
+{
+    "itemName": "Taco",
+    "description": "Choice of boolkogi beef, spicy pork, spicy chicken or tofu.",
+    "price": 2,
+    "cartID": "6770c77a-6b9d-11e5-8148-e51e4f633e84"
+},
+{
+    "itemName": "Rice Bowl",
+    "description": "Choice of meat with rice.",
+    "price": 6,
+    "cartID": "6770c77a-6b9d-11e5-8148-e51e4f633e84"
+},
+{
+    "itemName": "Pot Stickers",
+    "description": "Post stickerishness.",
+    "price": 7,
+    "cartID": "6770c77a-6b9d-11e5-8148-e51e4f633e84"
+}]

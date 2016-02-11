@@ -1,0 +1,68 @@
+[
+    {
+        "firstName": "Liz",
+        "lastName": "Lynch",
+        "address": "Ap #614-3294 Arcu Street",
+        "city": "Grand Island",
+        "region": "NE",
+        "postalCode": "69010",
+        "email": "lizzie@example.com",
+        "username": "Liz456",
+        "password": "Password1"
+    },
+    {
+        "firstName": "Stephen",
+        "lastName": "Gilson",
+        "address": "1098 Pede. St.",
+        "city": "Virginia Beach",
+        "region": "VA",
+        "postalCode": "17855",
+        "email": "steffen@example.com",
+        "username": "steffen111",
+        "password": "Password1"
+    },
+    {
+        "firstName": "Will",
+        "lastName": "Witman",
+        "address": "270-8243 Tempor St.",
+        "city": "Fort Worth",
+        "region": "TX",
+        "postalCode": "86519",
+        "email": "freewill@example.com",
+        "username": "freewill444",
+        "password": "Password1"
+    },
+    {
+        "firstName": "Floyd",
+        "lastName": "Jones",
+        "address": "3695 Auctor Street",
+        "city": "Gresham",
+        "region": "OR",
+        "postalCode": "12693",
+        "email": "floydster@example.com",
+        "username": "jonesy42",
+        "password": "Password1"
+    },
+    {
+        "firstName": "Alex",
+        "lastName": "Muramoto",
+        "address": "Ap #461-8529 Nec St.",
+        "city": "New Haven",
+        "region": "CT",
+        "postalCode": "61595",
+        "email": "wilyone@example.com",
+        "username": "Alex666",
+        "password": "Password1"
+    },
+    {
+        "firstName": "Steve",
+        "lastName": "Traut",
+        "address": "Ap #461-8529 Nec St.",
+        "city": "New Haven",
+        "region": "CT",
+        "postalCode": "61595",
+        "email": "steef@example.com",
+        "username": "steve303",
+        "password": "Password1"
+    }
+]

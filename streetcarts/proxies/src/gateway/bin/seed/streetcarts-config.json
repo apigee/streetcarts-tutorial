@@ -1,0 +1,156 @@
+{
+    "edge": {
+        "mgmtApiHost": "HOST FOR ACCESS TO EDGE MANAGEMENT API -- SUCH AS api.enterprise.apigee.com",
+        "appApiHost": "HOST FOR ACCESS TO STREETCARTS API -- SUCH AS apigee.net",
+        "orgName": "NAME OF EDGE APP WHERE STREETCARTS IS DEPLOYED",
+        "envName": "NAME OF EDGE ENVIRONMENT WHERE STREETSCARTS IS DEPLOYED -- SUCH AS prod OR test",
+        "appName": "streetcarts",
+        "apiVersion": "v1",
+        "clientCredentials": [
+            {
+                "name": "SC-PUBLIC-APP",
+                "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-PUBLIC-APP",
+                "consumerSecret": ""
+            },
+            {
+                "name": "SC-OWNER-APP",
+                "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-OWNER-APP",
+                "consumerSecret": "CONSUMER SECRET FROM STREETCARTS SC-OWNER-APP"
+            }
+        ],
+        "vaults": [
+            {
+                "name": "streetcarts",
+                "scope": "environment",
+                "entries" :[
+                    {
+                        "name": "datastore-client-id",
+                        "value": "CLIENT ID FROM API BAAS ORG WHERE STREETCARTS DATA WILL BE HOSTED"
+                    },
+                    {
+                        "name": "datastore-client-secret",
+                        "value": "CLIENT SECRET FROM API BAAS ORG WHERE STREETCARTS DATA WILL BE HOSTED"
+                    },
+                    {
+                        "name": "datastore-client-token",
+                        "value": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "apiBaaS": {
+        "orgName": "NAME OF API BAAS ORG WHERE STREETCARTS DATA WILL BE HOSTED",
+        "appName": "NAME OF API BAAS APP WHERE STREETCARTS DATA WILL BE HOSTED",
+        "apiHost": "HOST FOR ACCESS TO API BAAS API -- SUCH AS api.usergrid.com", 
+        "clientCredentials": {
+            "clientId": "CLIENT ID FROM API BAAS ORG WHERE STREETCARTS DATA WILL BE HOSTED",
+            "clientSecret": "CLIENT SECRET FROM API BAAS ORG WHERE STREETCARTS DATA WILL BE HOSTED"            
+        },
+        "roles": [
+            {
+                "title": "Foodcart Owners",
+                "name": "owners",
+                "permissions": [
+                    {
+                        "path": "/foodcarts/*",
+                        "verbs":"post"
+                    },
+                    {
+                        "path": "/foodcarts",
+                        "verbs":"post"
+                    }
+                ]
+            },
+            {
+                "title": "Default",
+                "name": "default",
+                "permissions": [
+                    {
+                        "path": "/groups/owners/users/*",
+                        "verbs":"post,put"
+                    }
+                ]
+            },
+            {
+                "title": "Guest",
+                "name": "guest",
+                "permissions": [
+                    {
+                        "path":"/foodcarts",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/foodcarts/*",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/foodcarts/*/offers/*",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/foodcarts/*/publishes/*",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/items",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/items/*",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/menus",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/menus/*",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/menus/*/includes/*",
+                        "verbs": "get"
+                    },
+                    {
+                        "path":"/devices",
+                        "verbs": "post"
+                    },
+                    {
+                        "path":"/groups/*/users/*",
+                        "verbs": "post"
+                    },
+                    {
+                        "path":"/users",
+                        "verbs": "post"
+                    },
+                    {
+                        "path":"/users/*",
+                        "verbs": "post"
+                    },
+                    {
+                        "path":"/devices/*",
+                        "verbs": "put"
+                    }                    
+                ]
+            }
+        ],
+        "groups": [
+            {
+                "title":"Foodcart Owners",
+                "path": "owners",
+                "roles": [
+                    {
+                        "name": "owners"
+                    }
+                ],
+                "permissions": [
+                    {
+                        "verbs": "",
+                        "path": ""
+                    }
+                ]
+            }
+        ]
+    }
+}
