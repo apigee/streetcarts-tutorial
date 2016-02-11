@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OAuthV2 async="false" continueOnError="false" enabled="true" name="Validate-Token-Owner-Access">
+    <DisplayName>Validate Owner Token</DisplayName>
+    <FaultRules/>
+    <Properties/>
+    <Attributes/>
+    <ExternalAuthorization>false</ExternalAuthorization>
+    <Operation>VerifyAccessToken</Operation>
+    <GenerateResponse enabled="true">
+        <Format>FORM_PARAM</Format>
+    </GenerateResponse>
+    <Scope>owner.create owner.update owner.delete owner.read</Scope>
+    <ReuseRefreshToken>false</ReuseRefreshToken>
+    <SupportedGrantTypes/>
+    <Tokens/>
+</OAuthV2>

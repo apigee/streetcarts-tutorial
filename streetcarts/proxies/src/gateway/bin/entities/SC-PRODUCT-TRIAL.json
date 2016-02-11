@@ -1,0 +1,42 @@
+{
+  "apiResources": [
+    "/"
+  ],
+  "approvalType": "auto",
+  "attributes": [
+    {
+      "name": "access",
+      "value": "public"
+    }
+  ],
+  "createdAt": 1452706896178,
+  "createdBy": "wwitman@apigee.com",
+  "description": "",
+  "displayName": "SC-PRODUCT-TRIAL",
+  "environments": [
+    "test",
+    "prod"
+  ],
+  "lastModifiedAt": 1452706896178,
+  "lastModifiedBy": "wwitman@apigee.com",
+  "name": "SC-PRODUCT-TRIAL",
+  "proxies": [
+    "foodcarts",
+    "menus",
+    "items",
+    "accesstoken"
+  ],
+  "quota": "1000",
+  "quotaInterval": "1",
+  "quotaTimeUnit": "day",
+  "scopes": [
+    "owner.read",
+    "owner.create",
+    "owner.update",
+    "owner.delete",
+    "reviewer.create",
+    "reviewer.read",
+    "manager.update",
+    "manager.read"
+  ]
+}

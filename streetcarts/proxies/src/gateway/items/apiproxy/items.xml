@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="3" name="items">
+<APIProxy revision="7" name="items">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447781263583</CreatedAt>
-    <CreatedBy>steve.traut@apigee.com</CreatedBy>
+    <CreatedAt>1454954445992</CreatedAt>
+    <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>items</Description>
     <DisplayName>items</DisplayName>
-    <LastModifiedAt>1447784251762</LastModifiedAt>
-    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1454968052634</LastModifiedAt>
+    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Get-Item-ID</Policy>
         <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
-        <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>ValidateToken</Policy>
+        <Policy>Validate-Token-Manager-Access</Policy>
+        <Policy>Validate-Token-Owner-Access</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
@@ -23,12 +23,10 @@
     </ProxyEndpoints>
     <Resources>
         <Resource>jsc://RewriteTargetUrl.js</Resource>
-        <Resource>jsc://SetRestrictedResource.js</Resource>
     </Resources>
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
-        <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
     <validate>false</validate>
 </APIProxy>

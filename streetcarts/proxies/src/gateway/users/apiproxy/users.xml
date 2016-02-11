@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="14" name="users">
+<APIProxy revision="1" name="users">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447796287460</CreatedAt>
+    <CreatedAt>1455040224822</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>users API</Description>
     <DisplayName>users</DisplayName>
-    <LastModifiedAt>1447796537801</LastModifiedAt>
+    <LastModifiedAt>1455115820517</LastModifiedAt>
     <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>ApiKeyFaultMessage</Policy>
-        <Policy>Delete-User</Policy>
-        <Policy>ExtractUserID</Policy>
         <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
-        <Policy>SetRestrictedResourcePost</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>Update-User-Response</Policy>
-        <Policy>ValidateToken</Policy>
-        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
+        <Policy>Validate-Admin-Token</Policy>
+        <Policy>Validate-Owner-Token</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
@@ -27,12 +23,10 @@
     </ProxyEndpoints>
     <Resources>
         <Resource>jsc://RewriteTargetUrl.js</Resource>
-        <Resource>jsc://SetRestrictedResourcePost.js</Resource>
     </Resources>
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
-        <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
     <validate>false</validate>
 </APIProxy>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<OAuthV2 async="false" continueOnError="false" enabled="true" name="ValidateToken">
-    <DisplayName>ValidateToken</DisplayName>
-    <FaultRules/>
+<OAuthV2 async="false" continueOnError="false" enabled="true" name="Validate-Token-Manager-Access">
+    <DisplayName>Validate Manager Token</DisplayName>
     <Properties/>
     <Attributes/>
     <ExternalAuthorization>false</ExternalAuthorization>
@@ -9,6 +8,7 @@
     <GenerateResponse enabled="true">
         <Format>FORM_PARAM</Format>
     </GenerateResponse>
+    <Scope>owner.create owner.update owner.delete owner.read manager.read manager.update</Scope>
     <ReuseRefreshToken>false</ReuseRefreshToken>
     <SupportedGrantTypes/>
     <Tokens/>

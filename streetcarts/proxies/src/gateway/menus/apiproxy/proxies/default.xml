@@ -9,28 +9,13 @@
             <Step>
                 <Name>Quota</Name>
             </Step>
-            <Step>
-                <Name>Get-MenuID</Name>
-            </Step>
-            <Step>
-                <Name>SetRestrictedResource</Name>
-            </Step>
         </Request>
         <Response/>
     </PreFlow>
     <Flows>
-        <Flow name="Remove Item from Menu">
-            <Description>Remove Item from Menu</Description>
-            <Request></Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "DELETE")</Condition>
-        </Flow>
-        <Flow name="Get Menu">
+        <Flow name="Get Menu By ID">
             <Description>Get Menu</Description>
             <Request>
-                <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
                 <Step>
                     <Name>Verify-API-Key</Name>
                 </Step>
@@ -41,38 +26,58 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}") and (request.verb = "GET")</Condition>
         </Flow>
-        <Flow name="Update Menu Item">
-            <Description>Update Menu Item</Description>
-            <Request>
-                <Step>
-                    <Name>SetRestrictedResource</Name>
-                </Step>
-                <Step>
-                    <Name>ValidateToken</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items/{item_id}") and (request.verb = "PUT")</Condition>
-        </Flow>
         <Flow name="Delete Menu">
             <Description>Delete Menu</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
+        <Flow name="Add Item to Menu">
+            <Description>Update Menu Item</Description>
+            <Request>
+                <Step>
+                    <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items/{item_id}") and (request.verb = "PUT")</Condition>
+        </Flow>
+        <Flow name="Remove Item from Menu">
+            <Description>Remove Item from Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "DELETE")</Condition>
+        </Flow>
         <Flow name="Add Menu Item to Menu">
             <Description>Add Menu Item to Menu</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="Get Items on Menu">
+            <Description>Get Items on a Menu</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items") and (request.verb = "GET")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">

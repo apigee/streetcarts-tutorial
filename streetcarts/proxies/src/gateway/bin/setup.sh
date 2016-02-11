@@ -9,89 +9,83 @@ curl -u $username:$password $url/v1/o/$org/developers \
 
 # Create API Products
 
-echo  -e "\n**** CREATING SC-OWNER-PRODUCT"
+echo  -e "\n**** CREATING SC-PRODUCT-TRIAL"
 curl -u $username:$password $url/v1/o/$org/apiproducts \
-  -H "Content-Type: application/json" -X POST -T ./entities/SC-OWNER-PRODUCT.json
+  -H "Content-Type: application/json" -X POST -T ./entities/SC-PRODUCT-TRIAL.json
 
-echo  -e "\n**** CREATING SC-PUBLIC-PRODUCT"
+echo  -e "\n**** CREATING SC-PRODUCT-UNLIMITED"
 curl -u $username:$password $url/v1/o/$org/apiproducts \
-  -H "Content-Type: application/json" -X POST -T ./entities/SC-PUBLIC-PRODUCT.json
-
+  -H "Content-Type: application/json" -X POST -T ./entities/SC-PRODUCT-UNLIMITED.json
 
   echo  -e "\n**** CREATING SC-DATA-MANAGER-PRODUCT"
 curl -u $username:$password $url/v1/o/$org/apiproducts \
   -H "Content-Type: application/json" -X POST -T ./entities/SC-DATA-MANAGER-PRODUCT.json
 
-  echo  -e "\n**** CREATING SC-OWNER-SCOPE-PRODUCT"
-curl -u $username:$password $url/v1/o/$org/apiproducts \
-  -H "Content-Type: application/json" -X POST -T ./entities/SC-OWNER-SCOPE-PRODUCT.json
-
 
 # Create Developer Apps
 
-echo  -e "\n**** CREATING SC-OWNER-APP"
+echo  -e "\n**** CREATING SC-APP-TRIAL"
 curl -u $username:$password \
   $url/v1/o/$org/developers/will@streetcarts.com/apps \
-  -H "Content-Type: application/json" -X POST -T ./entities/SC-OWNER-APP.json
+  -H "Content-Type: application/json" -X POST -T ./entities/SC-APP-TRIAL.json
 
-
-echo  -e "\n**** CREATING SC-PUBLIC-APP"
+echo  -e "\n**** CREATING SC-APP-UNLIMITED"
 curl -u $username:$password \
   $url/v1/o/$org/developers/will@streetcarts.com/apps \
-  -H "Content-Type: application/json" -X POST -T ./entities/SC-PUBLIC-APP.json
+  -H "Content-Type: application/json" -X POST -T ./entities/SC-APP-UNLIMITED.json
 
-echo  -e "\n**** CREATING SC-DATA-MANAGER-APP"
+ echo  -e "\n**** CREATING SC-DATA-MANAGER-APP"
 curl -u $username:$password \
   $url/v1/o/$org/developers/will@streetcarts.com/apps \
   -H "Content-Type: application/json" -X POST -T ./entities/SC-DATA-MANAGER-APP.json
 
-  echo  -e "\n**** CREATING SC-OWNER-SCOPE-APP"
-curl -u $username:$password \
-  $url/v1/o/$org/developers/will@streetcarts.com/apps \
-  -H "Content-Type: application/json" -X POST -T ./entities/SC-OWNER-SCOPE-APP.json
 
+echo -e "\n**** GET KEY AND SECRET FROM SC-APP-TRIAL"
 
-
-echo -e "\n**** GET KEY AND SECRET FROM THE OWNER APP"
-
-ks=`curl -u "$username:$password" "$url/v1/o/$org/developers/will@streetcarts.com/apps/sc-owner-app" 2>/dev/null | egrep "consumer(Key|Secret)"`
+ks=`curl -u "$username:$password" "$url/v1/o/$org/developers/will@streetcarts.com/apps/sc-app-trial" 2>/dev/null | egrep "consumer(Key|Secret)"`
 key=`echo $ks | awk -F '\"' '{ print $4 }'`
 secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 
 
-echo -e "\n**** Got Consumer Key for Owner App: $key ****"
-echo -e "\n**** Got Consumer Secret for Owner App: $secret ****"
+echo -e "\n**** Got Consumer Key for Trial App: $key ****"
+echo -e "\n**** Got Consumer Secret for Trial: $secret ****"
 
-echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-OWNER-PRODUCT"
+echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-TRIAL"
 
 curl -u $username:$password \
-  $url/v1/o/$org/developers/will@streetcarts.com/apps/sc-owner-app/keys/${key} \
-  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{sc-owner-product}"]}'
+  $url/v1/o/$org/developers/will@streetcarts.com/apps/sc-app-trial/keys/${key} \
+  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{sc-product-trial}"]}'
 
 
-echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE OWNER APP"
+echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE TRIAL APP"
 
 auth=$(echo -ne "$key:$secret" | base64);
 echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 
 
-echo -e "\n**** GET KEYS FROM THE PUBLIC APP"
 
-ks=`curl -u "$username:$password" "$url/v1/o/$org/developers/will@streetcarts.com/apps/sc-public-app" 2>/dev/null | egrep "consumer(Key|Secret)"`
+
+
+echo -e "\n**** GET KEY AND SECRET FROM SC-APP-UNLIMITED"
+
+ks=`curl -u "$username:$password" "$url/v1/o/$org/developers/will@streetcarts.com/apps/sc-app-unlimited" 2>/dev/null | egrep "consumer(Key|Secret)"`
 key=`echo $ks | awk -F '\"' '{ print $4 }'`
 secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 
 
-echo -e "\n**** Got Consumer Key for Public App: $key ****"
-echo -e "\n**** Got Consumer Secret for Public App: $secret ****"
+echo -e "\n**** Got Consumer Key for Unlimited App: $key ****"
+echo -e "\n**** Got Consumer Secret for Unlimited: $secret ****"
 
-echo -e "\n**** ASSOCIATE THE KEY WITH THE PUBLIC PRODUCT"
+echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-UNLIMITED"
+
 curl -u $username:$password \
-  $url/v1/o/$org/developers/will@streetcarts.com/apps/sc-public-app/keys/${key} \
-  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{sc-public-product}"]}'
+  $url/v1/o/$org/developers/will@streetcarts.com/apps/sc-app-unlimited/keys/${key} \
+  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{sc-product-unlimited}"]}'
 
-echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE PUBLIC APP"
+
+echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE TRIAL APP"
+
 auth=$(echo -ne "$key:$secret" | base64);
 echo -e "\n**** Base64 encoded credentials:  $auth ****"
 

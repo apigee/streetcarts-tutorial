@@ -12,6 +12,7 @@
     <Operation>GenerateAccessToken</Operation>
     <GenerateResponse enabled="true"/>
     <ReuseRefreshToken>false</ReuseRefreshToken>
+    <Scope>request.header.scope</Scope>
     <SupportedGrantTypes>
         <GrantType>password</GrantType>
     </SupportedGrantTypes>

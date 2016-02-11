@@ -120,7 +120,7 @@ module.exports = {
     /**
      * Get a single foodcart using the cart's UUID.
      */
-    getCart: function (cartUUID, callback) {
+     getCart: function (cartUUID, callback) {
         
         endpointPath = "/foodcarts/" + cartUUID;
         var uri = host + appPath + endpointPath;
@@ -137,6 +137,7 @@ module.exports = {
                 if (error.statusCode == 401) {
                     error.message = "Unable to find a food cart with ID "+ 
                         cartUUID;
+                    callback(error, null);
                 }
                 callback(error, null);
             } else {

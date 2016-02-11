@@ -6,21 +6,12 @@
             <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
-            <Step>
-                <Name>Quota</Name>
-            </Step>
-            <Step>
-                <Name>GetCartId</Name>
-            </Step>
-            <Step>
-                <Name>SetRestrictedResource</Name>
-            </Step>
         </Request>
         <Response/>
     </PreFlow>
     <Flows>
-        <Flow name="Get FoodCart Items">
-            <Description>Get FoodCart Items</Description>
+        <Flow name="Get Food Carts">
+            <Description>Get Food Carts</Description>
             <Request>
                 <Step>
                     <Name>Verify-API-Key</Name>
@@ -28,24 +19,14 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "GET")</Condition>
-        </Flow>
-        <Flow name="Get FoodCart Menus">
-            <Description>Get FoodCart Menus</Description>
-            <Request>
                 <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/menus") and (request.verb = "GET")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
         </Flow>
-        <Flow name="Get FoodCart">
+        <Flow name="Get Food Cart By ID">
             <Description>Get a FoodCart</Description>
             <Request>
                 <Step>
@@ -54,15 +35,34 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "GET")</Condition>
         </Flow>
-        <Flow name="Update FoodCart">
+        <Flow name="Create Food Cart">
+            <Description>Create FoodCart</Description>
+            <Request>
+                <Step>
+                    <Name>Validate-Token-Owner-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="Update Food Cart">
             <Description>Update FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Spike-Arrest</Name>
                 </Step>
             </Request>
             <Response/>
@@ -72,57 +72,30 @@
             <Description>Delete FoodCart</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Owner-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
-        <Flow name="Get FoodCarts">
-            <Description>Get FoodCarts</Description>
-            <Request>
-                <Step>
-                    <Name>Verify-API-Key</Name>
-                </Step>
-                <Step>
-                    <Name>Remove-API-Key</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
-        </Flow>
-        <Flow name="Create FoodCart">
-            <Description>Create FoodCart</Description>
-            <Request>
-                <Step>
-                    <Name>ValidateToken</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "") and (request.verb = "POST")</Condition>
-        </Flow>
-        <Flow name="Create Cart Menu">
+        <Flow name="Create Food Cart Menu">
             <Description>Create Foodcart Menu</Description>
             <Request>
                 <Step>
-                    <Name>ValidateToken</Name>
+                    <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
                 </Step>
             </Request>
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/menus") and (request.verb = "POST")</Condition>
         </Flow>
-        <Flow name="Create Cart Item">
-            <Description>Create Foodcart Item</Description>
-            <Request>
-                <Step>
-                    <Name>ValidateToken</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "POST")</Condition>
-        </Flow>
-        <Flow name="Get Menu Items">
-            <Description/>
+        <Flow name="Get Food Cart Menus">
+            <Description>Get FoodCart Menus</Description>
             <Request>
                 <Step>
                     <Name>Verify-API-Key</Name>
@@ -130,9 +103,41 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
             </Request>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/menus/{menu_id}/items") and (request.verb = "GET")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/menus") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="Create Food Cart Item">
+            <Description>Create Foodcart Item</Description>
+            <Request>
+                <Step>
+                    <Name>Validate-Token-Manager-Access</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="Get Food Cart Items">
+            <Description>Get FoodCart Items</Description>
+            <Request>
+                <Step>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Quota</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "GET")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">

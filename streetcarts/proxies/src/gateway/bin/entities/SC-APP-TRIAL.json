@@ -1,12 +1,13 @@
+
 {
- "name" : "sc-owner-app",
- "apiProducts": [ "sc-owner-product"],
+ "name" : "sc-app-trial",
+ "apiProducts": [ "SC-PRODUCT-TRIAL"],
  "keyExpiresIn" : "100000000000",
- "scopes": [ ],   
+ "scopes": [],   
  "attributes" : [ 
   {
    "name" : "DisplayName",
-   "value" : "SC-OWNER-APP"
+   "value" : "SC-APP-TRIAL"
   } 
  ],
  "callbackUrl" : "http://streetcarts.com"

@@ -1,0 +1,13 @@
+{
+ "name" : "sc-app-unlimited",
+ "apiProducts": [ "SC-PRODUCT-UNLIMITED"],
+ "keyExpiresIn" : "100000000000",
+ "scopes": [],   
+ "attributes" : [ 
+  {
+   "name" : "DisplayName",
+   "value" : "SC-APP-UNLIMITED"
+  } 
+ ],
+ "callbackUrl" : "http://streetcarts.com"
+}
