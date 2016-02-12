@@ -7,11 +7,11 @@ stty_orig=`stty -g` # save original terminal setting.
 usage() {
     CMD=`basename $0`
     echo "Usage:"
-    echo "$CMD [-u email] [-p password] [-o org-name] [-e environment] [-d deployenv] [-r rev] [-x proxyhost]"
-    echo "              email:          email address of Edge user"
+    echo "$CMD [-u email] [-p password] [-o org-name] [-e env] [-d deployenv] [-r rev] [-x proxyhost]"
+    echo "              username:       email address of Edge user"
     echo "              password:       password of Edge user"
     echo "              org-name:       name of existing organization"
-    echo "              environment:    management API URL as https://api.enterprise.apigee.com or https://api.e2e.apigee.net"
+    echo "              env:            management API URL as https://api.enterprise.apigee.com or https://api.e2e.apigee.net"
     echo "              deployenv:      the environment the proxies are deployed to"
     echo "              rev:            data manager proxy current revision"
     echo "              proxyhost:      the host part of the URL to your API proxies"
@@ -27,7 +27,7 @@ case $opt in
     e)  env=$OPTARG ;;
     d)  deployenv=$OPTARG ;;
     r)  rev=$OPTARG ;;
-    x)  proxyhost=$PROXYHOST ;;
+    x)  proxyhost=$OPTARG ;;
     h)  usage ;;
 esac
 done
@@ -40,9 +40,9 @@ fi
 if [ -z "${password}" ]; then
     read -sp "Password: " password
 fi
-echo -e "\n";
+echo "\n";
 if [ -z "${org}" ]; then
-    read -p "org: " org
+    read -p "Apigee organization name: " org
 fi
 
 if [ -z "${env}" ]; then
@@ -71,11 +71,17 @@ if [ -z "${proxyhost}" ]; then
 fi
 
 
-cd ../../../../../
+# Verify Apigee admin credentials
+
+source ./verify.sh
+
+# clone the GitHub repo
+cd ../../../../../../
 git pull https://github.com/apigee/docs-sandbox
 cd apps/streetcarts/proxies/src/gateway
 
 
+# Deploy the API proxies with Maven
 # The -Doptions=clean undeploys and deletes the existing revision
 # -Dproxyhost contains a value that is used by Maven to auto-replace URLs in the proxy config files.
 
@@ -121,8 +127,16 @@ mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$
 rm -r target
 cd ..
 
+# Install the Node.js dependencies for the data-manager proxy, then redeploy the proxy
+
 curl -v -X POST --header "Content-Type: application/x-www-form-urlencoded" -u $username:$password -d "command=install" "$env/v1/organizations/$org/apis/data-manager/revisions/$rev/npm"
 
 curl -v -X DELETE -u $username:$password "$env/v1/organizations/$org/environments/$deployenv/apis/data-manager/revisions/$rev/deployments"
 
 curl -v -X POST -u $username:$password "$env/v1/organizations/$org/environments/$deployenv/apis/data-manager/revisions/$rev/deployments?override=true"
+
+
+# Call the setup.sh script to boostrap products, developers, and apps
+cd bin
+source ./main.sh
+

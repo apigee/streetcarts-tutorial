@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Developer>
-    <Email>will@streetcarts.com</Email>
-    <FirstName>Will</FirstName>
-    <LastName>Witman</LastName>
-    <UserName>wwitman</UserName>
+    <Email>streetcarts@example.com</Email>
+    <FirstName>StreetCarts</FirstName>
+    <LastName>Developer</LastName>
+    <UserName>streetcarts</UserName>
     <Status>active</Status>
 </Developer>
