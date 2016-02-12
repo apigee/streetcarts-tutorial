@@ -28,29 +28,33 @@ If git prompts you for credentials, you can configure it to either use SSH or se
 
 ### Run the script
 
-1. cd to /streetcarts/proxies/src/gateway
+1. cd to /streetcarts/proxies/src/gateway/bin
 
-2. Run the shell script: ```./streetcarts_build.sh```
+2. Run the shell script: ```./main.sh```
 
    You will be prompted to enter your Edge email, password, org name, and deployment environment. The deployment environment is typically either the Edge Cloud, https://api.enterprise.apigee.com, or the Edge e2e server: https://api.e2e.apigee.net. 
 
-   If you want to pass all that on the command line:
+   If you want to pass options on the command line:
 
    ```bash
-   ./streetcarts_build.sh  -u sfoo@apigee.com -p PWORD -o myorg -e https://api.enterprise.apigee.com
+   ./main.sh  -u sfoo@apigee.com -p PWORD -o myorg -e https://api.enterprise.apigee.com
    ```
 
    Use the -h option for help:
 
    ```bash
-   ./streetcarts_build.sh  -h
+   ./main.sh  -h
    ```
 
 In the Edge UI, check your org to make sure the proxies were deployed.
 
+#### Sample API products, developer, and apps
+
+The script also asks you if you want to create sample API products, developer, and apps, which allow you to successfully run the StreetCarts API proxies. 
+
 ### Ensure you have the required Node.js plugins
 
-**Note: The ```streetcarts_build.sh``` script does the following automatically.**
+**Note: The ```main.sh``` script does the following automatically.**
 
 If this is the first time that you have uploaded the proxies, you have to ensure that you have all of the required Node.js plugins used by the data-manager API proxy.
 
@@ -74,10 +78,7 @@ In all proxies *other than* ```accesstoken``` and ```data-manager```:
 
 1. In the proxy editor Navigator, click **default** under Target Endpoints.
 
-2. In the editor pane, scroll to the bottom of the file and make sure the HTTPTargetConnection URL base path is correct. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be https://{org}-{env}.**e2e**.apigee.net). 
-
-Do not change the `production` target URL. It points to the internal Apigee e2e environment and should not be changed. 
-
+2. In the editor pane, scroll to the bottom of the file and make sure the HTTPTargetConnection URL base path is correct. (For example, if you're an Apigeek deploying in the internal e2e environment, the base URL should be accurate for calling the proxies in your environment. For example, https://{org}-{env}.apigee.net). 
 
 ### Problems?
 
