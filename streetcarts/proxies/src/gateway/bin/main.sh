@@ -40,7 +40,9 @@ fi
 if [ -z "${password}" ]; then
     read -sp "Password: " password
 fi
-echo "\n";
+
+echo -e
+
 if [ -z "${org}" ]; then
     read -p "Apigee organization name: " org
 fi
@@ -92,12 +94,12 @@ echo -e "\nDo you want to clean up existing API products, developers, and apps f
 read cleanup
 
 if [ -z $cleanup ] || [ "$cleanup" = "y" ]; then
-  source ./cleanup.sh
+  source ./apps_cleanup.sh
 fi
 
 echo -e "\nDo you want to create sample API products, developers, and apps to run StreetCarts? ([y]/n):"
 read setup
 
 if [ -z $setup ] || [ "$setup" = "y" ]; then
-  source ./setup.sh
+  source ./apps_setup.sh
 fi

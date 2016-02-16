@@ -6,7 +6,9 @@ curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/ap
 curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-APP-UNLIMITED -X DELETE
 curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-DATA-MANAGER-APP -X DELETE
 
+echo -e "\n**** Deleting Data Manager App KeyValueMap"
 
+curl -u $username:$password $env/v1/o/$org/keyvaluemaps/DATA-MANAGER-API-KEY -X DELETE
 
 echo -e "\n**** Deleting Developers"
 

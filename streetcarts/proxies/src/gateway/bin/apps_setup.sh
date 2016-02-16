@@ -106,12 +106,20 @@ curl -u $username:$password \
   $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-DATA-MANAGER-APP/keys/${key} \
   -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-DATA-MANAGER-PRODUCT}"]}'
 
+echo -e "\n**** ADD THE DATA MANAGER APP KEY TO THE KVM"
+curl -u $username:$password \
+  $env/v1/o/$org/keyvaluemaps \
+  -H "Content-Type: application/json" -X POST -d \
+'{   
+"name" : "DATA-MANAGER-API-KEY",
+"entry" : [ { "name" : "X-DATA-MANAGER-KEY", "value" : "'$key'" }]
+}'
+
 echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE DATA-MANAGER APP"
 auth=$(echo -ne "$key:$secret" | base64);
 echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 
+echo -e "\nDONE CREATING ENTITIES"
 
-
-echo "DONE CREATING ENTITIES"
 
