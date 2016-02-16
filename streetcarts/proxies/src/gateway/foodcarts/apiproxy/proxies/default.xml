@@ -146,7 +146,6 @@
     </PostFlow>
     <HTTPProxyConnection>
         <BasePath>/v1/streetcarts/foodcarts</BasePath>
-        <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
     <RouteRule name="default">

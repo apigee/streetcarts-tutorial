@@ -75,7 +75,6 @@
     <HTTPProxyConnection>
         <BasePath>/v1/streetcarts/data-manager</BasePath>
         <Properties/>
-        <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
     <RouteRule name="default">

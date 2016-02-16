@@ -50,7 +50,6 @@
     </PostFlow>
     <HTTPProxyConnection>
         <BasePath>/v1/streetcarts/accesstoken</BasePath>
-        <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
     <RouteRule name="noroute"/>

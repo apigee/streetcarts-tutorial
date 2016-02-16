@@ -104,7 +104,6 @@
     </PostFlow>
     <HTTPProxyConnection>
         <BasePath>/v1/streetcarts/reviews</BasePath>
-        <VirtualHost>default</VirtualHost>
         <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
     <RouteRule name="default">
