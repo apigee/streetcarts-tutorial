@@ -13,7 +13,7 @@
   };
   
 
-  dmurl = "http://PROXYHOSTREPLACE/v1/streetcarts/data-manager/authenticate";
+  dmurl = "https://PROXYHOSTREPLACE/v1/streetcarts/data-manager/authenticate";
   
   var bodyStr = JSON.stringify(bodyObj);
   var dmKey = context.getVariable("DATA-MANAGER-KEY");
