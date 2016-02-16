@@ -24,6 +24,7 @@
     "foodcarts",
     "menus",
     "items",
+    "items",
     "accesstoken"
   ],
   "quota": "1000",
