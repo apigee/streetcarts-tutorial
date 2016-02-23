@@ -1,16 +1,54 @@
 # StreetCarts Data Manager
 
-The data manager is a Node.js JavaScript file that is an interface between StreetCarts API proxies in Edge (foodcarts, menus, items, users, and accesstoken) and the API BaaS data store. Fundamentally, the data manager uses the API BaaS REST APIs to:
+The data manager is a Node.js JavaScript file that is an interface between StreetCarts API proxies in Edge (foodcarts, menus, items, users, and accesstoken) and the Apigee API BaaS data store. Fundamentally, the data manager uses the API BaaS REST APIs to:
 
 - Perform CRUD operations on behalf of the proxies, including about user data.
 - Generate errors related to data store requests.
 - Manage authorization for access to resources.
 
-### Flow of data
+## Setting up the data store
 
-[TBD]
+In addition to using API BaaS as a data store, StreetCarts uses it to authorize user requests. using user groups, roles, and permissions to manage access. So before running StreetCarts, you'll need to make a few general permissions settings (the data-manager configures specific permissions for foodcarts as you use the API). These changes will add support for adding new data with the API.
 
-#### Handling requests generally
+You can configure API BaaS either by [using the scripts provided in this repo](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway/bin/seed), or by making the settings in the API BaaS admin console, as described below.
+
+### Configuring API BaaS in the admin console
+
+1. Open the API BaaS admin console to the organization and application you'll use with StreetCarts.
+2. Under **Data**, create three new collections: `foodcarts`, `menus`, and `items`. Don't add entities to the collections.
+32. Under **Users**, to the Default and Guest roles that come with a new application, add a role with the title `Foodcart Owners` and role name `owners`.
+4. Make permissions settings for the three roles as described in the following table:
+
+ | Role | Path | GET | POST | PUT | DELETE |
+ | --- | --- | --- | --- | --- |--- |
+ | Default | /groups/owners/users/* | no | yes | yes | no | 
+ | Guest | /foodcarts | yes | no | no | no | 
+ |  | /foodcarts | yes | no | no | no | 
+ |  | /foodcarts/* | yes | no | no | no | 
+ |  | /foodcarts/\*/offers/* | yes | no | no | no | 
+ |  | /foodcarts/\*publishes/* | yes | no | no | no | 
+ |  | /items | yes | no | no | no | 
+ |  | /items/* | yes | no | no | no | 
+ |  | /menus | yes | no | no | no | 
+ |  | /menus/* | yes | no | no | no | 
+ |  | /menus/\*/includes/* | yes | no | no | no | 
+ |  | /devices | no | yes | no | no | 
+ |  | /groups/\*/users/* | no | yes | no | no | 
+ |  | /users | no | yes | no | no | 
+ |  | /users/* | no | yes | no | no | 
+ |  | /devices/* | no | no | yes | no | 
+ | Foodcart Owners | /foodcarts | no | yes | no | no |
+ |  | /foodcarts/* | no | yes | no | no |
+
+5. Add a new user group with the title `Foodcart Owners` and path `/owners`.
+6. Under Roles & Permissions, assign the `Foodcart Owners` role you created to the `Foodcart Owners` group.
+
+
+## How the data manager works
+
+The following describes how processing flows through the proxies and data manager.
+
+### Handling requests generally
 
 All GET requests are unauthenticated -- any user can request a list of foodcarts, menus, and food items. PUT/POST/DELETE requests require authentication and authorization, as described below. This section describes how requests are generally handled by the data manager.
 
@@ -22,7 +60,7 @@ All GET requests are unauthenticated -- any user can request a list of foodcarts
 6. Code in server.js implements a handler for each of the request paths sent by a client. When a request is received, the request's handler calls a function of data-manager.js that is specifically designed to format that request for the BaaS API.
 7. The data-manager.js function uses incoming parameters to create a request for API BaaS, makes the request, then passes the result back to server.js, which passes it back to the proxy.
 
-#### Handling for authenticated requests
+### Handling requests for authenticated users
 
 Most PUT/POST/DELETE requests require an OAuth token corresponding to a user in the data store. API BaaS determines the user's access to the requested resource as set in BaaS permissions for the resource. The following describes the steps for authenticated requests. For more on how permissions are defined by StreetCarts, see "Permissions configuration".
 
