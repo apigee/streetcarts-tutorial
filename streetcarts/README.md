@@ -1,4 +1,4 @@
-# StreetCarts API Proxy
+# StreetCarts API Proxies
 
 StreetCarts is a full API application that integrates Apigee Edge with API BaaS to provide data about mobile food carts.
 
