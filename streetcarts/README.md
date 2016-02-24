@@ -38,7 +38,7 @@ You can experiment with the StreetCarts API by deploying its proxies to Edge and
  
 7. If you like, you can use included scripts to add data to the StreetCarts data store.
 
-7. Use a client to start working with the API.
+7. Use a [client](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/clients) to start working with the API.
 
  The best way to get started is to use the [included collection and environment](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/clients/postman) for the [Postman tool](https://www.getpostman.com/). 
  
