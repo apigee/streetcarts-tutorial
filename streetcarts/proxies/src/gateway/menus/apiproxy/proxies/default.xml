@@ -56,16 +56,6 @@
             <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "DELETE")</Condition>
         </Flow>
-        <Flow name="Add Menu Item to Menu">
-            <Description>Add Menu Item to Menu</Description>
-            <Request>
-                <Step>
-                    <Name>Validate-Token-Manager-Access</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items") and (request.verb = "POST")</Condition>
-        </Flow>
         <Flow name="Get Items on Menu">
             <Description>Get Items on a Menu</Description>
             <Request>
