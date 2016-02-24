@@ -1,5 +1,5 @@
 {
- "name" : "sc-app-unlimited",
+ "name" : "SC-APP-UNLIMITED",
  "apiProducts": [ "SC-PRODUCT-UNLIMITED"],
  "keyExpiresIn" : "100000000000",
  "scopes": [],   

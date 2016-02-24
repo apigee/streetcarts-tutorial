@@ -1,6 +1,6 @@
 
 {
- "name" : "sc-app-trial",
+ "name" : "SC-APP-TRIAL",
  "apiProducts": [ "SC-PRODUCT-TRIAL"],
  "keyExpiresIn" : "100000000000",
  "scopes": [],   
