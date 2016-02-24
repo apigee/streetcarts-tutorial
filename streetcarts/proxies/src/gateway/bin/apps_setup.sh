@@ -10,7 +10,7 @@ curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/ap
 
 echo -e "\n**** Deleting Data Manager App KeyValueMap"
 
-curl -u $username:$password $env/v1/o/$org/keyvaluemaps/DATA-MANAGER-API-KEY -X DELETE
+curl -u $username:$password $env/v1/o/$org/environments/$deployenv/keyvaluemaps/DATA-MANAGER-API-KEY -X DELETE
 
 echo -e "\n**** Deleting Developers"
 
@@ -69,7 +69,7 @@ curl -u $username:$password \
 
 echo -e "\n**** GET KEY AND SECRET FROM SC-APP-TRIAL"
 
-ks=`curl -u "$username:$password" "$env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-trial" 2>/dev/null | egrep "consumer(Key|Secret)"`
+ks=`curl -u "$username:$password" "$env/v1/o/$org/developers/streetcarts@example.com/apps/SC-APP-TRIAL" 2>/dev/null | egrep "consumer(Key|Secret)"`
 key=`echo $ks | awk -F '\"' '{ print $4 }'`
 secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 
@@ -86,7 +86,7 @@ echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 echo -e "\n**** GET KEY AND SECRET FROM SC-APP-UNLIMITED"
 
-ks=`curl -u "$username:$password" "$env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-unlimited" 2>/dev/null | egrep "consumer(Key|Secret)"`
+ks=`curl -u "$username:$password" "$env/v1/o/$org/developers/streetcarts@example.com/apps/SC-APP-UNLIMITED" 2>/dev/null | egrep "consumer(Key|Secret)"`
 key=`echo $ks | awk -F '\"' '{ print $4 }'`
 secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 
@@ -113,9 +113,9 @@ echo -e "\n**** Got Consumer Key for Data Manager App: $key ****"
 echo -e "\n**** Got Consumer Secret for Data Manager App: $secret ****"
 
 
-echo -e "\n**** ADD THE DATA MANAGER APP KEY TO THE KVM"
+echo -e "\n**** CREATE A KVM AND ADD THE DATA MANAGER APP KEY TO IT"
 curl -u $username:$password \
-  $env/v1/o/$org/keyvaluemaps \
+  $env/v1/o/$org/environments/$deployenv/keyvaluemaps \
   -H "Content-Type: application/json" -X POST -d \
 '{   
 "name" : "DATA-MANAGER-API-KEY",

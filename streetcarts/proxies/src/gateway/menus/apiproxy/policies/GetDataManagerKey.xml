@@ -9,5 +9,5 @@
             <Parameter>X-DATA-MANAGER-KEY</Parameter>
         </Key>
     </Get>
-    <Scope>organization</Scope>
+    <Scope>environment</Scope>
 </KeyValueMapOperations>
