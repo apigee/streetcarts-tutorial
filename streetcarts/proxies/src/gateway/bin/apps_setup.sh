@@ -77,13 +77,6 @@ secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 echo -e "\n**** Got Consumer Key for Trial App: $key ****"
 echo -e "\n**** Got Consumer Secret for Trial: $secret ****"
 
-#echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-TRIAL"
-
-#curl -u $username:$password \
-#  $env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-trial/keys/${key} \
-#  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-PRODUCT-TRIAL}"]}'
-
-
 echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE TRIAL APP"
 
 auth=$(echo -ne "$key:$secret" | base64);
@@ -100,12 +93,6 @@ secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 
 echo -e "\n**** Got Consumer Key for Unlimited App: $key ****"
 echo -e "\n**** Got Consumer Secret for Unlimited: $secret ****"
-
-#echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-UNLIMITED"
-
-#curl -u $username:$password \
-#  $env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-unlimited/keys/${key} \
-#  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-PRODUCT-UNLIMITED}"]}'
 
 
 echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE TRIAL APP"
@@ -125,10 +112,6 @@ secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 echo -e "\n**** Got Consumer Key for Data Manager App: $key ****"
 echo -e "\n**** Got Consumer Secret for Data Manager App: $secret ****"
 
-#echo -e "\n**** ASSOCIATE THE KEY WITH THE DATA MANAGER PRODUCT"
-#curl -u $username:$password \
-#  $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-DATA-MANAGER-APP/keys/${key} \
-#  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-DATA-MANAGER-PRODUCT}"]}'
 
 echo -e "\n**** ADD THE DATA MANAGER APP KEY TO THE KVM"
 curl -u $username:$password \
