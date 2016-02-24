@@ -45,7 +45,7 @@ Use Maven to deploy the proxies. For details, see this [README](https://github.c
 
 The basic steps are:
 
-1. Change directory to: `docs-sandbox/apps/streetcarts/proxies/src/gateway`
+1. Change directory to: `docs-sandbox/apps/streetcarts/proxies/src/gateway/bin`
 2. `chmod 755 *.sh`
 3. `./main.sh`
 
