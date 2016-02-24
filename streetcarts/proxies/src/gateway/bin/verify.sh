@@ -16,5 +16,7 @@ then
   echo -e "\n**** Please re-run the script using the right org. ****"
   exit
 else
-  echo -e "\n**** Username/password verfied! Proceeding with deployment. ****"
+  echo -e "******************************************************************"
+  echo -e "*    Username/password verfied! Proceeding with deployment.      *"
+  echo -e "******************************************************************"
 fi;
