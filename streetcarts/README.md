@@ -32,9 +32,15 @@ You can experiment with the StreetCarts API by deploying its proxies to Edge and
 
  Add user groups, roles, and permissions that make it possible to start adding food carts with the API.
 
-6. [Configure Edge](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway#vault).
+6. [Configure an Edge vault](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway#vault).
 
  Set up a vault in the secure store, along with three entries that will be used to store API BaaS client app credentials. Edge will use these to authenticate for creating BaaS permissions.
+ 
+7. If you like, you can use included scripts to add data to the StreetCarts data store.
+
+7. Use a client to start working with the API.
+
+ The best way to get started is to use the [included collection and environment](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/clients/postman) for the [Postman tool](https://www.getpostman.com/). 
  
 <a name="deploy" />
 ## Deploy the proxies
