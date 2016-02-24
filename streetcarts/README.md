@@ -32,7 +32,7 @@ You can experiment with the StreetCarts API by deploying its proxies to Edge and
 
  Add user groups, roles, and permissions that make it possible to start adding food carts with the API.
 
-6. [Configure Edge](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway).
+6. [Configure Edge](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway#vault).
 
  Set up a vault in the secure store, along with three entries that will be used to store API BaaS client app credentials. Edge will use these to authenticate for creating BaaS permissions.
  
@@ -66,11 +66,9 @@ Steve Traut created Postman environments and collections. The are located [here]
 
 ## Quick test
 
-Make a call that doesn't require an OAuth token, like this:
+Grab the consumer key from StreetCarts' SC-APP-TRIAL or SC-APP-UNLIMITED developer app. Use the consumer key as an API to make a call that doesn't require an OAuth token, such as this GET call:
 
-curl http://<your_org>}-test.apigee.net/v1/streetcarts/foodcarts -H 'x-api-key: <your api key>'
-
-Grab the API key from either the SC-APP-TRIAL or SC-APP-UNLIMITED apps. 
+`curl http://<your_org>-test.apigee.net/v1/streetcarts/foodcarts -H 'x-api-key: <your api key>'`
 
 
 ## Using OAuth
