@@ -90,14 +90,20 @@ fi
 
 # Sample API products, developer, and apps
 
-echo -e "\nDo you want to clean up existing API products, developers, and apps for StreetCarts? ([y]/n):"
-read cleanup
 
-if [ -z $cleanup ] || [ "$cleanup" = "y" ]; then
-  source ./apps_cleanup.sh
-fi
-
-echo -e "\nDo you want to create sample API products, developers, and apps to run StreetCarts? ([y]/n):"
+echo -e "\n***************************************************"
+echo -e "*         Creating StreetCart Entities            *"
+echo -e "*         ----------------------------            *"
+echo -e "* This step lets you create the required entities *"
+echo -e "* to make StreetCarts API calls.                  *"
+echo -e "*                  CAUTION                        *"
+echo -e "* If you ran this step previously, the existing   *"
+echo -e "* entities will be deleted and re-created,        *"
+echo -e "* which means you'll need to replace the API keys *"
+echo -e "* in the StreetCarts Postman collection with the  *"
+echo -e "* new keys generated in this step.                *"
+echo -e "***************************************************"
+echo -e "\nWould you like to proceed with creating new entities? ([y]/n):"
 read setup
 
 if [ -z $setup ] || [ "$setup" = "y" ]; then

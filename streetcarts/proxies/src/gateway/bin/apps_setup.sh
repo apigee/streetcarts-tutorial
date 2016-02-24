@@ -1,5 +1,32 @@
 #!/bin/sh
 
+echo -e "\n********** Forcing cleanup **********"
+
+echo -e "\n**** Deleting Apps"
+
+curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-APP-TRIAL -X DELETE
+curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-APP-UNLIMITED -X DELETE
+curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-DATA-MANAGER-APP -X DELETE
+
+echo -e "\n**** Deleting Data Manager App KeyValueMap"
+
+curl -u $username:$password $env/v1/o/$org/keyvaluemaps/DATA-MANAGER-API-KEY -X DELETE
+
+echo -e "\n**** Deleting Developers"
+
+curl -u $username:$password $env/v1/o/$org/developers/streetcarts@example.com -X DELETE
+
+
+echo -e "\n**** Deleting Products"
+
+curl -u $username:$password $env/v1/o/$org/apiproducts/SC-PRODUCT-TRIAL -X DELETE
+curl -u $username:$password $env/v1/o/$org/apiproducts/SC-PRODUCT-UNLIMITED -X DELETE
+curl -u $username:$password $env/v1/o/$org/apiproducts/SC-DATA-MANAGER-PRODUCT -X DELETE
+
+
+echo -e "\n**** Cleanup Completed"
+
+echo -e "\n********** Creating new developers, products, apps, and KVM **********"
 
 # Create a Developer
 
@@ -50,20 +77,17 @@ secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 echo -e "\n**** Got Consumer Key for Trial App: $key ****"
 echo -e "\n**** Got Consumer Secret for Trial: $secret ****"
 
-echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-TRIAL"
+#echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-TRIAL"
 
-curl -u $username:$password \
-  $env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-trial/keys/${key} \
-  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{sc-product-trial}"]}'
+#curl -u $username:$password \
+#  $env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-trial/keys/${key} \
+#  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-PRODUCT-TRIAL}"]}'
 
 
 echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE TRIAL APP"
 
 auth=$(echo -ne "$key:$secret" | base64);
 echo -e "\n**** Base64 encoded credentials:  $auth ****"
-
-
-
 
 
 
@@ -77,11 +101,11 @@ secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 echo -e "\n**** Got Consumer Key for Unlimited App: $key ****"
 echo -e "\n**** Got Consumer Secret for Unlimited: $secret ****"
 
-echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-UNLIMITED"
+#echo -e "\n**** ASSOCIATE THE KEY WITH THE SC-PRODUCT-UNLIMITED"
 
-curl -u $username:$password \
-  $env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-unlimited/keys/${key} \
-  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{sc-product-unlimited}"]}'
+#curl -u $username:$password \
+#  $env/v1/o/$org/developers/streetcarts@example.com/apps/sc-app-unlimited/keys/${key} \
+#  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-PRODUCT-UNLIMITED}"]}'
 
 
 echo -e "\n**** BASE64 ENCODE THE KEY:SECRET FOR THE TRIAL APP"
@@ -101,10 +125,10 @@ secret=`echo $ks | awk -F '\"' '{ print $8 }'`
 echo -e "\n**** Got Consumer Key for Data Manager App: $key ****"
 echo -e "\n**** Got Consumer Secret for Data Manager App: $secret ****"
 
-echo -e "\n**** ASSOCIATE THE KEY WITH THE DATA MANAGER PRODUCT"
-curl -u $username:$password \
-  $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-DATA-MANAGER-APP/keys/${key} \
-  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-DATA-MANAGER-PRODUCT}"]}'
+#echo -e "\n**** ASSOCIATE THE KEY WITH THE DATA MANAGER PRODUCT"
+#curl -u $username:$password \
+#  $env/v1/o/$org/developers/streetcarts@example.com/apps/SC-DATA-MANAGER-APP/keys/${key} \
+#  -H "Content-Type: application/json" -X POST -d '{"apiproducts": ["{SC-DATA-MANAGER-PRODUCT}"]}'
 
 echo -e "\n**** ADD THE DATA MANAGER APP KEY TO THE KVM"
 curl -u $username:$password \
@@ -121,5 +145,6 @@ echo -e "\n**** Base64 encoded credentials:  $auth ****"
 
 
 echo -e "\nDONE CREATING ENTITIES"
+echo -e "\n"
 
 
