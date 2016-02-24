@@ -15,6 +15,8 @@ module.exports = {
         
         var edgeConfig = configOptions.config.edge;
         var mgmtApiHost = edgeConfig.mgmtApiHost;
+        var orgName = edgeConfig.orgName;
+        var envName = edgeConfig.envName;
         
         var vaults = edgeConfig.vaults;
         
