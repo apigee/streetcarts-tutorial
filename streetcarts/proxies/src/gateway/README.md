@@ -85,9 +85,8 @@ If this is the first time that you have uploaded the proxies, you have to ensure
 
    OR, use the following cURL. For e2e, change the URL host to https://api.e2e.apigee.net.
 
-   ```curl -X POST --header "Content-Type: application/x-www-form-urlencoded" -u {you@apigee.com} -d "command=install" "https://api.enterprise.apigee.com/v1/organizations/{org}/apis/data-manager/revisions/{version_num}/npm"
-   ```
-
+   `curl -X POST --header "Content-Type: application/x-www-form-urlencoded" -u {you@apigee.com} -d "command=install" "https://api.enterprise.apigee.com/v1/organizations/{org}/apis/data-manager/revisions/{version_num}/npm"`
+   
 2. Undeploy and then redeploy the data-manager proxy in the Edge UI. 
 
 <a name="httptargetconnection" />
