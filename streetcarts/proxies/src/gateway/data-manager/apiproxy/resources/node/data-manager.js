@@ -2,8 +2,8 @@ var request = require('request');
 var async = require('async');
 var apigee = require('apigee-access'); 
 
-var host = 'https://api.usergrid.com';
-var appPath = '/docfood/foodcarttest';
+var host = 'BAASAPIREPLACE';
+var appPath = '/BAASORGREPLACE/BAASAPPREPLACE';
 var edgeVault = 'streetcarts';
 var edgeVaultScope = 'environment';
 var dataStoreIdEntry = 'datastore-client-id';

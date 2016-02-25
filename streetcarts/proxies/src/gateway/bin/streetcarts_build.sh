@@ -2,8 +2,8 @@
 #!/bin/sh
 
 
-
 # clone the GitHub repo
+echo -e "\n***** Refresh the GitHub repo"
 cd ../../../../../../
 git pull https://github.com/apigee/docs-sandbox
 cd apps/streetcarts/proxies/src/gateway
@@ -13,6 +13,7 @@ cd apps/streetcarts/proxies/src/gateway
 # The -Doptions=clean undeploys and deletes the existing revision
 # -Dproxyhost contains a value that is used by Maven to auto-replace URLs in the proxy config files.
 
+echo -e "\n***** Deploying the API proxies"
 cd accesstoken
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
@@ -45,7 +46,7 @@ cd ..
 
 cd data-manager
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
-mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost -Dbaasorg=$baasorg -Dbaasapp=$baasapp -Dbaasapi=$baasapi
 rm -r target
 cd ..
 
@@ -55,7 +56,9 @@ mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$
 rm -r target
 cd ..
 
+
 # Install the Node.js dependencies for the data-manager proxy, then redeploy the proxy
+echo -e "\n***** Installing the Node.js dependencies in the data-manager API proxy"
 
 curl -v -X POST --header "Content-Type: application/x-www-form-urlencoded" -u $username:$password -d "command=install" "$env/v1/organizations/$org/apis/data-manager/revisions/$rev/npm"
 

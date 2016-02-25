@@ -82,8 +82,8 @@
                         </goals>
                         <configuration>
                            <includes>
-                               <include>${basedir}/target/apiproxy/*/default.xml</include>
-                               <include>${basedir}/target/apiproxy/resources/jsc/validate.js</include>
+                               <include>${basedir}/target/apiproxy/targets/default.xml</include>
+                               <include>${basedir}/target/apiproxy/resources/node/data-manager.js</include>
                             </includes>
                             <replacements>
                                 <replacement>
@@ -97,6 +97,18 @@
                                 <replacement>
                                   <token>PROXYHOSTREPLACE</token>
                                   <value>${proxyhost}</value>
+                                </replacement>
+                                <replacement>
+                                  <token>BAASORGREPLACE</token>
+                                  <value>${baasorg}</value>
+                                </replacement>
+                                <replacement>
+                                  <token>BAASAPPREPLACE</token>
+                                  <value>${baasapp}</value>
+                                </replacement>
+                                <replacement>
+                                  <token>BAASAPIREPLACE</token>
+                                  <value>${baasapi}</value>
                                 </replacement>
                             </replacements>
                         </configuration>
@@ -123,6 +135,9 @@
                         </goals>
                         <configuration>
                             <param>${proxyhost}</param>
+                            <param>${baasorg}</param>
+                            <param>${baasapp}</param>
+                            <param>${baasapi}</param>
                         </configuration>
                     </execution>
                 </executions>
@@ -131,7 +146,7 @@
     </build>
 <!-- This is where you add the environment specific properties under various profile names -->
  <profiles>
-        <profile>
+       <profile>
             <id>test</id>
             <properties>
                 <org>${org}</org>  <!-- default org, replace with default org to avoid passing parameter e.g. -Dorg testmyapi -->
