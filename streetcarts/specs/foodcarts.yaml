@@ -1,0 +1,65 @@
+swagger: "2.0"
+info:
+  version: "0.1"
+  title: StreetCarts API
+host: artomatic-test.apigee.net
+basePath: /v1/streetcarts/foodcarts
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      description: Returns a list of all foodcarts.
+      operationId: getFoodcarts
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FoodCart"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+definitions:
+  FoodCart: 
+    type: object
+    properties: 
+      uuid: 
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      hours: 
+        type: string
+      location:
+        type: object
+        properties:
+          address:
+            type: string
+          city:
+            type: string
+          region:
+            type: string
+          country:
+            type: string
+          postalCode:
+            type: string
+          latitude:
+            type: string
+          longitude:
+            type: string
+          shortAddress:
+            type: string
+            
+  UnauthorizedResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
