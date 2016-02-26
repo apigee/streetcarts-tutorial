@@ -8,14 +8,14 @@
         "apiVersion": "v1",
         "clientCredentials": [
             {
-                "devAppName": "SC-PUBLIC-APP",
-                "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-PUBLIC-APP",
-                "consumerSecret": ""
+                "devAppName": "SC-APP-TRIAL",
+                "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-APP-TRIAL",
+                "consumerSecret": "CONSUMER SECRET FROM STREETCARTS SC-APP-TRIAL"
             },
             {
-                "devAppName": "SC-OWNER-APP",
-                "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-OWNER-APP",
-                "consumerSecret": "CONSUMER SECRET FROM STREETCARTS SC-OWNER-APP"
+                "devAppName": "SC-APP-UNLIMITED",
+                "consumerKey": "CONSUMER KEY FROM STREETCARTS SC-APP-UNLIMITED",
+                "consumerSecret": "CONSUMER SECRET FROM STREETCARTS SC-APP-UNLIMITED"
             }
         ],
         "vaults": [
