@@ -13,9 +13,8 @@ var domain = '';
 var appName = '';
 var appUri = '';
 
-var unlimitedConsumerKey = '';
-var unlimitedConsumerKey = '';
-var unlimitedConsumerSecret = '';
+var consumerKey = '';
+var consumerSecret = '';
 
 
 var args = process.argv;
@@ -148,26 +147,23 @@ if (args[2] === 'configure-edge') {
             var clientCredentialsArray = edgeConfig.clientCredentials;
             
             async.each(clientCredentialsArray, function (clientCredentials, callback) {            
-//                console.log(clientCredentials);
-                if (clientCredentials.devAppName === 'SC-APP-UNLIMITED') {
-                    console.log(clientCredentials);
-                    unlimitedConsumerKey = clientCredentials.consumerKey;
-                    unlimitedConsumerSecret = clientCredentials.consumerSecret;
-                    fs.readFile(userDataFilePath, 'utf8', function (error, data) {
-                        if (error) {
-                            console.log('\nGot read file error: \n' + error);
-                        } else {
-                            var userData = JSON.parse(data);
-                            createUserAccounts(userData, function (error, response) {
-                                if (error) {
-                                    console.log('\nError creating user account: \n' + error);
-                                } else {
-                                    return console.log('\nUser accounts created.');
-                                }
-                            });
-                        }
-                    });                                    
-                }
+                console.log(clientCredentials);
+                consumerKey = clientCredentials.consumerKey;
+                consumerSecret = clientCredentials.consumerSecret;
+                fs.readFile(userDataFilePath, 'utf8', function (error, data) {
+                    if (error) {
+                        console.log('\nGot read file error: \n' + error);
+                    } else {
+                        var userData = JSON.parse(data);
+                        createUserAccounts(userData, function (error, response) {
+                            if (error) {
+                                console.log('\nError creating user account: \n' + error);
+                            } else {
+                                return console.log('\nUser accounts created.');
+                            }
+                        });
+                    }
+                });
             },
             function (error) {
                 if (error) {
@@ -201,39 +197,34 @@ if (args[2] === 'configure-edge') {
             var clientCredentialsArray = edgeConfig.clientCredentials;
             
             async.each(clientCredentialsArray, function (clientCredentials, callback) {            
-            
-                if (clientCredentials.devAppName === 'SC-APP-UNLIMITED') {
-                    unlimitedConsumerKey = clientCredentials.consumerKey;
-                    unlimitedConsumerSecret = clientCredentials.consumerSecret;
-                } else if (clientCredentials.devAppName === 'SC-APP-TRIAL') {
-                    unlimitedConsumerKey = clientCredentials.consumerKey;
-                    fs.readFile(foodcartDataFilePath, 'utf8', function (error, foodcartsData) {
-                        if (error) {
-                            console.log('\nError reading foodcart data file: \n' + error);
-                        } else {
-                            // Got the foodcart data.
-                            var foodcartsData = JSON.parse(foodcartsData);
-                            
-                            fs.readFile(userDataFilePath, 'utf8', function (error, usersData) {
-                                if (error) {
-                                    console.log('\nError reading user data file: \n' + error);
-                                } else {
-                                    var usersData = JSON.parse(usersData);
-                                    
-                                    createFoodcarts(foodcartsData, usersData, 
-                                        function (error, response) {
-                                        if (error) {
-                                            console.log('\nError creating foodcart: \n' + 
-                                                error);
-                                        } else {
-                                            return console.log('Foodcarts created');
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });                                
-                }                
+                consumerKey = clientCredentials.consumerKey;
+                consumerSecret = clientCredentials.consumerSecret;
+                fs.readFile(foodcartDataFilePath, 'utf8', function (error, foodcartsData) {
+                    if (error) {
+                        console.log('\nError reading foodcart data file: \n' + error);
+                    } else {
+                        // Got the foodcart data.
+                        var foodcartsData = JSON.parse(foodcartsData);
+                        
+                        fs.readFile(userDataFilePath, 'utf8', function (error, usersData) {
+                            if (error) {
+                                console.log('\nError reading user data file: \n' + error);
+                            } else {
+                                var usersData = JSON.parse(usersData);
+                                
+                                createFoodcarts(foodcartsData, usersData, 
+                                    function (error, response) {
+                                    if (error) {
+                                        console.log('\nError creating foodcart: \n' + 
+                                            error);
+                                    } else {
+                                        return console.log('Foodcarts created');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });                                
             },
             function (error) {
                 if (error) {
@@ -266,7 +257,7 @@ function createUserAccounts(usersData, callback) {
                 body: user,
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': unlimitedConsumerKey
+                    'x-api-key': consumerKey
                 },
                 method: "POST"
             };
@@ -539,8 +530,8 @@ function authenticateUser(username, password, callback) {
     endpointPath = '/accesstoken';
     var uri = appUri + endpointPath;
     
-    var auth = "Basic " + new Buffer(unlimitedConsumerKey +
-    ":" + unlimitedConsumerSecret).toString("base64");
+    var auth = "Basic " + new Buffer(consumerKey +
+    ":" + consumerSecret).toString("base64");
     
     var form = {
         username: username,
@@ -556,7 +547,7 @@ function authenticateUser(username, password, callback) {
             'Content-Length': contentLength,
             'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': auth,
-            'x-api-key': unlimitedConsumerKey
+            'x-api-key': consumerKey
         },
         uri: uri,
         body: formData,
