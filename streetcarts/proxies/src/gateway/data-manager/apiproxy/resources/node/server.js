@@ -44,7 +44,7 @@ app.get('/foodcarts', function (req, res) {
                 
                 for (var i = 0; i < response.foodcarts.length; i++) {
                     cartData.foodcarts.push({
-                        "name": response.foodcarts[i].name,
+                        "name": response.foodcarts[i].cartName,
                         "uuid": response.foodcarts[i].uuid,
                         "city": response.foodcarts[i].location.city
                     });
