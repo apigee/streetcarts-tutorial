@@ -8,11 +8,7 @@ module.exports = {
 
     createVaults: function (configOptions, callback) {
     
-        var username = configOptions.username;
-        var password = configOptions.password;
-        var auth = "Basic " + new Buffer(username +
-            ":" + password).toString("base64");
-        
+        var auth = configOptions.auth;
         var edgeConfig = configOptions.config.edge;
         var mgmtApiHost = edgeConfig.mgmtApiHost;
         var orgName = edgeConfig.orgName;
@@ -27,96 +23,120 @@ module.exports = {
                 var vaultName = vault.name;
                 var vaultScope = vault.scope;
                 var vaultEntries = vault.entries;
-                
+
                 var uri = 'https://' + mgmtApiHost + '/v1/organizations/' + orgName + 
-                    '/environments/' + envName + '/vaults';                    
-                var vaultBody = {
-                    "name": vaultName
-                };
+                    '/environments/' + envName + '/vaults/' + vaultName;                    
                 
                 var options = {
                     uri: uri,
-                    body: JSON.stringify(vaultBody),
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': auth
                     },
-                    method: "POST"
+                    method: "DELETE"
                 };
-                return makeRequest(options, function (error, response) {
+                // To keep things clean, delete the vault if it's there.
+                deleteVault(vaultName, options, function(error, response){
                     if (error) {
                         callback(error, null);
-                    } else if (response.statusCode == 500) {
-                        var responseBody = response.body;
-                        var message = JSON.parse(responseBody).message;
-                        var errorObject = new Error();
-                        errorObject.message = message;
-                        errorObject.statusCode = response.statusCode;
-                        callback(errorObject, null);
+                    } else {                        
+                        uri = 'https://' + mgmtApiHost + '/v1/organizations/' + orgName + 
+                            '/environments/' + envName + '/vaults';
+
+                        var vaultBody = {
+                            "name": vaultName
+                        };
                         
-                    } else {
-                        var responseBody = response.body;
-                        console.log('\n\nCreated vault: ' + JSON.parse(responseBody).name);   
-                        
-                        if (vaultEntries.length > 0)
-                        {
-                            uri = 'https://' + mgmtApiHost + '/v1/organizations/' + 
-                                orgName + '/environments/' + envName + '/vaults/' + 
-                                vaultName + '/entries';
-                            
-                            async.each(vaultEntries, function (vaultEntry, callback) {
-                            
-                                var entryName = vaultEntry.name;
-                                var entryValue = vaultEntry.value;
-                                
-                                var body = {
-                                    "name": entryName,
-                                    "value": entryValue
-                                };
-                                
-                                var options = {
-                                    uri: uri,
-                                    body: JSON.stringify(body),
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': auth
-                                    },
-                                    method: "POST"
-                                };
-                                makeRequest(options, function (error, response) {
-                                    if (error && error.statusCode != '201')
-                                    {
-                                        callback(error, null);
-                                    } else {
-                                        var responseBody = response.body;
-                                        console.log('\n\nCreated vault entry.');
-                                    }
-                                });
+                        options = {
+                            uri: uri,
+                            body: JSON.stringify(vaultBody),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': auth
                             },
-                            function (error) {
-                                if (error) {
-                                    callback(error, null);
-                                } else {
-                                    callback(null, 'Added vault entries.');
+                            method: "POST"
+                        };
+                        
+                        console.log('\nCreating vault: ' + vaultName);
+
+                        return makeRequest(options, function (error, response) {
+                            if (error) {
+                                callback(error, null);
+                            } else if (response.statusCode == 500) {
+                                var responseBody = response.body;
+                                var message = JSON.parse(responseBody).message;
+                                var errorObject = new Error();
+                                errorObject.message = message;
+                                errorObject.statusCode = response.statusCode;
+                                callback(errorObject, null);
+                                
+                            } else {
+                                var responseBody = response.body;
+                                
+                                if (vaultEntries.length > 0)
+                                {
+                                    uri = 'https://' + mgmtApiHost + '/v1/organizations/' + 
+                                        orgName + '/environments/' + envName + '/vaults/' + 
+                                        vaultName + '/entries';
+                                    
+                                    async.each(vaultEntries, function (vaultEntry, callback) {
+                                    
+                                        var entryName = vaultEntry.name;
+                                        var entryValue = vaultEntry.value;
+                                        
+                                        var body = {
+                                            "name": entryName,
+                                            "value": entryValue
+                                        };
+                                        
+                                        var options = {
+                                            uri: uri,
+                                            body: JSON.stringify(body),
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': auth
+                                            },
+                                            method: "POST"
+                                        };
+                                        
+                                        console.log('\nAdding vault entry: ' + entryName);
+                                        
+                                        makeRequest(options, function (error, response) {
+                                            if (error && error.statusCode != '201')
+                                            {
+                                                callback(error, null);
+                                            } else {
+                                                var responseBody = response.body;
+//                                                console.log(response);
+                                                callback(null, responseBody);
+                                            }
+                                        });
+                                    },
+                                    function (error) {
+                                        if (error) {
+                                            callback(error, null);
+                                        } else {
+                                            callback(null, 'Added vault entries.');
+                                        }
+                                    });
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
-                });
+                });                
             },
             function (error) {
                 if (error) {
                     callback(error, null);
                 } else {
-                    callback('Added vault entries.');
+                    callback(null, 'Added vault entries.');
                 }
             });
         } else {
-            callback('No vaults information was included in the configuration file.');
+            callback('No vaults information was included in the configuration file.', null);
         }
     },
-    
-    
+
     createBaasGroups: function (configOptions, callback) {
 
         var baasConfig = configOptions.config.apiBaaS;
@@ -132,42 +152,52 @@ module.exports = {
         {
             var groups = baasConfig.groups;
             
-            var uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + 
-                '/groups?client_id=' + clientId + '&client_secret=' + clientSecret;
-                
             async.each(groups, function (group, callback) {
                 var title = group.title;
                 var path = group.path;
                 
-                var groupBody = {
-                    "path" : path,
-                    "title" : title
-                };
+                var uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + 
+                '/groups/' + path + '?client_id=' + clientId + '&client_secret=' + clientSecret;
                 
-                var options = {
-                    uri: uri,
-                    body: JSON.stringify(groupBody),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: "POST"
-                };
-                return makeRequest(options, function (error, response) {
-                    if (error && error.statusCode != '201')
-                    {
-                        callback(error, null);
-                    } else if (response.statusCode == 400) {
-                        var body = response.body;
-                        var error = JSON.parse(body).error;
+                // To keep things clean, delete the group if it's there.
+                deleteGroup(path, uri, function(error, response){
+                    if (error) {
                         callback(error, null);
                     } else {
-                        var body = response.body;
-                        var entities = JSON.parse(body).entities;
-                        var groupPath = entities[0].path;
-                        console.log('\n\nCreated group: ' + groupPath);
-                        callback(null, response);                        
+                        var groupBody = {
+                            "path" : path,
+                            "title" : title
+                        };
+                        
+                        var uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + 
+                            '/groups?client_id=' + clientId + '&client_secret=' + clientSecret;
+                            
+                        var options = {
+                            uri: uri,
+                            body: JSON.stringify(groupBody),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            method: "POST"
+                        };
+                        console.log('\nCreating group: ' + groupPath);
+                        return makeRequest(options, function (error, response) {
+                            if (error && error.statusCode != '201')
+                            {
+                                callback(error, null);
+                            } else if (response.statusCode == 400) {
+                                var body = response.body;
+                                var error = JSON.parse(body).error;
+                                callback(error, null);
+                            } else {
+                                var body = response.body;
+                                var entities = JSON.parse(body).entities;
+                                var groupPath = entities[0].path;
+                                callback(null, response);                        
+                            }
+                        });
                     }
-                });
+                });                        
             },
             function (error) {
                 if (error) {
@@ -179,7 +209,10 @@ module.exports = {
         }        
     },
     
-    
+    /**
+     * Create roles and permissions in API BaaS according to 
+     * roles defined in the config file.
+     */
     createBaasRoles: function (configOptions, callback) {
        
         var baasConfig = configOptions.config.apiBaaS;
@@ -195,85 +228,96 @@ module.exports = {
         {
             var roles = baasConfig.roles;
             
-            var uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + 
-                '/roles?client_id=' + clientId + '&client_secret=' + clientSecret;
-                
             async.each(roles, function (role, callback) {
                 var roleTitle = role.title;
                 var roleName = role.name;
                 
-                var roleBody = {
-                    "name" : roleName,
-                    "title" : roleTitle
-                };
+                var uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + 
+                '/roles/' + roleName + '?client_id=' + clientId + '&client_secret=' + clientSecret;
                 
-                var options = {
-                    uri: uri,
-                    body: JSON.stringify(roleBody),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: "POST"
-                };
-                return makeRequest(options, function (error, response) {
-                    if (error)
-                    {
+                // To keep things clean, delete the role if it's there.
+                deleteRole(roleName, uri, function(error, response){
+                    if (error) {
                         callback(error, null);
                     } else {
-                        var body = response.body;
-                        var entities = JSON.parse(body).entities;
-                        var roleName = entities[0].name;
-                        console.log('\n\nCreated ' + roleName + ' role.');      
-
-                        if (role.permissions && (role.permissions.length > 0)) {
-                            var permissions = role.permissions;
-                            
-                            async.each(permissions, function (permission, callback) {
-                            
-                                var uri = 'https://' + apiBaaSHost + '/' + orgName + 
-                                    '/' + appName + '/roles/' + roleName + 
-                                    '/permissions?client_id=' + clientId +
-                                    '&client_secret=' + clientSecret;
-
-                                var verbs = permission.verbs;
-                                var path = permission.path;
-                                
-                                var permissionsBody = { 
-                                    "permission" : verbs + ':' + path
-                                };
-                                
-                                var options = {
-                                    uri: uri,
-                                    body: JSON.stringify(permissionsBody),
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    method: "POST"
-                                };
-                                return makeRequest(options, function (error, response) {
-                                    if (error && error.statusCode != '200')
-                                    {
-                                        callback(error, null);
-                                    } else {
-                                        var body = response.body;
-                                        var data = JSON.parse(body).data;    
-                                        callback(null, response);
-                                    }
-                                });
-                            }, 
-                            
-                            function (error) {
-                                if (error) { 
-                                    callback(error, null);                                    
-                                } else {
-                                    console.log('\n\nAdded permissions for ' + 
-                                    roleName + ' role');                 
-                                    callback(null, 'Added ' + roleName +  'role.');
+                        var roleBody = {
+                            "name" : roleName,
+                            "title" : roleTitle
+                        };
+                        
+                        // Now create the new role from the config file.
+                        uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + 
+                            '/roles?client_id=' + clientId + '&client_secret=' + clientSecret;
+                        
+                        var options = {
+                            uri: uri,
+                            body: JSON.stringify(roleBody),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            method: "POST"
+                        };
+                        console.log('\nCreating role: ' + roleName);      
+                        return makeRequest(options, function (error, response) {
+                            if (error)
+                            {
+                                callback(error, null);
+                            } else {
+                                var body = response.body;
+                                var entities = JSON.parse(body).entities;
+                                var roleName = entities[0].name;
+        
+                                if (role.permissions && (role.permissions.length > 0)) {
+                                    var permissions = role.permissions;
+                                    
+                                    async.each(permissions, function (permission, callback) {
+                                    
+                                        var uri = 'https://' + apiBaaSHost + '/' + orgName + 
+                                            '/' + appName + '/roles/' + roleName + 
+                                            '/permissions?client_id=' + clientId +
+                                            '&client_secret=' + clientSecret;
+        
+                                        var verbs = permission.verbs;
+                                        var path = permission.path;
+                                        
+                                        var permissionsBody = { 
+                                            "permission" : verbs + ':' + path
+                                        };
+                                        
+                                        var options = {
+                                            uri: uri,
+                                            body: JSON.stringify(permissionsBody),
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            },
+                                            method: "POST"
+                                        };
+                                        return makeRequest(options, function (error, response) {
+                                            if (error && error.statusCode != '200')
+                                            {
+                                                callback(error, null);
+                                            } else {
+                                                var body = response.body;
+                                                var data = JSON.parse(body).data;    
+                                                callback(null, response);
+                                            }
+                                        });
+                                    }, 
+                                    
+                                    function (error) {
+                                        if (error) { 
+                                            callback(error, null);                                    
+                                        } else {
+                                            console.log('\nAdded permissions for ' + 
+                                            roleName + ' role');                 
+                                            callback(null, 'Added role: ' + roleName);
+                                        }
+                                    });
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
-                });
+                });                
             },
             function (error) {
                 if (error) {
@@ -321,7 +365,7 @@ module.exports = {
                         } else {
                             var body = response.body;
                             var entities = JSON.parse(body).entities;    
-                            console.log('\n\nAssigned ' + entities[0].path + ' role to group.' );                        
+                            console.log('\nAssigned ' + entities[0].path + ' role to group.' );                        
                             callback(null, response);
                         }
                     });
@@ -342,7 +386,60 @@ module.exports = {
                 callback(null, 'Added groups.');
             }
         });
-    }    
+    }
+}
+
+function deleteGroup(groupName, uri, callback) {
+    
+    var options = {
+        uri: uri,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: "DELETE"
+    };
+    console.log('\nDeleting group: ' + groupName)
+    return makeRequest(options, function (error, response) {
+        if (error)
+        {
+            callback(error, null);
+        } else {
+            callback(null, response);
+        }
+    });
+}
+
+function deleteRole(roleName, uri, callback) {
+    
+    var options = {
+        uri: uri,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: "DELETE"
+    };
+    console.log('\nDeleting role: ' + roleName)
+    return makeRequest(options, function (error, response) {
+        if (error)
+        {
+            callback(error, null);
+        } else {
+            callback(null, response);
+        }
+    });
+}
+
+function deleteVault(vaultName, options, callback) {
+    
+    console.log('\nDeleting vault: ' + vaultName)
+    return makeRequest(options, function (error, response) {
+        if (error)
+        {
+            callback(error, null);
+        } else {
+            callback(null, response);
+        }
+    });
 }
 
 function makeRequest(options, callback) {
