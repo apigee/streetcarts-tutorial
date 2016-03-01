@@ -1,0 +1,190 @@
+swagger: "2.0"
+info:
+  version: "0.1"
+  title: API for menus proxy
+host: artomatic-test.apigee.net
+basePath: /v1/streetcarts/menus
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /:
+    post:
+      description: Add a new food cart to the database.
+      operationId: createFoodcart
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: A food cart object.
+          schema:
+            $ref: "#/definitions/FoodCart"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FoodCart"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+            
+  /{menu_id}:
+    get:
+      description: Returns a menu specified by ID.
+      operationId: getMenuById
+      parameters:
+        - name: menu_id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Menu"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+    delete:
+      description: Delete a menu specified by ID.
+      operationId: deleteMenuById
+      parameters:
+        - name: menu_id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FoodCart"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+  /{menu_id}/items:
+    get:
+      description: Get all items on a menu
+      operationId: getItemsForMenu
+      parameters:
+        - name: menu_id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Item"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+  /{menu_id}/items/{item_id}:
+    put:
+      description: Add a menu item to a menu.
+      operationId: addItemToMenu
+      parameters:
+        - name: menu_id
+          in: path
+          required: true
+          type: string
+        - name: item_id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Item"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+    delete:
+      description: Add an item from a menu.
+      operationId: deleteItemFromMenu
+      parameters:
+        - name: menu_id
+          in: path
+          required: true
+          type: string
+        - name: item_id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Item"
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: "#/definitions/UnauthorizedResponse"
+definitions:
+  Menu: 
+    type: object
+    properties: 
+      uuid: 
+        type: string
+      menuName:
+        type: string
+      description:
+        type: string
+  Item:
+    type: object
+    properties:
+      uuid: 
+        type: string
+      cartID: 
+        type: string
+      description: 
+        type: string
+      itemName: 
+        type: string
+      price: 
+        type: string
+  FoodCart: 
+    type: object
+    properties: 
+      uuid: 
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      hours: 
+        type: string
+      location:
+        type: object
+        properties:
+          address:
+            type: string
+          city:
+            type: string
+          region:
+            type: string
+          country:
+            type: string
+          postalCode:
+            type: string
+          latitude:
+            type: string
+          longitude:
+            type: string
+          shortAddress:
+            type: string
+  UnauthorizedResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
