@@ -180,7 +180,7 @@ module.exports = {
                             },
                             method: "POST"
                         };
-                        console.log('\nCreating group: ' + groupPath);
+                        console.log('\nCreating group: ' + path);
                         return makeRequest(options, function (error, response) {
                             if (error && error.statusCode != '201')
                             {
