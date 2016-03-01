@@ -83,7 +83,7 @@
                         <configuration>
                            <includes>
                                <include>${basedir}/target/apiproxy/targets/default.xml</include>
-                               <include>${basedir}/target/apiproxy/resources/node/data-manager.js</include>
+                               <include>${basedir}/target/apiproxy/**/*.js</include>
                             </includes>
                             <replacements>
                                 <replacement>
