@@ -6,3 +6,28 @@ Once you've set up StreetCarts, you can use a client to try out its APIs. You ca
 
  You can use included collection and environment files for the [Postman application](https://www.getpostman.com/) to call StreetCarts APIs.
 
+## Using OAuth
+
+Some of the proxies require an OAuth token. Using the Postman collection, you get tokens like this:
+
+1. Call the `Register user` API. This API creates a new user with a username and password.
+2. Call the `Authenticate user` API to generate an access token. 
+    1. Set the Basic Auth with username/password as the client key/secret for one of the provisioned developer apps.
+    2. Be sure to pass the scope header. Scopes set what the user can do. 
+
+    If the user is a cart owner, pass these scopes:
+
+    ```
+    owner.create owner.update owner.read owner.delete
+    ```
+
+    If the user is a cart manager, pass these scopes:
+
+    ```
+    manager.update manager.read
+    ```
+
+
+
+
+

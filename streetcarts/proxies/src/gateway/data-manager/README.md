@@ -1,48 +1,10 @@
 # StreetCarts Data Manager
 
-The data manager is a Node.js JavaScript file that is an interface between StreetCarts API proxies in Edge (foodcarts, menus, items, users, and accesstoken) and the Apigee API BaaS data store. Fundamentally, the data manager uses the API BaaS REST APIs to:
+The data manager is a Node.js JavaScript file that is an interface between StreetCarts API proxies in Edge (foodcarts, menus, items, users, and accesstoken) and the Apigee API BaaS data store. The data manager uses the API BaaS REST APIs to:
 
 - Perform CRUD operations on behalf of the proxies, including about user data.
 - Generate errors related to data store requests.
 - Manage authorization for access to resources.
-
-## Setting up the data store
-
-In addition to using API BaaS as a data store, StreetCarts uses it to authorize user requests. using user groups, roles, and permissions to manage access. So before running StreetCarts, you'll need to make a few general permissions settings (the data-manager configures specific permissions for foodcarts as you use the API). These changes will add support for adding new data with the API.
-
-You can configure API BaaS either by [using the scripts provided in this repo](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway/bin/seed), or by making the settings in the API BaaS admin console, as described below.
-
-### Configuring API BaaS in the admin console
-
-1. Open the API BaaS admin console to the organization and application you'll use with StreetCarts.
-2. Under **Data**, create three new collections: `foodcarts`, `menus`, and `items`. Don't add entities to the collections.
-32. Under **Users**, to the Default and Guest roles that come with a new application, add a role with the title `Foodcart Owners` and role name `owners`.
-4. Make permissions settings for the three roles as described in the following table:
-
- | Role | Path | GET | POST | PUT | DELETE |
- | --- | --- | --- | --- | --- |--- |
- | Default | /groups/owners/users/* | no | yes | yes | no | 
- | Guest | /foodcarts | yes | no | no | no | 
- |  | /foodcarts | yes | no | no | no | 
- |  | /foodcarts/* | yes | no | no | no | 
- |  | /foodcarts/\*/offers/* | yes | no | no | no | 
- |  | /foodcarts/\*publishes/* | yes | no | no | no | 
- |  | /items | yes | no | no | no | 
- |  | /items/* | yes | no | no | no | 
- |  | /menus | yes | no | no | no | 
- |  | /menus/* | yes | no | no | no | 
- |  | /menus/\*/includes/* | yes | no | no | no | 
- |  | /devices | no | yes | no | no | 
- |  | /groups/\*/users/* | no | yes | no | no | 
- |  | /users | no | yes | no | no | 
- |  | /users/* | no | yes | no | no | 
- |  | /devices/* | no | no | yes | no | 
- | Foodcart Owners | /foodcarts | no | yes | no | no |
- |  | /foodcarts/* | no | yes | no | no |
-
-5. Add a new user group with the title `Foodcart Owners` and path `/owners`.
-6. Under Roles & Permissions, assign the `Foodcart Owners` role you created to the `Foodcart Owners` group.
-
 
 ## How the data manager works
 
