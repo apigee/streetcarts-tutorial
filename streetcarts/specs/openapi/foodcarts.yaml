@@ -1,6 +1,6 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "0.1"
+  version: '0.1'
   title: API for foodcarts proxy
 host: artomatic-test.apigee.net
 basePath: /v1/streetcarts/foodcarts
@@ -17,14 +17,14 @@ paths:
       description: Returns a list of all food carts.
       operationId: getFoodcarts
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/FoodCart"
-        "401":
+            $ref: '#/definitions/FoodCart'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     post:
       description: Add a new food cart to the database.
       operationId: createFoodcart
@@ -34,18 +34,17 @@ paths:
           required: true
           description: A food cart object.
           schema:
-            $ref: "#/definitions/FoodCart"
+            $ref: '#/definitions/FoodCart'
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/FoodCart"
-        "401":
+            $ref: '#/definitions/FoodCart'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
-            
-  /{cart_id}:
+            $ref: '#/definitions/UnauthorizedResponse'
+  '/{cart_id}':
     get:
       description: Returns a food cart specified by ID.
       operationId: getFoodcartById
@@ -55,14 +54,14 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/FoodCart"
-        "401":
+            $ref: '#/definitions/FoodCart'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     put:
       description: Update a food cart specified by ID.
       operationId: updateFoodcartById
@@ -76,16 +75,16 @@ paths:
           required: true
           description: A food cart object.
           schema:
-            $ref: "#/definitions/FoodCart"
+            $ref: '#/definitions/FoodCart'
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/FoodCart"
-        "401":
+            $ref: '#/definitions/FoodCart'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     delete:
       description: Deletes a food cart specified by ID.
       operationId: deleteFoodcartById
@@ -95,15 +94,15 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/FoodCart"
-        "401":
+            $ref: '#/definitions/FoodCart'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
-  /{cart_id}/menus:
+            $ref: '#/definitions/UnauthorizedResponse'
+  '/{cart_id}/menus':
     get:
       description: Get the menus associated with a food cart.
       operationId: getFoodcartMenus
@@ -113,16 +112,16 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Menu"
-        "401":
+            $ref: '#/definitions/Menu'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     post:
-      description: Add a menu to a food cart. 
+      description: Add a menu to a food cart.
       operationId: addFoodcartMenu
       parameters:
         - name: cart_id
@@ -134,17 +133,17 @@ paths:
           required: true
           description: A menu object.
           schema:
-            $ref: "#/definitions/Menu"
+            $ref: '#/definitions/Menu'
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/FoodCart"
-        "401":
+            $ref: '#/definitions/FoodCart'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
-  /{cart_id}/items:
+            $ref: '#/definitions/UnauthorizedResponse'
+  '/{cart_id}/items':
     get:
       description: Get the menu items associated with a food cart.
       operationId: getFoodcartItems
@@ -154,16 +153,16 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Item"
-        "401":
+            $ref: '#/definitions/Item'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     post:
-      description: Add a menu item to a food cart. 
+      description: Add a menu item to a food cart.
       operationId: addFoodcartItem
       parameters:
         - name: cart_id
@@ -175,49 +174,53 @@ paths:
           required: true
           description: A menu object.
           schema:
-            $ref: "#/definitions/Item"
+            $ref: '#/definitions/Item'
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Item"
-        "401":
+            $ref: '#/definitions/Item'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
 definitions:
-  Menu: 
+  Menu:
     type: object
-    properties: 
-      uuid: 
+    properties:
+      uuid:
         type: string
       menuName:
         type: string
       description:
         type: string
+      menus: 
+        type: array
+        items:
+            $ref: '#/definitions/Item'
   Item:
     type: object
     properties:
-      uuid: 
+      uuid:
         type: string
-      cartID: 
+      cartID:
         type: string
-      description: 
+      description:
         type: string
-      itemName: 
+      itemName:
         type: string
-      price: 
+      price:
         type: string
-  FoodCart: 
+  FoodCart:
     type: object
-    properties: 
-      uuid: 
+    properties:
+      uuid:
         type: string
       name:
         type: string
       description:
         type: string
-      hours: 
+      hours:
         type: string
       location:
         type: object
@@ -238,6 +241,14 @@ definitions:
             type: string
           shortAddress:
             type: string
+      menus: 
+        type: array
+        items:
+            $ref: '#/definitions/Menu'
+      items: 
+        type: array
+        items:
+            $ref: '#/definitions/Item'
   UnauthorizedResponse:
     required:
       - message
