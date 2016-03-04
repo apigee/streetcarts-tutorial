@@ -3,7 +3,7 @@
 
 
 # clone the GitHub repo
-echo -e "\n***** Refresh the GitHub repo"
+echo -e "\n***** Pull from GitHub"
 cd ../../../../../../
 git pull https://github.com/apigee/docs-sandbox
 cd apps/streetcarts/proxies/src/gateway
