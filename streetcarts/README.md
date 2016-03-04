@@ -22,9 +22,10 @@ For steps describing how to get StreetCarts installed and usable (with data), se
 
 ## Learn more about what's in it
 
-StreetCarts integrates a set of Edge API proxies with an API BaaS data store.
+StreetCarts integrates a set of Edge API proxies with an API BaaS data store. You might be interested in:
 
-* For more about the proxies, see [StreetCarts API proxies](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway).
-* For an explanation of how StreetCarts accesses the data store, see [StreetCarts data manager](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway/data-manager).
-
+* Descriptions of the [StreetCarts API proxies](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway).
+* [OpenAPI documentation on the StreetCarts API](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/specs/openapi).
+* [An explanation of how StreetCarts accesses the data store](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/proxies/src/gateway/data-manager).
+* Using a client to call its APIs. The repository includes collections and environments for the Postman tool. For more on using these, see [StreetCarts Postman client](https://github.com/apigee/docs-sandbox/tree/master/apps/streetcarts/clients/postman).
 
