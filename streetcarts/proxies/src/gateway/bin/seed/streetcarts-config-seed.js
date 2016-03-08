@@ -26,16 +26,20 @@ if (args[2] === 'configure-edge') {
 
     prompt.start();
     
-    prompt.get(['username', 'password'], function (error, result) {
+    prompt.get([{
+            name: 'Username',
+            required: true
+        }, {
+            name: 'Password',
+            hidden: true,
+            required: true
+    }], function (error, result) {
         if (error) { 
             console.log(error);
             return 1;
         } else {
-            username = result.username;
-            password = result.password;
-            console.log('Command-line input received:');
-            console.log('  Username: ' + username);
-            console.log('  Password: ' + password);         
+            username = result.Username;
+            password = result.Password;
             
             fs.readFile(args[3], 'utf8', function (error, data) {
                 if (error) {
@@ -54,9 +58,14 @@ if (args[2] === 'configure-edge') {
                         };
                         
                         apigeeAppConfig.createVaults(options, function (error, response) {
-                            if (error && (error.statusCode != '201')) {
-                                console.log('\nGot create vault error: \n' +
+                            if (error) {
+                                if (error.statusCode === 500) {
+                                    
+                                }
+                                if (error.statusCode != '201') {
+                                console.log('\nError creating vault: \n' +
                                     JSON.stringify(error));
+                                }
                             } else {
                                 return console.log('\nVaults created.');
                             }
@@ -84,7 +93,7 @@ if (args[2] === 'configure-edge') {
                     if (error) {
                         console.log('\nGot create roles error: \n' + JSON.stringify(error));
                     } else {
-                        console.log('\nRoles created.');
+                        // console.log('\nRoles created.');
                     }
                 });
             }
@@ -97,7 +106,6 @@ if (args[2] === 'configure-edge') {
                         console.log('\nError while creating API BaaS groups: \n' + 
                             error);
                     } else {
-                        console.log('\nBaaS user groups created.');
                         async.each(baasConfig.groups, function (group, callback) {
                             if (group.roles) {
                                 var options = {
@@ -144,32 +152,22 @@ if (args[2] === 'configure-edge') {
             appUri = 'https://' + orgName + '-' + envName + '.' + domain +
             '/v1/' + appName;
             
-            var clientCredentialsArray = edgeConfig.clientCredentials;
+            var clientCredentials = edgeConfig.clientCredentials[0];
             
-            async.each(clientCredentialsArray, function (clientCredentials, callback) {            
-                console.log(clientCredentials);
-                consumerKey = clientCredentials.consumerKey;
-                consumerSecret = clientCredentials.consumerSecret;
-                fs.readFile(userDataFilePath, 'utf8', function (error, data) {
-                    if (error) {
-                        console.log('\nGot read file error: \n' + error);
-                    } else {
-                        var userData = JSON.parse(data);
-                        createUserAccounts(userData, function (error, response) {
-                            if (error) {
-                                console.log('\nError creating user account: \n' + error);
-                            } else {
-                                return console.log('\nUser accounts created.');
-                            }
-                        });
-                    }
-                });
-            },
-            function (error) {
+            consumerKey = clientCredentials.consumerKey;
+            consumerSecret = clientCredentials.consumerSecret;
+            fs.readFile(userDataFilePath, 'utf8', function (error, data) {
                 if (error) {
-                    callback(error, null);
+                    console.log('\nGot read file error: \n' + error);
                 } else {
-                    callback(null, '');
+                    var userData = JSON.parse(data);
+                    createUserAccounts(userData, function (error, response) {
+                        if (error) {
+                            console.log('\nError creating user account: \n' + error);
+                        } else {
+                            return console.log('\nUser accounts created.');
+                        }
+                    });
                 }
             });
         }
@@ -194,45 +192,36 @@ if (args[2] === 'configure-edge') {
             appUri = 'https://' + orgName + '-' + envName + '.' + domain +
             '/v1/' + appName;
             
-            var clientCredentialsArray = edgeConfig.clientCredentials;
+            var clientCredentials = edgeConfig.clientCredentials[0];
             
-            async.each(clientCredentialsArray, function (clientCredentials, callback) {            
-                consumerKey = clientCredentials.consumerKey;
-                consumerSecret = clientCredentials.consumerSecret;
-                fs.readFile(foodcartDataFilePath, 'utf8', function (error, foodcartsData) {
-                    if (error) {
-                        console.log('\nError reading foodcart data file: \n' + error);
-                    } else {
-                        // Got the foodcart data.
-                        var foodcartsData = JSON.parse(foodcartsData);
-                        
-                        fs.readFile(userDataFilePath, 'utf8', function (error, usersData) {
-                            if (error) {
-                                console.log('\nError reading user data file: \n' + error);
-                            } else {
-                                var usersData = JSON.parse(usersData);
-                                
-                                createFoodcarts(foodcartsData, usersData, 
-                                    function (error, response) {
-                                    if (error) {
-                                        console.log('\nError creating foodcart: \n' + 
-                                            error);
-                                    } else {
-                                        return console.log('Foodcarts created');
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });                                
-            },
-            function (error) {
+            consumerKey = clientCredentials.consumerKey;
+            consumerSecret = clientCredentials.consumerSecret;
+            fs.readFile(foodcartDataFilePath, 'utf8', function (error, foodcartsData) {
                 if (error) {
-                    callback(error, null);
+                    console.log('\nError reading foodcart data file: \n' + error);
                 } else {
-                    callback(null, '');
+                    // Got the foodcart data.
+                    var foodcartsData = JSON.parse(foodcartsData);
+                    
+                    fs.readFile(userDataFilePath, 'utf8', function (error, usersData) {
+                        if (error) {
+                            console.log('\nError reading user data file: \n' + error);
+                        } else {
+                            var usersData = JSON.parse(usersData);
+                            
+                            createFoodcarts(foodcartsData, usersData, 
+                                function (error, response) {
+                                if (error) {
+                                    console.log('\nError creating foodcart: \n' + 
+                                        error);
+                                } else {
+                                    return console.log('Foodcarts created');
+                                }
+                            });
+                        }
+                    });
                 }
-            });            
+            });                                
         }
     });
 } else {
@@ -251,7 +240,7 @@ function createUserAccounts(usersData, callback) {
         
         async.each(usersData, function (userData, callback) {
             var user = JSON.stringify(userData);
-            console.log('\nAttempting to create user ' + userData.username);
+            console.log('\nCreating user ' + userData.username);
             var options = {
                 uri: uri,
                 body: user,
@@ -261,21 +250,21 @@ function createUserAccounts(usersData, callback) {
                 },
                 method: "POST"
             };
-            console.log(options);
             return makeRequest(options, function (error, response) {
-                var responseObject = JSON.parse(response);
-                console.log('tried to add user: ' + response);
                 if (error) {
-                    callback(error, null);
-                } else if (responseObject.statusCode === 400) {
-                    var errorObject = new Error();
-                    errorObject.message = responseObject.message;
-                    errorObject.statusCode = responseObject.statusCode;
-                    errorObject.errorType = responseObject.errorType;
-                    callback(errorObject, null);
+                    if ((error.statusCode === 400) && error.message.indexOf('exists')) {
+                        console.log('\n' + error.message);
+                    } else if (error.statusCode === 200){
+                        // Do nothing.
+                    } else {
+                        callback(error, null);                        
+                    }
                 } else {
-                    console.log('\nCreated user account: ' + responseObject.username);
-                    callback(null, responseObject);
+                    var body = JSON.parse(response.body);
+                    if ((body.statusCode === 400) && body.message.indexOf('exists')) {
+                        console.log('\n' + body.message);
+                    }
+                    callback(null, response);
                 }
             });
         },
@@ -312,16 +301,12 @@ function createFoodcarts(foodcartsData, usersData, callback) {
             var username = userData.username;
             var password = userData.password;
             
-            console.log(username + ':' + password);
-            
-            // send to function authenticate
+            console.log('\nAuthenticating: ' + username);
             authenticateUser(username, password, function (error, response) {
                 if (error) {
-                    console.log('\nGot error while authenticating during foodcart creation: ' +
-                    error);
                     callback(error);
                 } else {
-                    var access_token = response;
+                    var access_token = JSON.parse(response.body).access_token;
                     
                     var foodcartEntity = JSON.parse(foodcart);
                     var itemsData = foodcartEntity.items;
@@ -345,12 +330,13 @@ function createFoodcarts(foodcartsData, usersData, callback) {
                             console.log('\nError creating foodcart: \n' + 
                                 JSON.stringify(error));
                             callback(error, null);
-                            process.exit(1);
                         } else {
-                            var foodcart = JSON.parse(response);
-                            console.log('\nCreated foodcart: ' +
-                                foodcart.cartName);
-                            
+                           var foodcart;
+                            try {
+                               foodcart = JSON.parse(response.body);
+                            } catch (exception) {
+                               foodcart = response.body;
+                            }                        
                             var foodcartUUID = foodcart.uuid;
                             
                             // Reuse the options object because it has the 
@@ -422,8 +408,12 @@ function createItemsForFoodcart(foodcartUUID, itemsData, options, callback) {
                 if (error) {
                     callback(error, null);
                 } else {
-                    var item = JSON.parse(response);
-                    console.log('\nCreated item: ' + item.itemName);
+                    var item;
+                    try {
+                       item = JSON.parse(response.body);
+                    } catch (exception) {
+                       item = response.body;
+                    }
                     itemsUUIDs.push(item.uuid);
                     callback(null, '');
                 }
@@ -452,24 +442,19 @@ function createMenusForFoodcart(foodcartUUID, menusData, options, callback) {
     endpointPath = '/foodcarts/' + foodcartUUID + '/menus';
     var uri = appUri + endpointPath;
     
-    var menusUUIDs =[];
+    var menusUUIDs = [];
     
     if (menusData.length > 0) {
         
         async.each(menusData, function (menuData, callback) {
-            
-            var menu = JSON.stringify(menuData);
-                        
             options.uri = uri;
-            options.body = menu;
+            options.body = JSON.stringify(menuData);
             
             return makeRequest(options, function (error, response) {
                 if (error) {
-                    console.log('\nError creating menu: \n' + JSON.stringify(error));
                     callback(error, null);
                 } else {
-                    var menu = JSON.parse(response);
-                    console.log('\nCreated menu: ' + menu.menuName);
+                    menu = JSON.parse(response.body);
                     menusUUIDs.push(menu.uuid);
                     callback(null, '');
                 }
@@ -507,8 +492,6 @@ function addItemsToMenu(menuUUID, itemsUUIDs, options, callback) {
                 if (error) {
                     callback(error, null);
                 } else {
-                    item = JSON.parse(response);
-                    console.log('\nAdded item to menu: ' + JSON.parse(response).itemName);
                     callback(null, '');
                 }
             });
@@ -553,12 +536,12 @@ function authenticateUser(username, password, callback) {
         body: formData,
         method: 'POST'
     };
+
     return makeRequest(options, function (error, response) {
         if (error) {
             callback(error, null);
         } else {
-            var access_token = JSON.parse(response).access_token;
-            callback(null, access_token);
+            callback(null, response);
         }
     });
 }
@@ -569,14 +552,68 @@ function makeRequest(options, callback) {
     // StreetCarts spike arrest shut down access.
     sleep.sleep(1);
     
-    request(options, function (error, response, body) {
-        
+    request(options, function (error, response) {
         var errorObject = new Error();
         
         if (error) {
+            console.log('\nRequest: ' + options.method + ' ' + options.uri +
+                '\nHeaders: ' + JSON.stringify(options.headers));
+            errorObject.message = error.message;
+            errorObject.statusCode = error.statusCode;
             callback(errorObject, null);
-        } else if (response) {
-            callback(null, body);
+            process.exit();
+        } else if (response.statusCode !== 200) {
+            console.log('\nRequest: ' + options.method + ' ' + options.uri +
+                '\nHeaders: ' + JSON.stringify(options.headers));
+            console.log('Status code: ' + response.statusCode);
+            
+            var bodyObj;
+            try {
+                bodyObj = JSON.parse(response.body);
+            } catch (exception) {
+                bodyObj = response.body;
+            }
+            if (bodyObj.fault) {
+                var fault = bodyObj.fault;
+                errorObject.message = fault.faultstring;
+            } else if (response.statusMessage) {
+                errorObject.message = response.statusMessage;
+            }
+            errorObject.statusCode = response.statusCode;
+            callback(errorObject, null);
+            process.exit();
+        } else {
+            console.log('\nRequest: ' + options.method + ' ' + options.uri +
+                '\nHeaders: ' + JSON.stringify(options.headers));
+            console.log('Status code: ' + response.statusCode);
+            console.log('Response: ' + JSON.stringify(response));
+
+            if (response.body) {
+                var bodyObj = JSON.parse(response.body);
+                if (response.statusCode !== 200) {
+                    errorObject.statusCode = response.statusCode;
+                    if (bodyObj.fault) {
+                        var fault = bodyObj.fault;
+                        errorObject.message = fault.faultstring;
+                    } else if (bodyObj.message) {
+                        errorObject.message = bodyObj.message;
+                    } else if (response.statusMessage) {
+                        errorObject.message = response.statusMessage;
+                    }
+                    callback(errorObject, null);
+                    process.exit();
+                } else if ((bodyObj.message) && (bodyObj.message.indexOf('OK') < 0)) {
+                    errorObject.message = bodyObj.message;
+                    callback(errorObject, null);
+                    process.exit();
+                } else if ((bodyObj.statusCode) && (bodyObj.statusCode !== 200)) {
+                    errorObject.message = bodyObj.message;
+                    errorObject.statusCode = bodyObj.statusCode;
+                    callback(errorObject, null);
+                    process.exit();
+                }
+            }
+            callback(null, response);
         }
     });
 }

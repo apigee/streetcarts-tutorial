@@ -107,7 +107,6 @@ module.exports = {
                                                 callback(error, null);
                                             } else {
                                                 var responseBody = response.body;
-//                                                console.log(response);
                                                 callback(null, responseBody);
                                             }
                                         });
@@ -190,8 +189,8 @@ module.exports = {
                                 var error = JSON.parse(body).error;
                                 callback(error, null);
                             } else {
-                                var body = response.body;
-                                var entities = JSON.parse(body).entities;
+                                var body = JSON.parse(response.body);
+                                var entities = body.entities;
                                 var groupPath = entities[0].path;
                                 callback(null, response);                        
                             }
@@ -237,9 +236,10 @@ module.exports = {
                 
                 // To keep things clean, delete the role if it's there.
                 deleteRole(roleName, uri, function(error, response){
-                    if (error) {
-                        callback(error, null);
-                    } else {
+                        if (error)
+                        {
+                            callback(error, null);
+                        } else {
                         var roleBody = {
                             "name" : roleName,
                             "title" : roleTitle
@@ -262,9 +262,10 @@ module.exports = {
                             if (error)
                             {
                                 callback(error, null);
+                                process.exit();
                             } else {
-                                var body = response.body;
-                                var entities = JSON.parse(body).entities;
+                                var body = JSON.parse(response.body);
+                                var entities = body.entities;
                                 var roleName = entities[0].name;
         
                                 if (role.permissions && (role.permissions.length > 0)) {
@@ -296,6 +297,7 @@ module.exports = {
                                             if (error && error.statusCode != '200')
                                             {
                                                 callback(error, null);
+                                                process.exit();
                                             } else {
                                                 var body = response.body;
                                                 var data = JSON.parse(body).data;    
@@ -308,8 +310,6 @@ module.exports = {
                                         if (error) { 
                                             callback(error, null);                                    
                                         } else {
-                                            console.log('\nAdded permissions for ' + 
-                                            roleName + ' role');                 
                                             callback(null, 'Added role: ' + roleName);
                                         }
                                     });
@@ -357,15 +357,18 @@ module.exports = {
                         uri: uri,
                         method: "POST"
                     };
+                    console.log('\nAssigning ' + roleName + ' role to ' + 
+                        groupPath + ' group.' );
                     return makeRequest(options, function (error, response) {
                         if (error && (error.statusCode != '201') && 
                             (error.statusCode != '200'))
                         {
                             callback(error, null);
+                            process.exit();
                         } else {
                             var body = response.body;
                             var entities = JSON.parse(body).entities;    
-                            console.log('\nAssigned ' + entities[0].path + ' role to group.' );                        
+          
                             callback(null, response);
                         }
                     });
@@ -402,7 +405,11 @@ function deleteGroup(groupName, uri, callback) {
     return makeRequest(options, function (error, response) {
         if (error)
         {
-            callback(error, null);
+            if (error.statusCode !== 404){
+                callback(error, null);
+            } else {
+                callback();
+            }
         } else {
             callback(null, response);
         }
@@ -422,7 +429,11 @@ function deleteRole(roleName, uri, callback) {
     return makeRequest(options, function (error, response) {
         if (error)
         {
-            callback(error, null);
+            if (error.statusCode !== 404){
+                callback(error, null);
+            } else {
+                callback();
+            }
         } else {
             callback(null, response);
         }
@@ -435,7 +446,12 @@ function deleteVault(vaultName, options, callback) {
     return makeRequest(options, function (error, response) {
         if (error)
         {
-            callback(error, null);
+            if (error.statusCode !== 500)
+            {
+                callback(error, null);                
+            } else {
+                callback();
+            }
         } else {
             callback(null, response);
         }
@@ -447,15 +463,43 @@ function makeRequest(options, callback) {
     sleep.sleep(1);
     
     request(options, function (error, response) {
-       
         var errorObject = new Error();
         
         if (error) {
+            console.log('\nRequest: ' + options.method + ' ' + options.uri);
+            console.log('Status code: ' + response.statusCode);
+            
             errorObject.message = error.message;
             errorObject.statusCode = error.statusCode;
             callback(errorObject, null);
-        } else {
-            callback(null, response);
+        } else if (response.statusCode !== 200 && response.statusCode !== 201) {
+            console.log('\nRequest: ' + options.method + ' ' + options.uri);
+            console.log('Status code: ' + response.statusCode);
+            
+            var bodyObj = JSON.parse(response.body);
+            if (bodyObj.fault) {
+                var fault = bodyObj.fault;
+                errorObject.message = fault.faultstring;
+            } else if (response.statusMessage) {
+                errorObject.message = response.statusMessage;
+            }
+            errorObject.statusCode = response.statusCode;
+            callback(errorObject, null);
+        } else {            
+            console.log('\nRequest: ' + options.method + ' ' + options.uri);
+            console.log('Status code: ' + response.statusCode);
+            console.log('Response body: ' + response.body);
+            
+            if (response.body) {
+                var callbackResponse;
+                try {
+                    var bodyObj = JSON.parse(response.body);
+                    callbackResponse = bodyObject
+                    callback(null, bodyObj);                    
+                } catch (exception) {
+                    callback(null, response);                    
+                }
+            }
         }
     });
 }
