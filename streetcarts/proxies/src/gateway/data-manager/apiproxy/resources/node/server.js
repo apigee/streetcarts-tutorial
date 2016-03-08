@@ -480,6 +480,24 @@ app.delete('/menus/:menu_uuid/items/:item_uuid', function (req, res) {
     });
 });
 
+app.delete('/menus/:uuid', function (req, res) {
+    var menuUUID = req.params.uuid;
+    
+    console.log('DELETE /menus/' + menuUUID);
+
+    var userBaaSToken = req.headers['x-user-baas-token'];
+    
+    dataManager.deleteMenu(menuUUID, userBaaSToken, function (error, data) {
+        if (error) {
+            res.send(error);
+        }
+        if (data) {
+            res.set('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+});
+
 // users proxy paths //
 
 app.get('/users', function (req, res) {

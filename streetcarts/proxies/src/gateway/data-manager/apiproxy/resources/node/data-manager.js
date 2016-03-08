@@ -339,7 +339,64 @@ module.exports = {
         }
     },
     
-    // Functions supporting the menus proxy //
+    /**
+     * Creates a new menu item for a foodcart (doesn't
+     * add the item to a menu).
+     */
+    addNewItem: function (args, callback) {
+
+        var tokenParam = "?access_token=" + args.baasToken;
+        var cartUUID = args.cartUUID;
+        var itemData = args.newValues;
+        itemData.cartID = cartUUID;
+        
+        endpointPath = "/foodcarts/" + cartUUID + "/offers/items" + tokenParam;
+        
+        var uri = host + appPath + endpointPath;
+
+        console.log("Adding a new item: " + uri + "\n" + JSON.stringify(itemData));
+
+        var options = {
+            uri: uri,
+            body: JSON.stringify(itemData),
+            method: "POST"
+        };
+        
+        return makeRequest(options, function (error, response) {
+            if (error) {
+                callback(error, null);
+            } else {
+                var item = JSON.parse(response)['entities'][0];
+                
+                // Now that the item is created, control access to it
+                // by adding item-specific permissions to API BaaS.
+                var pathCartID = cartUUID.replace(/-/g, ".");                
+                var roleName = pathCartID + "-menus-manager";
+                
+                // Permissions to set in API BaaS.
+                var permissionsList = {
+                    permissions: [
+                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + 
+                            "/offers/" + item.uuid },
+                        { permission : "get,put,post,delete:/menus/*/includes/" + item.uuid },
+                        { permission : "get,put,post,delete:/items/" + item.uuid }
+                    ]
+                };
+
+                assignPermissionsToRole(roleName, permissionsList, 
+                    function(error, response) {
+                    if (error) {
+                        console.log(error);
+                        callback(error, null);
+                    } else {
+                        streamlineResponseEntity(item, function(streamlinedResponse){
+                            callback(null, JSON.stringify(streamlinedResponse));
+                        });
+                    }
+                });
+            }
+        });
+    },
     
     /**
      * Adds a new menu for a foodcart.
@@ -377,34 +434,32 @@ module.exports = {
                 // Permissions to set in API BaaS.
                 var permissionsList = 
                 { permissions: [
+                    { permission : "get,put,post,delete:/foodcarts/" + cartUUID + 
+                        "/publishes/" + menu.uuid },
                     { permission : "get,put,post,delete:/menus/" + menu.uuid },
                     { permission : "get,put,post,delete:/menus/" + menu.uuid +
                         "/includes/*" }
                     ]
                 };
-                async.each(permissionsList.permissions, function(permission, callback) {
-                    assignPermissionsToRole(roleName, permission, 
-                        function(error, response) {
-                        if (error) {
-                            console.log(error);
-                            callback(error, null);
-                        } else {
-                            callback();
-                        }
-                    });
-                }, function(error) {
-                    if(error) {
+                console.log('setting menu perms');
+                
+                assignPermissionsToRole(roleName, permissionsList, 
+                    function(error, response) {
+                    if (error) {
+                        console.log(error);
                         callback(error, null);
                     } else {
                         streamlineResponseEntity(menu, function(streamlinedResponse){
                             callback(null, JSON.stringify(streamlinedResponse));
                         });
                     }
-                });                
+                });
             }
         });
     },
     
+    // Functions supporting the menus proxy //
+        
     /**
      * Gets a list of all the menus in the data store.
      */
@@ -715,66 +770,57 @@ module.exports = {
         });
     },
     
-    // Functions supporting the items proxy //
-    
     /**
-     * Creates a new menu item for a foodcart (doesn't
-     * add the item to a menu).
+     * Deletes data about the specified menu.
      */
-    addNewItem: function (args, callback) {
-
-        var tokenParam = "?access_token=" + args.baasToken;
-        var cartUUID = args.cartUUID;
-        var itemData = args.newValues;
-        itemData.cartID = cartUUID;
+    deleteMenu: function (menuUUID, baasToken, callback) {
         
-        endpointPath = "/foodcarts/" + cartUUID + "/offers/items" + tokenParam;
-        
+        var tokenParam = "?access_token=" + baasToken;
+        var endpointPath = "/menus/" + menuUUID + tokenParam;
         var uri = host + appPath + endpointPath;
 
-        console.log("Adding a new item: " + uri + "\n" + JSON.stringify(itemData));
+        console.log("Deleting a menu: " + uri);
 
         var options = {
             uri: uri,
-            body: JSON.stringify(itemData),
-            method: "POST"
+            method: "DELETE"
         };
         
-        return makeRequest(options, function (error, response) {
+        return makeRequest(options, function (error, menuDeleteResponse) {
             if (error) {
+                console.log('error deleting menu: ' + JSON.stringify(error));
                 callback(error, null);
             } else {
-                var item = JSON.parse(response)['entities'][0];
+                var cartUUID = JSON.parse(menuDeleteResponse).entities[0].cartID;
                 
-                // Now that the item is created, control access to it
-                // by adding item-specific permissions to API BaaS.
-                var pathCartID = cartUUID.replace(/-/g, ".");                
+                // Now that the item is deleted, clean up by removing 
+                // permissions settings specific to the item.
+                var pathCartID = cartUUID.replace(/-/g, ".");
                 var roleName = pathCartID + "-menus-manager";
                 
-                // Permissions to set in API BaaS.
+                // Permissions to delete from API BaaS.
                 var permissionsList = {
                     permissions: [
+                        { permission : "get,put,post,delete:/menus/" + menuUUID },
+                        { permission : "get,put,post,delete:/menus/" + menuUUID +
+                            "/includes/*" },
                         { permission : "get,put,post,delete:/foodcarts/" + cartUUID + 
-                            "/offers/" + item.uuid },
-                        { permission : "get,put,post,delete:/menus/*/includes/" + item.uuid },
-                        { permission : "get,put,post,delete:/items/" + item.uuid }
+                            "/publishes/" + menuUUID }
                     ]
                 };
-
-                assignPermissionsToRole(roleName, permissionsList, 
+                deletePermissionsFromRole(roleName, permissionsList, 
                     function(error, response) {
                     if (error) {
-                        console.log(error);
                         callback(error, null);
                     } else {
-                        streamlineResponseEntity(item, function(streamlinedResponse){
-                            callback(null, JSON.stringify(streamlinedResponse));
-                        });
+                        callback(null, menuDeleteResponse);
                     }
                 });
             }
         });
     },
+
+    // Functions supporting the items proxy //
     
     /**
      * Gets details for the specified menu item.
@@ -940,17 +986,17 @@ module.exports = {
         return makeRequest(options, function (error, itemDeleteResponse) {
             if (error) {
                 if (error.statusCode == 401) {                
-                    error.message = "Unable to find an item with ID "+ 
+                    error.message = "Unable to delete item with ID "+ 
                         itemUUID;
                     callback(error, null);
                 }
                 else {
                     callback(error, null);
-                }            
+                }
             } else {
                 var cartUUID = JSON.parse(itemDeleteResponse).entities[0].cartID;
                 
-                // Now that the menu is deleted, clean up by removing 
+                // Now that the item is deleted, clean up by removing 
                 // permissions settings specific to the item.
                 var pathCartID = cartUUID.replace(/-/g, ".");
                 var roleName = pathCartID + "-menus-manager";
@@ -959,6 +1005,8 @@ module.exports = {
                 var permissionsList = {
                     permissions: [
                         { permission : "get,put,post,delete:/menus/*/includes/" + itemUUID },
+                        { permission : "get,put,post,delete:/foodcarts/" + cartUUID + 
+                            "/offers/" + itemUUID },
                         { permission : "get,put,post,delete:/items/" + itemUUID }
                     ]
                 };
@@ -1314,7 +1362,7 @@ module.exports = {
                 });
             }
         });
-    },    
+    }
     
 };
 
@@ -2050,7 +2098,7 @@ function authenticateAsDataStoreClient(callback) {
             console.log('Just got client ID: ' + clientID);
             orgVault.get(dataStoreSecretEntry, function(error, secretValue) {
                 if (error) {
-                    
+                    callback(error, null);
                 } else {
                     clientSecret = secretValue;
                     console.log('Just got client secret: ' + clientSecret);
