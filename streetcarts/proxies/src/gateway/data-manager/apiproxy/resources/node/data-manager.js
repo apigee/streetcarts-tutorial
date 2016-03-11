@@ -1340,8 +1340,9 @@ module.exports = {
      * Deletes the specified user account from the data store.
      */
     deleteUser: function (userUUID, baasToken, callback) {
-        
-        endpointPath = "/users/" + userUUID;
+
+        var tokenParam = "?access_token=" + baasToken;
+        endpointPath = "/users/" + userUUID + tokenParam;
         var uri = host + appPath + endpointPath;
         
         console.log("Deleting a user: " + uri);

@@ -27,6 +27,11 @@ In [Postman](https://www.getpostman.com/), import the collection and environment
 | DOMAIN | Name of the domain hosting StreetCarts, such as `apigee.net` |
 | API-KEY | The Edge consumer key value from either the SC-APP-TRIAL or SC-APP-UNLIMITED developer app |
 | ACCESS-TOKEN | The access token for an authenticated user. In the script environment, this value is populated automatically when you run the "Authenticate user" API call |
+7. For the "Authenticate user" endpoint, add credentials needed to request and OAuth token.
+ 1. In the collection, click the Authenticate user call to edit it.
+ 2. Click the Authorization tab, then enter the following values from either the SC-APP-TRIAL or SC-APP-UNLIMITED developer apps in your StreetCarts deployment on Edge:
+  For Username, enter the consumer key.
+  For Password, enter the consumer secret.
 
 ## Using the noscript collection and environment
 
