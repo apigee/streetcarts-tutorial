@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ProxyEndpoint name="default">
-    <Description/>
+    <Description>Endpoints to get, update, and delete items.</Description>
     <PreFlow name="PreFlow">
         <Request>
             <Step>
@@ -9,11 +9,7 @@
             <Step>
                 <Name>Quota</Name>
             </Step>
-            <Step>
-                <Name>Get-Item-ID</Name>
-            </Step>
         </Request>
-        <Response/>
     </PreFlow>
     <Flows>
         <Flow name="Get Menu Item By ID">

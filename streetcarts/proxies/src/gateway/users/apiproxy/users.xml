@@ -5,8 +5,8 @@
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>users API</Description>
     <DisplayName>users</DisplayName>
-    <LastModifiedAt>1455115820517</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1457652910408</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>ApiKeyFaultMessage</Policy>
         <Policy>GetDataManagerKey</Policy>

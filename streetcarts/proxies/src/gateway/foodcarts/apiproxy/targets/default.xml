@@ -18,8 +18,8 @@
         </Request>
         <Response/>
     </PreFlow>
-    <HTTPTargetConnection>
-        <Properties/>
-        <URL>https://PROXYHOSTREPLACE/v1/streetcarts/data-manager</URL>
-    </HTTPTargetConnection>
+    <LocalTargetConnection>
+        <APIProxy>data-manager</APIProxy>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </LocalTargetConnection>
 </TargetEndpoint>

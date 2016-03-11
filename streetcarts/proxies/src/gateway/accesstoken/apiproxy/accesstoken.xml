@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <APIProxy revision="2" name="accesstoken">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1447708499241</CreatedAt>
-    <CreatedBy>wwitman@apigee.com</CreatedBy>
+    <CreatedAt>1457654989113</CreatedAt>
+    <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <Description>accesstoken</Description>
     <DisplayName>accesstoken</DisplayName>
-    <LastModifiedAt>1448414864738</LastModifiedAt>
+    <LastModifiedAt>1457654989113</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
+        <Policy>Authenticate</Policy>
         <Policy>GenerateToken</Policy>
         <Policy>GetDataManagerKey</Policy>
         <Policy>InvalidUserFault</Policy>
+        <Policy>Parse-Authentication-Response</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
-        <Policy>SetRestrictedResource</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>ValidateUser</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
-    <Resources>
-        <Resource>jsc://setRestrictedResource.js</Resource>
-        <Resource>jsc://validate.js</Resource>
-    </Resources>
+    <Resources/>
     <TargetServers/>
     <TargetEndpoints/>
-    <validate>false</validate>
 </APIProxy>

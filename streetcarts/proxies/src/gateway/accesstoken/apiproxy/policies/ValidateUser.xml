@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Javascript timeLimit="1000" async="false" continueOnError="true" enabled="true" name="ValidateUser">
-    <DisplayName>ValidateUser</DisplayName>
-    <FaultRules/>
-    <Properties/>
-    <ResourceURL>jsc://validate.js</ResourceURL>
-</Javascript>

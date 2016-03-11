@@ -26,21 +26,24 @@
                     <Name>GetDataManagerKey</Name>
                 </Step>
                 <Step>
-                    <FaultRules/>
-                    <Name>ValidateUser</Name>
+                    <Name>Authenticate</Name>
                 </Step>
                 <Step>
-                    <Condition>streetcarts.user.valid = true</Condition>
+                    <Name>Parse-Authentication-Response</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Condition>streetcarts.user.baas.token != null</Condition>
                     <FaultRules/>
                     <Name>GenerateToken</Name>
                 </Step>
                 <Step>
-                    <Condition>streetcarts.user.valid = false</Condition>
+                    <Condition>streetcarts.user.baas.token = null</Condition>
                     <FaultRules/>
                     <Name>InvalidUserFault</Name>
                 </Step>
-            </Request>
-            <Response/>
+            </Response>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
         </Flow>
     </Flows>

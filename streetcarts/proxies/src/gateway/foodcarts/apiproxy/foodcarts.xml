@@ -5,8 +5,8 @@
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>foodcarts</Description>
     <DisplayName>foodcarts</DisplayName>
-    <LastModifiedAt>1455035614025</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1457652026591</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>

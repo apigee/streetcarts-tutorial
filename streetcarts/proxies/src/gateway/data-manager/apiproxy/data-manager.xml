@@ -4,13 +4,11 @@
     <CreatedAt>1448392152622</CreatedAt>
     <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1448414835075</LastModifiedAt>
+    <LastModifiedAt>1457654637778</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>GenerateAccessToken</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>SetRestrictedResource</Policy>
-        <Policy>ValidateToken</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>

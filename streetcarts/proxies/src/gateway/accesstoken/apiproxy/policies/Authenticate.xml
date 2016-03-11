@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="false" enabled="true" name="Authenticate">
+    <DisplayName>Authenticate</DisplayName>
+    <Request clearPayload="true" variable="myRequest">
+        <Set>
+            <Headers>
+                <Header name="x-api-key">{DATA-MANAGER-KEY}</Header>
+            </Headers>
+            <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">{"username" : "@request.formparam.username#", "password" : "@request.formparam.password#"}</Payload>
+            <Path>/authenticate</Path>
+            <Verb>POST</Verb>
+        </Set>
+    </Request>
+    <Response>AuthenticationResponse</Response>
+    <Timeout>700000</Timeout>
+    <LocalTargetConnection>
+        <APIProxy>data-manager</APIProxy>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </LocalTargetConnection>
+</ServiceCallout>

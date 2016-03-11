@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ExtractVariables async="false" continueOnError="false" enabled="true" name="Parse-Authentication-Response">
+    <DisplayName>Parse Authentication Response</DisplayName>
+    <Source>AuthenticationResponse</Source>
+    <VariablePrefix>streetcarts</VariablePrefix>
+    <JSONPayload>
+        <Variable name="user.id">
+            <JSONPath>$.user.uuid</JSONPath>
+        </Variable>
+        <Variable name="user.baas.token">
+            <JSONPath>$.access_token</JSONPath>
+        </Variable>
+    </JSONPayload>
+</ExtractVariables>

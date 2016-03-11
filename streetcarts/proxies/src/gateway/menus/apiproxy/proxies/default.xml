@@ -10,7 +10,6 @@
                 <Name>Quota</Name>
             </Step>
         </Request>
-        <Response/>
     </PreFlow>
     <Flows>
         <Flow name="Get Menu By ID">
@@ -23,7 +22,6 @@
                     <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Delete Menu">
@@ -33,7 +31,6 @@
                     <Name>Validate-Token-Owner-Access</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Add Item to Menu">
@@ -43,7 +40,6 @@
                     <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items/{item_id}") and (request.verb = "PUT")</Condition>
         </Flow>
         <Flow name="Remove Item from Menu">
@@ -53,7 +49,6 @@
                     <Name>Validate-Token-Manager-Access</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*/items/*") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Get Items on Menu">
@@ -66,7 +61,6 @@
                     <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{menu_id}/items") and (request.verb = "GET")</Condition>
         </Flow>
     </Flows>

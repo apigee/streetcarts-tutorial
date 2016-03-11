@@ -5,22 +5,14 @@
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>reviews</Description>
     <DisplayName>reviews</DisplayName>
-    <LastModifiedAt>1447604312532</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1457653639529</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Add-Review-Response</Policy>
-        <Policy>Deleted-user-Review</Policy>
-        <Policy>Get-All-Reviews-Response</Policy>
-        <Policy>Get-Review-Response</Policy>
-        <Policy>Get-Review-and-User-ID</Policy>
-        <Policy>Get-User-Review</Policy>
+        <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
         <Policy>RewriteTargetUrl</Policy>
-        <Policy>SetRestrictedResourcePost</Policy>
         <Policy>Spike-Arrest</Policy>
-        <Policy>Update-User-Review</Policy>
-        <Policy>Verify-API-Key-TEMPONPREFLOW</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
@@ -28,12 +20,9 @@
     </ProxyEndpoints>
     <Resources>
         <Resource>jsc://RewriteTargetUrl.js</Resource>
-        <Resource>jsc://SetRestrictedResource.js</Resource>
     </Resources>
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
-        <TargetEndpoint>docfood</TargetEndpoint>
     </TargetEndpoints>
-    <validate>false</validate>
 </APIProxy>

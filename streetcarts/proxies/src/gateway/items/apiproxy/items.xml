@@ -5,10 +5,9 @@
     <CreatedBy>wwitman@apigee.com</CreatedBy>
     <Description>items</Description>
     <DisplayName>items</DisplayName>
-    <LastModifiedAt>1454968052634</LastModifiedAt>
-    <LastModifiedBy>wwitman@apigee.com</LastModifiedBy>
+    <LastModifiedAt>1457653298413</LastModifiedAt>
+    <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
-        <Policy>Get-Item-ID</Policy>
         <Policy>GetDataManagerKey</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>

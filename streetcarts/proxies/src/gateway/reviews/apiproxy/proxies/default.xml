@@ -4,16 +4,10 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>Verify-API-Key-TEMPONPREFLOW</Name>
-            </Step>
-            <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
             <Step>
                 <Name>Quota</Name>
-            </Step>
-            <Step>
-                <Name>Get-Review-and-User-ID</Name>
             </Step>
         </Request>
         <Response/>
@@ -28,41 +22,43 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Get-User-Review</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Add Review">
             <Description>Add Review</Description>
             <Request>
                 <Step>
-                    <Name>Add-Review-Response</Name>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "POST")</Condition>
         </Flow>
         <Flow name="Update Review">
             <Description>Update Review</Description>
             <Request>
                 <Step>
-                    <Name>Update-User-Review</Name>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "PUT")</Condition>
         </Flow>
         <Flow name="Delete Review">
             <Description>Delete Review</Description>
             <Request>
                 <Step>
-                    <Name>Deleted-user-Review</Name>
+                    <Name>Verify-API-Key</Name>
+                </Step>
+                <Step>
+                    <Name>Remove-API-Key</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/users/*") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Get Review">
@@ -74,11 +70,7 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Get-Review-Response</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/*") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Get All Reviews for All Trucks">
@@ -90,11 +82,7 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Get-All-Reviews-Response</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>request.verb="GET"</Condition>
         </Flow>
     </Flows>

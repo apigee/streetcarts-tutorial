@@ -1943,11 +1943,9 @@ function deletePermissionsFromRole (roleName, permissionsList, callback) {
                };
                return makeRequest(options, function (error, response) {
                    if (error) {
-                       console.log(error);
                        error.message = "Unable to delete permissions from role.";
                        callback(error, false);
                    } else {
-                       console.log(JSON.parse(response));
                        callback(null, JSON.parse(response));
                    }
                });
@@ -2095,16 +2093,11 @@ function authenticateAsDataStoreClient(callback) {
             callback(error);
         } else {
             clientID = idValue;
-            console.log('Just got client ID: ' + clientID);
             orgVault.get(dataStoreSecretEntry, function(error, secretValue) {
                 if (error) {
                     callback(error, null);
                 } else {
                     clientSecret = secretValue;
-                    console.log('Just got client secret: ' + clientSecret);
-                    
-                    console.log('Client ID: ' + clientID);
-                    console.log('Client secret: ' + clientSecret);
                     
                     endpointPath = "/token";
                     var uri = host + appPath + endpointPath;
@@ -2125,7 +2118,6 @@ function authenticateAsDataStoreClient(callback) {
                     
                     return makeRequest(options, function (error, response) {
                         if (error) {
-                            console.log(error);
                             error.message = "Unable to authenticate as client.";
                             callback(error, null);
                         } else {
@@ -2166,12 +2158,10 @@ function getDataStoreClientToken(callback) {
         if (error) {
             callback(error);
         } else {
-            console.log('client token: ' + clientToken);            
             if (clientToken === '')
             {
                 authenticateAsDataStoreClient( function(error, authToken) {
                     if (error) {
-                        console.log(error);
                         callback(error, null);
                     } else {
                         console.log('client token update: ' + authToken);

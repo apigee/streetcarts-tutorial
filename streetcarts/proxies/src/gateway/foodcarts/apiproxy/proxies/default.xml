@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ProxyEndpoint name="default">
-    <Description/>
+    <Description>Endpoints to create foodcarts, menus, and items.</Description>
     <PreFlow name="PreFlow">
         <Request>
             <Step>
                 <Name>Spike-Arrest</Name>
             </Step>
+            <Step>
+                <Name>Quota</Name>
+            </Step>
         </Request>
-        <Response/>
     </PreFlow>
     <Flows>
         <Flow name="Get Food Carts">
@@ -19,11 +21,7 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Quota</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Get Food Cart By ID">
@@ -35,11 +33,7 @@
                 <Step>
                     <Name>Remove-API-Key</Name>
                 </Step>
-                <Step>
-                    <Name>Quota</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Create Food Cart">
@@ -48,11 +42,7 @@
                 <Step>
                     <Name>Validate-Token-Owner-Access</Name>
                 </Step>
-                <Step>
-                    <Name>Quota</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
         </Flow>
         <Flow name="Update Food Cart">
@@ -61,11 +51,7 @@
                 <Step>
                     <Name>Validate-Token-Manager-Access</Name>
                 </Step>
-                <Step>
-                    <Name>Spike-Arrest</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "PUT")</Condition>
         </Flow>
         <Flow name="Delete FoodCart">
@@ -74,11 +60,7 @@
                 <Step>
                     <Name>Validate-Token-Owner-Access</Name>
                 </Step>
-                <Step>
-                    <Name>Quota</Name>
-                </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}") and (request.verb = "DELETE")</Condition>
         </Flow>
         <Flow name="Create Food Cart Menu">
@@ -91,7 +73,6 @@
                     <Name>Quota</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/menus") and (request.verb = "POST")</Condition>
         </Flow>
         <Flow name="Get Food Cart Menus">
@@ -107,7 +88,6 @@
                     <Name>Quota</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/menus") and (request.verb = "GET")</Condition>
         </Flow>
         <Flow name="Create Food Cart Item">
@@ -120,7 +100,6 @@
                     <Name>Quota</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "POST")</Condition>
         </Flow>
         <Flow name="Get Food Cart Items">
@@ -136,7 +115,6 @@
                     <Name>Quota</Name>
                 </Step>
             </Request>
-            <Response/>
             <Condition>(proxy.pathsuffix MatchesPath "/{cart_id}/items") and (request.verb = "GET")</Condition>
         </Flow>
     </Flows>
