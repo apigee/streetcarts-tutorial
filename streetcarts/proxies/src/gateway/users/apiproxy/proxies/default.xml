@@ -39,15 +39,6 @@
             </Request>
             <Condition>(proxy.pathsuffix MatchesPath "/{user_id}") and (request.verb = "GET")</Condition>
         </Flow>
-        <Flow name="Delete User">
-            <Description>Delete User</Description>
-            <Request>
-                <Step>
-                    <Name>Validate-Admin-Token</Name>
-                </Step>
-            </Request>
-            <Condition>(proxy.pathsuffix MatchesPath "/{user_id}") and (request.verb = "DELETE")</Condition>
-        </Flow>
         <Flow name="Create User">
             <Description/>
             <Request>
