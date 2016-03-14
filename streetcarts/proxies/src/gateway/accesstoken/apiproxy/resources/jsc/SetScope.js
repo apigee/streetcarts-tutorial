@@ -11,7 +11,7 @@ if (userGroups.user_groups && userGroups.user_groups.length > 0) {
         if (groupName === "owners") {
             userScope = userScope + "owner.read owner.create owner.delete owner.update ";
         }
-        if (groupName === "managers") {
+        if (groupName.indexOf("/managers/menus") > 0) {
             userScope = userScope + "manager.read manager.update ";
         }
         if (groupName === "members") {
