@@ -27,9 +27,10 @@ In [Postman](https://www.getpostman.com/), import the collection and environment
 | DOMAIN | Name of the domain hosting StreetCarts, such as `apigee.net` |
 | API-KEY | The Edge consumer key value from either the SC-APP-TRIAL or SC-APP-UNLIMITED developer app |
 | ACCESS-TOKEN | The access token for an authenticated user. In the script environment, this value is populated automatically when you run the "Authenticate user" API call |
+7. Click **Update**, then close the **Manage Environments** dialog.
 7. For the "Authenticate user" endpoint, add credentials needed to request and OAuth token.
- 1. In the collection, click the Authenticate user call to edit it.
- 2. Click the Authorization tab, then enter the following values from either the SC-APP-TRIAL or SC-APP-UNLIMITED developer apps in your StreetCarts deployment on Edge:
+ 1. In the collection, click the **Authenticate user** call to edit it.
+ 2. Click the **Authorization** tab, then enter the following values from either the SC-APP-TRIAL or SC-APP-UNLIMITED developer apps in your StreetCarts deployment on Edge:
   For Username, enter the consumer key.
   For Password, enter the consumer secret.
 
@@ -39,7 +40,7 @@ If you imported the -noscript collection and environment, replace placeholders i
 
 ## Using the script collection and environment
 
-If you imported the -script collection and environment, you should be able to make calls from top to bottom without having to type in variable values for each. Those values are set by script, generally JavaScript in the request's Tests tab.
+If you imported the -scripted collection and environment, you should be able to make calls from top to bottom without having to type in variable values for each. Those values are set by script, generally JavaScript in the request's Tests tab.
 
 The following variables are included in the script environment.
 
