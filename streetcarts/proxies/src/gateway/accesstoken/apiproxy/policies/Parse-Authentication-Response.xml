@@ -3,6 +3,7 @@
     <DisplayName>Parse Authentication Response</DisplayName>
     <Source>AuthenticationResponse</Source>
     <VariablePrefix>streetcarts</VariablePrefix>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
     <JSONPayload>
         <Variable name="user.baas.token">
             <JSONPath>$.access_token</JSONPath>

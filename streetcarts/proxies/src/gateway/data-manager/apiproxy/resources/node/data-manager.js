@@ -77,7 +77,34 @@ module.exports = {
                                     if (error) {
                                         callback(error, null);
                                     } else {
-                                        callback(null, JSON.stringify(cart));
+//                                        callback(null, JSON.stringify(cart));
+                                        createMenuManagerUserGroup(cart.uuid,
+                                            function(error, response) {
+                                            if (error) {
+                                                callback(error, null);
+                                            } else {
+                                                var groupEntity = response.entities[0];
+                                                var groupPath = groupEntity.path;
+                                                var groupName = groupEntity.name;
+                                                
+                                                secureMenuManagerUserGroup(cart.uuid,
+                                                    groupPath, function(error, response) {
+                                                    if (error) {
+                                                        callback(error, null);
+                                                    } else {
+                                                        addUserToGroup(ownerUUID, groupPath, 
+                                                            function(error, response) {
+                                                            if (error) {
+                                                                callback(error, null);
+                                                            } else {
+                                                                callback(null, JSON.stringify(cart));
+                                                            }
+                                                        });                                    
+                                                    }
+                                                });
+                                            }
+                                        });
+
                                     }
                                 });                                    
                             }
@@ -371,7 +398,7 @@ module.exports = {
                 // Now that the item is created, control access to it
                 // by adding item-specific permissions to API BaaS.
                 var pathCartID = cartUUID.replace(/-/g, ".");                
-                var roleName = pathCartID + "-menus-manager";
+                var roleName = pathCartID + "-manager-menus";
                 
                 // Permissions to set in API BaaS.
                 var permissionsList = {
@@ -429,7 +456,7 @@ module.exports = {
                 // Create a user role with the permissions needed 
                 // to control access to the new menu. 
                 var pathCartID = cartUUID.replace(/-/g, ".");                
-                var roleName = pathCartID + "-menus-manager";
+                var roleName = pathCartID + "-manager-menus";
                 
                 // Permissions to set in API BaaS.
                 var permissionsList = 
@@ -642,7 +669,7 @@ module.exports = {
                     } else {
                         var item = JSON.parse(response)['entities'][0];
                         var pathCartID = cartUUID.replace(/-/g, ".");
-                        var roleName = pathCartID + "-menus-manager";
+                        var roleName = pathCartID + "-manager-menus";
                         
                         // Permissions to set in API BaaS.
                         var permissionsList = {
@@ -796,7 +823,7 @@ module.exports = {
                 // Now that the item is deleted, clean up by removing 
                 // permissions settings specific to the item.
                 var pathCartID = cartUUID.replace(/-/g, ".");
-                var roleName = pathCartID + "-menus-manager";
+                var roleName = pathCartID + "-manager-menus";
                 
                 // Permissions to delete from API BaaS.
                 var permissionsList = {
@@ -999,7 +1026,7 @@ module.exports = {
                 // Now that the item is deleted, clean up by removing 
                 // permissions settings specific to the item.
                 var pathCartID = cartUUID.replace(/-/g, ".");
-                var roleName = pathCartID + "-menus-manager";
+                var roleName = pathCartID + "-manager-menus";
                 
                 // Permissions to delete from API BaaS.
                 var permissionsList = {
@@ -1367,10 +1394,10 @@ module.exports = {
                 var entity = JSON.parse(response);
                 getGroupsForUser(entity.user.uuid, function(error, groupList) {
                     if (error) {
+                        console.log('groups auth error: ' + JSON.stringify(error)); 
                         callback(error, null);
                     } else {
                         entity.user.user_groups = groupList;
-                        console.log('authed entity: ' + JSON.stringify(entity));
                         streamlineResponseEntity(entity, function(error, streamlinedResponse){
                             if (error) {
                                 callback(error, null);
@@ -1487,7 +1514,7 @@ function getGroupsForUser (userUUID, callback) {
                         }
                         callback(null, groupList);
                     } else {
-                        var error;
+                        var error = new Error();
                         error.message = "User is not in any user groups.";
                         error.statusCode = 401;
                         callback(error, null);
@@ -1791,8 +1818,141 @@ function deleteCartManagerRole (cartUUID, callback) {
     });
 }
 
+
 /**
- * Create the menus-manager user role for a foodcart. The
+ * Creates an "owners" API BaaS user group for the specified foodcart.
+ * The user who creates the cart is automatically added to this
+ * group.
+ * 
+ * Through a role and permissions assigned to this group, users in 
+ * the group are able to update and delete the foodcart that corresponds
+ * to the group.
+ */
+function createMenuManagerUserGroup (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error, null);
+        } else {
+        
+            // Construct the group's path and title with the 
+            // foodcart's UUID, ensuring the those values will be 
+            // unique.
+            var pathCartID = cartUUID.replace(/-/g, ".");
+            var groupPath = "foodcarts/" + pathCartID + "/managers/menus";
+            var groupTitle = "/foodcarts/" + cartUUID + "/managers/menus";
+            
+            var body = {
+                path : groupPath,
+                title : groupTitle
+            };
+            
+            endpointPath = "/groups" + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Creating a user group for menu managers of a cart: " + uri);
+        
+            var options = {
+                uri: uri,
+                method: "POST",
+                body: JSON.stringify(body)
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    console.log(error);
+                    error.message = "Unable to add menu manager group for that foodcart.";
+                    callback(error, false);
+                } else {
+                    callback(null, JSON.parse(response));
+                }
+            });
+        }
+    });
+    
+}
+
+/**
+ * Deletes the "owners" API BaaS user group. This function would
+ * be called when the foodcart is being deleted.
+ */
+function deleteMenuManagerUserGroup (cartUUID, callback) {
+    
+    // Get an "application client" token to pass for authorization.
+    // Making changes to user groups, roles, and permissions, should
+    // only be done by the application, not a user account.
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error);
+        } else {
+        
+            var pathCartID = cartUUID.replace(/-/g, ".");
+            
+            var groupPath = "foodcarts/" + pathCartID + "/managers/menus";            
+            endpointPath = "/groups/" + groupPath + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Deleting a user group for menu managers of a cart: " + uri);
+        
+            var options = {
+                uri: uri,
+                method: "DELETE"
+            };
+            
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    error.message = "Unable to delete menu managers group for that foodcart.";
+                    callback(error, false);
+                } else {
+                    callback(null, JSON.parse(response));
+                }
+            });
+        }
+    });
+}
+
+/**
+ * Applies security settings to the specified cart's owner user group.
+ * 
+ */
+function secureMenuManagerUserGroup (cartUUID, groupPath, callback) {
+
+    console.log("Securing a cart's menu manager user group: cart " + 
+        cartUUID + ", group " + groupPath);
+    
+    // Create the menu manager role that will include
+    // permissions granting access to create, update, and 
+    // delete menu items and menus for this foodcart.
+    createMenuManagerRole(cartUUID, 
+        function(error, menuManagerResponse) {
+        if (error) {
+            callback(error, null);
+        } else {        
+            // Assign the new menu manager role to the 
+            // foodcart's "owners" group.
+            managerRoleName = menuManagerResponse.name;
+            var menuManagerRoleName = menuManagerResponse.name;
+            assignRoleToGroup(menuManagerRoleName, groupPath, 
+                function(error, response) {
+                if (error) {
+                    callback(error, null);
+                } else {
+                    callback(null, response);                                        
+                }
+            });
+        }                
+    });                                            
+}
+
+/**
+ * Create the manager-menus user role for a foodcart. The
  * role will contain permissions that control access for
  * adding, changing, and deleting menu items and menus. 
  * This function would be called when a foodcart is 
@@ -1813,8 +1973,8 @@ function createMenuManagerRole (cartUUID, callback) {
             // Construct the role's name using the foodcart's 
             // UUID to ensure its uniqueness.
              var pathCartID = cartUUID.replace(/-/g, ".");             
-             var roleName = pathCartID + "-menus-manager";
-             var roleTitle = "/foodcarts/" + cartUUID + "/menus/manager";
+             var roleName = pathCartID + "-manager-menus";
+             var roleTitle = "/foodcarts/" + cartUUID + "/managers/menus";
              
              var body = {
                  name : roleName,
@@ -1884,7 +2044,7 @@ function deleteMenuManagerRole (cartUUID, callback) {
         } else {
         
             var pathCartID = cartUUID.replace(/-/g, ".");
-            var roleName = pathCartID + "-menus-manager";
+            var roleName = pathCartID + "-manager-menus";
             
             endpointPath = "/roles/" + roleName + 
                 '?access_token=' + dataStoreClientToken;
