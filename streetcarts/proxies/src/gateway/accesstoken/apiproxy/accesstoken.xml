@@ -15,13 +15,17 @@
         <Policy>Parse-Authentication-Response</Policy>
         <Policy>Quota</Policy>
         <Policy>Remove-API-Key</Policy>
+        <Policy>SetScope</Policy>
         <Policy>Spike-Arrest</Policy>
         <Policy>Verify-API-Key</Policy>
     </Policies>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
-    <Resources/>
+    <Resources>
+        <Resource>jsc://SetScope.js</Resource>
+    </Resources>
     <TargetServers/>
     <TargetEndpoints/>
+    <validate>false</validate>
 </APIProxy>

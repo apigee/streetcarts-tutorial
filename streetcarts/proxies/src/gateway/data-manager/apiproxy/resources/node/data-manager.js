@@ -1288,6 +1288,13 @@ module.exports = {
                 } else {
                     var entity = JSON.parse(response)['entities'][0];
                     streamlineResponseEntity(entity, function(streamlinedResponse){
+                        addMember(streamlinedResponse.uuid, function(error, entity){
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                callback(null, JSON.stringify(streamlinedResponse));              
+                            }
+                        });
                         if (isOwner) {
                             addOwner(streamlinedResponse.uuid, function(error, entity){
                                 if (error) {
@@ -1302,6 +1309,35 @@ module.exports = {
             });            
         }
     },
+    
+    /**
+     * Deletes the specified user account from the data store.
+     */
+//    deleteUser: function (userUUID, baasToken, callback) {
+//        
+//        var tokenParam = "?access_token=" + baasToken;
+//        endpointPath = "/users/" + userUUID + tokenParam;
+//        var uri = host + appPath + endpointPath;
+//        
+//        console.log("Deleting a user: " + uri);
+//        
+//        var options = {
+//            uri: uri,
+//            method: "DELETE"
+//        };
+//        
+//        return makeRequest(options, function (error, response) {
+//            if (error) {
+//                error.message = "That user ID is not in the system.";
+//                callback(error, null);
+//            } else {
+//                var entity = JSON.parse(response)['entities'][0];
+//                streamlineResponseEntity(entity, function(streamlinedResponse){
+//                    callback(null, JSON.stringify(streamlinedResponse));
+//                });
+//            }
+//        });
+//    },
     
     /**
      * Authenticate a user with API BaaS using their username 
@@ -1329,37 +1365,20 @@ module.exports = {
                 callback(error, null);
             } else {
                 var entity = JSON.parse(response);
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
-                });
-            }
-        });
-    },
-    
-    /**
-     * Deletes the specified user account from the data store.
-     */
-    deleteUser: function (userUUID, baasToken, callback) {
-
-        var tokenParam = "?access_token=" + baasToken;
-        endpointPath = "/users/" + userUUID + tokenParam;
-        var uri = host + appPath + endpointPath;
-        
-        console.log("Deleting a user: " + uri);
-        
-        var options = {
-            uri: uri,
-            method: "DELETE"
-        };
-        
-        return makeRequest(options, function (error, response) {
-            if (error) {
-                error.message = "That user ID is not in the system.";
-                callback(error, null);
-            } else {
-                var entity = JSON.parse(response)['entities'][0];
-                streamlineResponseEntity(entity, function(streamlinedResponse){
-                    callback(null, JSON.stringify(streamlinedResponse));
+                getGroupsForUser(entity.user.uuid, function(error, groupList) {
+                    if (error) {
+                        callback(error, null);
+                    } else {
+                        entity.user.user_groups = groupList;
+                        console.log('authed entity: ' + JSON.stringify(entity));
+                        streamlineResponseEntity(entity, function(error, streamlinedResponse){
+                            if (error) {
+                                callback(error, null);
+                            } else {
+                                callback(null, JSON.stringify(streamlinedResponse));                       
+                            }
+                        });
+                    }
                 });
             }
         });
@@ -1401,53 +1420,82 @@ function addOwner (userUUID, callback) {
 }
 
 /**
- * true if the specified user has permission to edit cart data, create
- * new carts, and add users as cart editors.
+ * Adds the specified user to the group of users who can browse
+ * carts and write reviews.
  */
-function isOwner (userUUID, callback) {
-
-    // API BaaS path pointing to users of the "owners" user group.
-    endpointPath = "/groups/27f46f8a-b304-11e5-ac2e-2b595e5b208a/users";
+function addMember (userUUID, callback) {
+    
+    endpointPath = "/groups/members/users/" + userUUID;
     var uri = host + appPath + endpointPath;
 
-    console.log("Verifying that a user is an owner user: " + uri);
+    console.log("Adding an member user: " + uri);
 
     var options = {
         uri: uri,
-        method: "GET"
+        method: "POST"
     };
-    
     return makeRequest(options, function (error, response) {
-        var isOwner = false;
         if (error) {
-            error.message = "Unable to find that cart's owners.";
-            callback(error, false);
+            callback(error, null);
         } else {
-            var userEntities = JSON.parse(response)['entities'];
-            
-            if (userEntities.length > 0) {
-
-                // Check the specified user's UUID against the 
-                // UUID of the user found in the group. If they match
-                // then specified user is an owner.
-                async.each(userEntities, function(userEntity, callback) {
-                    var ownerUUID = userEntity.uuid;
-                    if (ownerUUID === userUUID) {
-                        isOwner = true;
-                    }
-                    callback(null, isOwner);
-                }, function(error) {
-                    if(error) {
-                        callback(error, null);
-                    } else {
-                        callback(null, isOwner);
-                    }
-                });                
-            } else {
-                callback(null, isOwner);
-            }            
+            var entity = JSON.parse(response);
+            streamlineResponseEntity(entity, function(streamlinedResponse){
+                callback(null, JSON.stringify(streamlinedResponse));
+            });
         }
     });
+}
+
+/**
+ * true if the specified user has permission to edit cart data, create
+ * new carts, and add users as cart editors.
+ */
+function getGroupsForUser (userUUID, callback) {
+
+    getDataStoreClientToken( function(error, dataStoreClientToken) {
+
+        if (error) {
+            console.log(error);
+            callback(error, null);
+        } else {
+        
+            endpointPath = "/users/" + userUUID + "/groups"  + '?access_token=' + dataStoreClientToken;
+            var uri = host + appPath + endpointPath;
+            
+            console.log("Getting the list of groups a user is in: " + uri);
+    
+            var options = {
+                uri: uri,
+                method: "GET"
+            };
+        
+            return makeRequest(options, function (error, response) {
+                if (error) {
+                    error.message = "Unable to get the list of groups for user ID:" +
+                        userUUID;
+                    callback(error, false);
+                } else {
+                    var groupEntities = JSON.parse(response)['entities'];
+                    
+                    if (groupEntities.length > 0) {
+                        var groupList = {
+                            user_groups : []
+                        };
+                        for (var i = 0; i < groupEntities.length; i++) {
+                            var groupItem = { name : groupEntities[i].path };
+                            groupList.user_groups.push(groupItem);
+                        }
+                        callback(null, groupList);
+                    } else {
+                        var error;
+                        error.message = "User is not in any user groups.";
+                        error.statusCode = 401;
+                        callback(error, null);
+                    }            
+                }
+            });            
+        }
+    });    
 }
 
 /**
@@ -1468,7 +1516,7 @@ function createCartOwnerUserGroup (cartUUID, callback) {
 
         if (error) {
             console.log(error);
-            callback(error);
+            callback(error, null);
         } else {
         
             // Construct the group's path and title with the 
@@ -2165,7 +2213,6 @@ function getDataStoreClientToken(callback) {
                     if (error) {
                         callback(error, null);
                     } else {
-                        console.log('client token update: ' + authToken);
                         clientToken = authToken;
                         callback(null, clientToken);
                     }

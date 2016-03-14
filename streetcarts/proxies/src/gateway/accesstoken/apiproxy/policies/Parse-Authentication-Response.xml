@@ -4,11 +4,14 @@
     <Source>AuthenticationResponse</Source>
     <VariablePrefix>streetcarts</VariablePrefix>
     <JSONPayload>
+        <Variable name="user.baas.token">
+            <JSONPath>$.access_token</JSONPath>
+        </Variable>
         <Variable name="user.id">
             <JSONPath>$.user.uuid</JSONPath>
         </Variable>
-        <Variable name="user.baas.token">
-            <JSONPath>$.access_token</JSONPath>
+        <Variable name="user.groups">
+            <JSONPath>$.user.user_groups</JSONPath>
         </Variable>
     </JSONPayload>
 </ExtractVariables>
