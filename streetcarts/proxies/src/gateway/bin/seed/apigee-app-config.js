@@ -527,7 +527,6 @@ function makeRequest(options, callback) {
             callback(errorObject, null);
         } else if (response.statusCode !== 200 && response.statusCode !== 201) {
             console.log('\nRequest: ' + options.method + ' ' + options.uri);
-            console.log('Status code: ' + response.statusCode);
             
             var bodyObj = JSON.parse(response.body);
             if (bodyObj.fault) {
