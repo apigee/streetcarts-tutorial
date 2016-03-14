@@ -85,10 +85,22 @@ if (args[2] === 'configure-edge') {
             var apigeeConfig = JSON.parse(data);
             var baasConfig = apigeeConfig.apiBaaS;
             
+            if (baasConfig.collections) {
+                var options = {
+                    "config": apigeeConfig
+                };
+                apigeeAppConfig.createBaasCollections(options, function (error, response) {
+                    if (error) {
+                        console.log('\nGot create collections error: \n' + JSON.stringify(error));
+                    } else {
+                        // console.log('\nRoles created.');
+                    }
+                });
+            }
             if (baasConfig.roles) {
                 var options = {
                     "config": apigeeConfig
-                };                            
+                };
                 apigeeAppConfig.createBaasRoles(options, function (error, response) {
                     if (error) {
                         console.log('\nGot create roles error: \n' + JSON.stringify(error));

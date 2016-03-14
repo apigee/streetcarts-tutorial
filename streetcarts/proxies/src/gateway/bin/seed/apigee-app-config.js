@@ -136,6 +136,59 @@ module.exports = {
         }
     },
 
+    createBaasCollections: function (configOptions, callback) {
+
+        var baasConfig = configOptions.config.apiBaaS;
+        
+        var clientId = baasConfig.clientCredentials.clientId;
+        var clientSecret = baasConfig.clientCredentials.clientSecret;
+        
+        var apiBaaSHost = baasConfig.apiHost;
+        var orgName = baasConfig.orgName;
+        var appName = baasConfig.appName;
+        
+        if (baasConfig.collections && baasConfig.collections.length > 0)
+        {
+            var collections = baasConfig.collections;
+            
+            async.each(collections, function (collection, callback) {
+                var collectionName = collection.name;
+                
+                var uri = 'https://' + apiBaaSHost + '/' + orgName + '/' + appName + '/' +
+                collectionName + '?client_id=' + clientId + '&client_secret=' + clientSecret;
+                
+                var options = {
+                    uri: uri,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST"
+                };
+                console.log('\nCreating collection: ' + collectionName);
+                return makeRequest(options, function (error, response) {
+                    if (error && error.statusCode != '201')
+                    {
+                        callback(error, null);
+                    } else if (response.statusCode == 400) {
+                        var body = response.body;
+                        var error = JSON.parse(body).error;
+                        callback(error, null);
+                    } else {
+                        var body = JSON.parse(response.body);
+                        callback(null, response);                        
+                    }
+                });                
+            },
+            function (error) {
+                if (error) {
+                    callback(error, null);
+                } else {
+                    callback(null, 'Added collections.');
+                }
+            });
+        }        
+    },
+    
     createBaasGroups: function (configOptions, callback) {
 
         var baasConfig = configOptions.config.apiBaaS;
