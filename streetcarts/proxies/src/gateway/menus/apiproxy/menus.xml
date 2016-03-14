@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="4" name="menus">
+<APIProxy revision="1" name="menus">
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
     <CreatedAt>1454952968048</CreatedAt>
     <CreatedBy>wwitman@apigee.com</CreatedBy>
