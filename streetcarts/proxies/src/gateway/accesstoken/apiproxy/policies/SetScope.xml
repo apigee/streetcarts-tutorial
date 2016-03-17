@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Call out to JavaScript that sets user authorization scope
+    based on incoming values. -->
 <Javascript async="false" continueOnError="false" enabled="true" timeLimit="200" name="SetScope">
     <DisplayName>SetScope</DisplayName>
     <Properties/>

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Call out to the data-manager proxy to authenticate the 
+    user with the data store.  -->
 <ServiceCallout async="false" continueOnError="false" enabled="true" name="Authenticate">
     <DisplayName>Authenticate</DisplayName>
     <Request clearPayload="true" variable="myRequest">
         <Set>
+            <!-- Set the API key that the data-manager requires. -->
             <Headers>
                 <Header name="x-api-key">{DATA-MANAGER-KEY}</Header>
             </Headers>
+            <!-- Grab form params from the request and pass them as username and password 
+                payload values. -->
             <Payload contentType="application/json" variablePrefix="@" variableSuffix="#">{"username" : "@request.formparam.username#", "password" : "@request.formparam.password#"}</Payload>
             <Path>/authenticate</Path>
             <Verb>POST</Verb>
@@ -13,6 +18,8 @@
     </Request>
     <Response>AuthenticationResponse</Response>
     <Timeout>700000</Timeout>
+    <!-- Call out to the data-manager proxy locally, bypassing message processors and other
+        features used for typical HTTP requests to a proxy. -->
     <LocalTargetConnection>
         <APIProxy>data-manager</APIProxy>
         <ProxyEndpoint>default</ProxyEndpoint>

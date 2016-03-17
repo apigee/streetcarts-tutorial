@@ -3,6 +3,8 @@
     <DisplayName>GenerateToken</DisplayName>
     <Attributes>
         <Attribute display="true" name="USER_UUID" ref="streetcarts.user.id"/>
+        <!-- Store the BaaS auth token here so it can be sent back for 
+            subsequent requests from the same user. -->
         <Attribute display="true" name="USER_BAAS_TOKEN" ref="streetcarts.user.baas.token"/>
     </Attributes>
     <ExpiresIn>-1</ExpiresIn>
@@ -10,6 +12,8 @@
     <Operation>GenerateAccessToken</Operation>
     <GenerateResponse enabled="true"/>
     <ReuseRefreshToken>false</ReuseRefreshToken>
+    <!-- Set the scope value from the variable value created
+        in SetScope.js. -->
     <Scope>streetcarts.user.scope</Scope>
     <SupportedGrantTypes>
         <GrantType>password</GrantType>
