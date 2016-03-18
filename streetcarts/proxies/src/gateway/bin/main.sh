@@ -54,6 +54,10 @@ echo -e "the StreetCarts project to your Edge org."
 echo -e "There is a separate script for bootstrapping"
 echo -e "sample data into your API BaaS application."
 echo -e "See the project readme file for more information."
+echo -e " "
+echo -e "NOTE: When you first run the script, you'll see"
+echo -e "a few 'not found' or 'doesn't exist' errors."
+echo -e "Happily ignore those."
 echo -e "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
 echo -e
 
