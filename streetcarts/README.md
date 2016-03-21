@@ -4,7 +4,7 @@ StreetCarts is a full API application that integrates Apigee Edge with API BaaS 
 
 ## Getting started
 
-Learn how to install, set up, and use StreetCarts, on the doc wiki](https://github.com/apigee/docs-sandbox/wiki).
+Learn how to install, set up, and use StreetCarts, on the [doc wiki](https://github.com/apigee/docs-sandbox/wiki).
 
 ## About StreetCarts
 
