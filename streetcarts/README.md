@@ -2,7 +2,11 @@
 
 StreetCarts is a full API application that integrates Apigee Edge with API BaaS to provide data about mobile food carts.
 
-> For information about deploying StreetCarts, see the [Deploying and Running StreetCarts](https://github.com/apigee/docs-sandbox/wiki/Deploying-and-Running-StreetCarts) in the repository wiki.
+## Getting started
+
+To install and set up StreetCarts, see [Deploying and Running StreetCarts](https://github.com/apigee/docs-sandbox/wiki/Deploying-and-Running-StreetCarts).
+
+## About StreetCarts
 
 StreetCarts illustrates the following:
 
@@ -16,11 +20,8 @@ StreetCarts illustrates the following:
 
 ![StreetCarts diagram](https://github.com/apigee/docs-sandbox/blob/master/apps/streetcarts/streetcarts-diagram.png).
 
-## Install the app
 
-For steps describing how to get StreetCarts installed and usable (with data), see [Deploying and Running StreetCarts](https://github.com/apigee/docs-sandbox/wiki/Deploying-and-Running-StreetCarts).
-
-## Learn more about what's in it
+## Learn more about what's in StreetCarts
 
 StreetCarts integrates a set of Edge API proxies with an API BaaS data store. You might be interested in:
 
