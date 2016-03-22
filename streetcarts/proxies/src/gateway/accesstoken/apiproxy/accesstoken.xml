@@ -5,7 +5,7 @@
     <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <Description>accesstoken</Description>
     <DisplayName>accesstoken</DisplayName>
-    <LastModifiedAt>1457983091300</LastModifiedAt>
+    <LastModifiedAt>1458674106892</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Authenticate</Policy>
@@ -27,4 +27,5 @@
     </Resources>
     <TargetServers/>
     <TargetEndpoints/>
+    <validate>false</validate>
 </APIProxy>

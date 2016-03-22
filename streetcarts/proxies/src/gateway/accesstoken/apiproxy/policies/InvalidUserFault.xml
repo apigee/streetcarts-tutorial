@@ -4,9 +4,9 @@
     <FaultResponse>
         <Set>
             <Headers/>
-            <Payload contentType="text/plain"/>
-            <StatusCode>401</StatusCode>
-            <ReasonPhrase>Unauthorized</ReasonPhrase>
+            <Payload>{streetcarts.error.content}</Payload>
+            <StatusCode>{streetcarts.auth.status.code}</StatusCode>
+            <ReasonPhrase>{streetcarts.error.message}</ReasonPhrase>
         </Set>
     </FaultResponse>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>

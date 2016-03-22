@@ -4,7 +4,7 @@
     <CreatedAt>1448392152622</CreatedAt>
     <CreatedBy>steve.traut@apigee.com</CreatedBy>
     <DisplayName>data-manager</DisplayName>
-    <LastModifiedAt>1457654637778</LastModifiedAt>
+    <LastModifiedAt>1458150039075</LastModifiedAt>
     <LastModifiedBy>steve.traut@apigee.com</LastModifiedBy>
     <Policies>
         <Policy>Remove-API-Key</Policy>
@@ -17,6 +17,7 @@
     <Resources>
         <Resource>node://README.md</Resource>
         <Resource>node://data-manager.js</Resource>
+        <Resource>node://node_modules_apigee-access.zip</Resource>
         <Resource>node://node_modules_async.zip</Resource>
         <Resource>node://node_modules_body-parser.zip</Resource>
         <Resource>node://node_modules_cors.zip</Resource>
@@ -30,5 +31,4 @@
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
     </TargetEndpoints>
-    <validate>false</validate>
 </APIProxy>

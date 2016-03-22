@@ -34,19 +34,18 @@
                 <Step>
                     <Name>SetScope</Name>
                 </Step>
-            </Request>
-            <Response>
+                <Step>
+                    <Condition>streetcarts.auth.status.code != 200</Condition>
+                    <FaultRules/>
+                    <Name>InvalidUserFault</Name>
+                </Step>
                 <Step>
                     <Condition>streetcarts.user.baas.token != null</Condition>
                     <FaultRules/>
                     <Name>GenerateToken</Name>
                 </Step>
-                <Step>
-                    <Condition>streetcarts.user.baas.token = null</Condition>
-                    <FaultRules/>
-                    <Name>InvalidUserFault</Name>
-                </Step>
-            </Response>
+            </Request>
+            <Response></Response>
             <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
         </Flow>
     </Flows>

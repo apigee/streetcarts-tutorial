@@ -14,8 +14,8 @@
         <Variable name="user.id">
             <JSONPath>$.user.uuid</JSONPath>
         </Variable>
-        <Variable name="user.groups">
-            <JSONPath>$.user.user_groups</JSONPath>
+        <Variable name="response">
+            <JSONPath>$</JSONPath>
         </Variable>
     </JSONPayload>
 </ExtractVariables>

@@ -1397,8 +1397,9 @@ module.exports = {
                         console.log('groups auth error: ' + JSON.stringify(error)); 
                         callback(error, null);
                     } else {
-                        entity.user.user_groups = groupList;
-                        streamlineResponseEntity(entity, function(error, streamlinedResponse){
+                        entity.user.user_groups = groupList;                        
+                        streamlineResponseEntity(entity, function(error,
+                            streamlinedResponse){
                             if (error) {
                                 callback(error, null);
                             } else {
@@ -1486,7 +1487,8 @@ function getGroupsForUser (userUUID, callback) {
             callback(error, null);
         } else {
         
-            endpointPath = "/users/" + userUUID + "/groups"  + '?access_token=' + dataStoreClientToken;
+            endpointPath = "/users/" + userUUID + "/groups"  + 
+                '?access_token=' + dataStoreClientToken;
             var uri = host + appPath + endpointPath;
             
             console.log("Getting the list of groups a user is in: " + uri);
@@ -1505,12 +1507,10 @@ function getGroupsForUser (userUUID, callback) {
                     var groupEntities = JSON.parse(response)['entities'];
                     
                     if (groupEntities.length > 0) {
-                        var groupList = {
-                            user_groups : []
-                        };
+                        var groupList = [];
                         for (var i = 0; i < groupEntities.length; i++) {
                             var groupItem = { name : groupEntities[i].path };
-                            groupList.user_groups.push(groupItem);
+                            groupList.push(groupItem);
                         }
                         callback(null, groupList);
                     } else {
