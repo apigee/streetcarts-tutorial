@@ -289,10 +289,15 @@ module.exports = {
                                 }
                             } else {
                                 
+                                var deletedCart = JSON.parse(cartDeleteResponse)['entities'][0];
+                                streamlineResponseEntity(deletedCart, 
+                                    function(streamlinedResponse){
+                                    cartDeleteResponse = JSON.stringify(streamlinedResponse);
+                                });                                
                                 // Now that we've deleted the cart, delete the
                                 // menus and items created for it.
                                 module.exports.deleteMenusAndItems(cartMenus, 
-                                    cartItems, userBaasToken, function (error, response) {                                    
+                                    cartItems, userBaasToken, function (error, response) {
                                     if (error) {
                                         callback(error, null);
                                     } else {
