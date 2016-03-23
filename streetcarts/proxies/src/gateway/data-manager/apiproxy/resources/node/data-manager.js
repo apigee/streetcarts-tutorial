@@ -57,6 +57,9 @@ module.exports = {
                 callback(error, null);
             } else {
                 var cart = JSON.parse(newCartResponse)['entities'][0];
+                streamlineResponseEntity(cart, function(streamlinedResponse){
+                    cart = streamlinedResponse;
+                });
                 
                 createCartOwnerUserGroup(cart.uuid,
                     function(error, response) {
