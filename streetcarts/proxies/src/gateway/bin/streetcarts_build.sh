@@ -4,10 +4,11 @@
 
 # clone the GitHub repo
 echo -e "\n***** Pull from GitHub"
+sc_bin=$(pwd)
 cd ../../../../../../
 git pull https://github.com/apigee/docs-sandbox
-cd apps/streetcarts/proxies/src/gateway
-
+cd $sc_bin
+cd ..
 
 # Deploy the API proxies with Maven
 # The -Doptions=clean undeploys and deletes the existing revision
