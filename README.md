@@ -10,7 +10,7 @@ Learn how to install, set up, and use StreetCarts, on the [doc wiki](https://git
 
 StreetCarts illustrates the following:
 
-* Multiple client-facing proxies calling a single internal proxy to share a connection with a backend resource.
+* Multiple client-facing proxies calling a single internal proxy (using proxy chaining) to share a connection with a backend resource.
 * Authentication with Edge OAuth policies.
 * Authorization with API BaaS user groups, roles, and permissions.
 * Enforcing two distinct client access levels with the Quota policy.
