@@ -5,7 +5,7 @@
 # clone the GitHub repo
 echo -e "\n***** Pull from GitHub"
 sc_bin=$(pwd)
-cd ../../../../../../
+cd ../../../../../
 git pull https://github.com/apigee/streetcarts
 cd $sc_bin
 cd ..
