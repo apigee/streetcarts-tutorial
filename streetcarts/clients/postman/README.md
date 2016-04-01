@@ -33,7 +33,12 @@ In [Postman](https://www.getpostman.com/), import the collection and environment
 
 * **User**
 
-  POST/PUT/DELETE StreetCarts calls require an API BaaS access token, which the **Authenticate user** call gets by passing an API BaaS username and password. The StreetCarts seeding script created sample users that you can use (creds are in /streetcarts/proxies/src/gateway/bin/seed/data/users.json). Of you can create a new user with the **Create user** call to set your own username and password.
+  POST/PUT/DELETE StreetCarts calls require an API BaaS access token, which the **Authenticate user** call gets by passing an API BaaS username and password. 
+
+  **Existing users** - The StreetCarts seeding script created sample users that you can use (creds are in `/streetcarts/proxies/src/gateway/bin/seed/data/users.json`).
+
+  **Create new user** - Or you can create a new user with the **Create user** call to set your own username and password.
+
 * **Authenticate user**
   * For the "Authenticate user" endpoint, add credentials needed to request and OAuth token.
       1. In the collection, click the **Authenticate user** call to edit it.
