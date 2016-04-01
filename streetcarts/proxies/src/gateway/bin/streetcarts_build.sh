@@ -15,13 +15,8 @@ cd ..
 # -Dproxyhost contains a value that is used by Maven to auto-replace URLs in the proxy config files.
 
 echo -e "\n***** Deploying the API proxies"
-cd accesstoken
-mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
-mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
-rm -r target
-cd ..
 
-cd foodcarts
+cd reviews
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
 rm -r target
@@ -39,7 +34,19 @@ mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$
 rm -r target
 cd ..
 
-cd reviews
+cd foodcarts
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
+rm -r target
+cd ..
+
+cd users
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
+mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
+rm -r target
+cd ..
+
+cd accesstoken
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
 rm -r target
@@ -48,12 +55,6 @@ cd ..
 cd data-manager
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
 mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost -Dbaasorg=$baasorg -Dbaasapp=$baasapp -Dbaasapi=$baasapi
-rm -r target
-cd ..
-
-cd users
-mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Doptions=clean
-mvn install -P test -Dusername=$username -Dpassword=$password -Dorg=$org -Denv=$env -Dproxyhost=$proxyhost
 rm -r target
 cd ..
 
