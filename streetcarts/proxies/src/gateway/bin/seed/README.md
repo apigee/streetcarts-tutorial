@@ -79,7 +79,7 @@ node streetcarts-config-seed configure-edge /path/to/streetcarts-config.json
 
 In addition to using API BaaS as a data store, StreetCarts uses it to authorize user requests. using user groups, roles, and permissions to manage access. So before running StreetCarts, you'll need to make a few general permissions settings (the data-manager configures specific permissions for foodcarts as you use the API). These changes will add support for adding new data with the API.
 
-You can configure API BaaS either by [using the scripts provided in this repo](https://github.com/apigee/streetcarts/tree/master/apps/streetcarts/proxies/src/gateway/bin/seed), or by making the settings in the API BaaS admin console, as described below.
+You can configure API BaaS either by [using the scripts provided in this repo](https://github.com/apigee/streetcarts/tree/master/streetcarts/proxies/src/gateway/bin/seed), or by making the settings in the API BaaS admin console, as described below.
 
 #### Configuring API BaaS with the script
 

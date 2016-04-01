@@ -2,7 +2,7 @@
 
 Once you've set up StreetCarts, you can use a client to try out its APIs. The [installation guide](https://github.com/apigee/streetcarts/wiki/Deploying-and-Running#add-data) ends with a brief introduction to using cURL to add a food cart.
 
-The repository also includes collection and environment files for [Postman support](https://github.com/apigee/streetcarts/tree/master/apps/streetcarts/clients/postman). You can use included collection and environment files for the [Postman application](https://www.getpostman.com/) to call StreetCarts APIs.
+The repository also includes collection and environment files for [Postman support](https://github.com/apigee/streetcarts/tree/master/streetcarts/clients/postman). You can use included collection and environment files for the [Postman application](https://www.getpostman.com/) to call StreetCarts APIs.
 
 > Keep in mind that nearly all POST, PUT, and DELETE operations must be performed by a registered user. That means that before calling an API that, for example, creates a food cart, you must have first called an API that authenticates a registered user. The authentication response includes an OAuth token you can use in subsequent POST, PUT, and DELETE requests.
 

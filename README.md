@@ -18,15 +18,15 @@ StreetCarts illustrates the following:
 * Node.js modules to integrate an API BaaS data store with Edge proxies.
 * Storing sensitive credential data in the Edge secure store (vault).
 
-![StreetCarts diagram](https://github.com/apigee/streetcarts/blob/master/apps/streetcarts/streetcarts-diagram.png).
+![StreetCarts diagram](https://github.com/apigee/streetcarts/blob/master/streetcarts-diagram.png).
 
 
 ## Learn more about what's in StreetCarts
 
 StreetCarts integrates a set of Edge API proxies with an API BaaS data store. You might be interested in:
 
-* Descriptions of the [StreetCarts API proxies](https://github.com/apigee/streetcarts/tree/master/apps/streetcarts/proxies/src/gateway).
-* [OpenAPI documentation on the StreetCarts API](https://github.com/apigee/streetcarts/tree/master/apps/streetcarts/specs/openapi).
-* [An explanation of how StreetCarts accesses the data store](https://github.com/apigee/streetcarts/tree/master/apps/streetcarts/proxies/src/gateway/data-manager).
-* Using a client to call its APIs. The repository includes collections and environments for the Postman tool. For more on using these, see [StreetCarts Postman client](https://github.com/apigee/streetcarts/tree/master/apps/streetcarts/clients/postman).
+* Descriptions of the [StreetCarts API proxies](https://github.com/apigee/streetcarts/tree/master/streetcarts/proxies/src/gateway).
+* [OpenAPI documentation on the StreetCarts API](https://github.com/apigee/streetcarts/tree/master/streetcarts/specs/openapi).
+* [An explanation of how StreetCarts accesses the data store](https://github.com/apigee/streetcarts/tree/master/streetcarts/proxies/src/gateway/data-manager).
+* Using a client to call its APIs. The repository includes collections and environments for the Postman tool. For more on using these, see [StreetCarts Postman client](https://github.com/apigee/streetcarts/tree/master/streetcarts/clients/postman).
 
