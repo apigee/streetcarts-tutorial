@@ -82,7 +82,8 @@ echo -e
 
 if [ -z "${env}" ]; then
     ENV_DEFAULT="https://api.enterprise.apigee.com"
-    read -p "The management API URL, such as https://api.enterprise.apigee.com or https://api.e2e.apigee.net. Default is [$ENV_DEFAULT]: " env
+    echo -e "The management API URL, such as https://api.enterprise.apigee.com or https://api.e2e.apigee.net."
+    read -p "Default is [$ENV_DEFAULT]: " env
     env="${env:-$ENV_DEFAULT}"
 fi
 
@@ -96,7 +97,8 @@ echo -e
 
 if [ -z "${deployenv}" ]; then
     DEPLOYENV_DEFAULT="test"
-    read -p "The environment to deploy to, such as test or prod. Default is [$DEPLOYENV_DEFAULT]: " deployenv
+    echo -e "The environment to deploy to, such as test or prod."
+    read -p "Default is [$DEPLOYENV_DEFAULT]: " deployenv
     deployenv="${deployenv:-$DEPLOYENV_DEFAULT}"
 fi
 
@@ -104,7 +106,8 @@ echo -e
 
 if [ -z "${rev}" ]; then
     REV_DEFAULT="1"
-    read -p "The current revision of the data-manager proxy. Accept the default if you haven't manually changed the revision. Default is [$REV_DEFAULT]: " rev
+    echo -e "The current revision of the data-manager proxy. Accept the default if you haven't manually changed the revision."
+    read -p "Default is [$REV_DEFAULT]: " rev
     rev="${rev:-$REV_DEFAULT}"
 fi
 
@@ -112,7 +115,8 @@ echo -e
 
 if [ -z "${proxyhost}" ]; then
     PROXYHOST_DEFAULT="$org-$deployenv$server.apigee.net"
-    read -p "The host for your API proxies, such as $org-$deployenv.apigee.net. Default is [$PROXYHOST_DEFAULT]: " proxyhost
+    echo -e "The host for your API proxies, such as $org-$deployenv.apigee.net."
+    read -p "Default is [$PROXYHOST_DEFAULT]: " proxyhost
     proxyhost="${proxyhost:-$PROXYHOST_DEFAULT}"
 fi
 
@@ -120,7 +124,8 @@ echo -e
 
 if [ -z "${baasorg}" ]; then
     BAASORG_DEFAULT="$org"
-    read -p "The API BaaS organization you want to use. This can be different than your Edge organization. Default is [$BAASORG_DEFAULT]: " baasorg
+    echo -e "The API BaaS organization you want to use. This can be different than your Edge organization."
+    read -p "Default is [$BAASORG_DEFAULT]: " baasorg
     baasorg="${baasorg:-$BAASORG_DEFAULT}"
 fi
 
@@ -128,7 +133,8 @@ echo -e
 
 if [ -z "${baasapp}" ]; then
     BAASAPP_DEFAULT="sandbox"
-    read -p "The API BaaS application you want to use. Default is [$BAASAPP_DEFAULT]: " baasapp
+    echo -e "The API BaaS application you want to use."
+    read -p "Default is [$BAASAPP_DEFAULT]: " baasapp
     baasapp="${baasapp:-$BAASAPP_DEFAULT}"
 fi
 
@@ -136,7 +142,8 @@ echo -e
 
 if [ -z "${baasapi}" ]; then
     BAASAPI_DEFAULT="https://api.usergrid.com"
-    read -p "The API BaaS API URL. Select the default if you are using the cloud version. Default is [$BAASAPI_DEFAULT]: " baasapi
+    echo -e "The API BaaS API URL. Select the default if you are using the cloud version."
+    read -p "Default is [$BAASAPI_DEFAULT]: " baasapi
     baasapi="${baasapi:-$BAASAPI_DEFAULT}"
 fi
 
