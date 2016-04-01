@@ -28,6 +28,7 @@ In [Postman](https://www.getpostman.com/), import the collection and environment
 | API-KEY | The Edge consumer key value from either the SC-APP-TRIAL or SC-APP-UNLIMITED developer app |
 | ACCESS-TOKEN | The access token for an authenticated user. In the script environment, this value is populated automatically when you run the "Authenticate user" API call |
 7. Click **Update**, then close the **Manage Environments** dialog.
+8. Select that environment in Postman.
 
 ### The first crucial calls
 
