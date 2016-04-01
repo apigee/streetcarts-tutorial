@@ -2,7 +2,7 @@
 
 StreetCarts is made up of several proxies that integrate with a backend data store.
 
-> For information about deploying StreetCarts, see the [Deploying and Running StreetCarts](https://github.com/apigee/docs-sandbox/wiki/Deploying-and-Running-StreetCarts) in the repository wiki.
+> For information about deploying StreetCarts, see the [Deploying and Running StreetCarts](https://github.com/apigee/streetcarts/wiki/Deploying-and-Running) in the repository wiki.
 
 | Proxy | Description | 
 | --- | --- |
