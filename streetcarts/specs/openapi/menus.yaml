@@ -1,9 +1,10 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "0.1"
-  title: API for menus proxy
+  version: '0.1'
+  title: Menus API
+  description: Manage menus in your food cart.
 host: artomatic-test.apigee.net
-basePath: /v1/streetcarts/menus
+basePath: /v1/streetcarts
 schemes:
   - http
   - https
@@ -12,66 +13,70 @@ consumes:
 produces:
   - application/json
 paths:
-  /{menu_id}:
+  '/menus/{menu_id}':
     get:
-      description: Returns a menu specified by ID.
+      description: Lists menu details.
       operationId: getMenuById
       parameters:
         - name: menu_id
           in: path
+          description: ID of the menu.
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Menu"
-        "401":
+            $ref: '#/definitions/menu'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     delete:
-      description: Delete a menu specified by ID.
+      description: Deletes a menu.
       operationId: deleteMenuById
       parameters:
         - name: menu_id
           in: path
+          description: ID of the menu.
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Menu"
-        "401":
+            $ref: '#/definitions/menu'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
-  /{menu_id}/items:
+            $ref: '#/definitions/UnauthorizedResponse'
+  '/menus/{menu_id}/items':
     get:
-      description: Get all items on a menu
+      description: Lists all items on a menu.
       operationId: getItemsForMenu
       parameters:
         - name: menu_id
           in: path
+          description: ID of the menu.
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Item"
-        "401":
+            $ref: '#/definitions/items'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
-  /{menu_id}/items/{item_id}:
+            $ref: '#/definitions/UnauthorizedResponse'
+  '/menus/{menu_id}/items/{item_id}':
     put:
-      description: Add a menu item to a menu.
+      description: Adds an item to a menu.
       operationId: addItemToMenu
       parameters:
         - name: menu_id
           in: path
+          description: ID of the menu.
           required: true
           type: string
         - name: item_id
@@ -79,63 +84,78 @@ paths:
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Item"
-        "401":
+            $ref: '#/definitions/item'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
     delete:
-      description: Add an item from a menu.
+      description: Deletes an item from a menu.
       operationId: deleteItemFromMenu
       parameters:
         - name: menu_id
           in: path
+          description: ID of the menu.
           required: true
           type: string
         - name: item_id
           in: path
+          description: ID of the menu item.
           required: true
           type: string
       responses:
-        "200":
+        '200':
           description: Success
           schema:
-            $ref: "#/definitions/Item"
-        "401":
+            $ref: '#/definitions/item'
+        '401':
           description: Unauthorized
           schema:
-            $ref: "#/definitions/UnauthorizedResponse"
+            $ref: '#/definitions/UnauthorizedResponse'
 definitions:
-  Menu: 
+  menu:
     type: object
-    properties: 
-      uuid: 
+    properties:
+      uuid:
+        description: ID of the menu.
+        type: string
+      cartID:
+        description: ID of the food cart.
         type: string
       menuName:
         type: string
-      description:
-        type: string
-      items: 
+        description: Name of the menu.
+      items:
         type: array
+        description: List of menu items.
         items:
-            $ref: '#/definitions/Item'
-  Item:
+          $ref: '#/definitions/item'
+  items:
+    type: array
+    description: List of menu items.
+    items:
+      $ref: '#/definitions/item'
+  item:
     type: object
     properties:
-      uuid: 
+      uuid:
         type: string
-      cartID: 
+        description: ID of the item.
+      cartID:
         type: string
-      description: 
+        description: ID of the food cart.
+      description:
         type: string
-      itemName: 
+        description: Description of the menu item.
+      itemName:
         type: string
-      price: 
-        type: string
-
+        description: Name of the menu item.
+      price:
+        type: number
+        description: Price of the menu itme.
   UnauthorizedResponse:
     required:
       - message

@@ -1,0 +1,125 @@
+swagger: '2.0'
+info:
+  version: '0.1'
+  title: Users API
+host: artomatic-test.apigee.net
+basePath: /v1/streetcarts
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  '/users':
+    get:
+      description: Lists all users.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/users'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+    post:
+      description: Add a user.
+      operationId: addUser
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/addUser'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+  '/users/{user_id}':
+    get:
+      description: Lists details of a user.
+      operationId: getUserById
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of the user.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/user'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/UnauthorizedResponse'
+definitions:
+  addUser:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      firstName:
+        type: string
+        description: First name of user.
+      lastName:
+        type: string
+        description: Last name of user.
+      address:
+        type: string
+        description: Street address of user.
+      city:
+        type: string
+        description: City where user resides.
+      region:
+        type: string
+        description: Region or state where user resides.
+      postalCode:
+        type: string
+        description: Postal code where user resides.
+      email:
+        type: string
+        description: Email for contacting user.
+      username:
+        type: string
+        description: User name.
+      password:
+        type: string
+        description: Password.
+  users:
+    type: array
+    description: List of users.
+    items:
+      $ref: '#/definitions/user'
+  user:
+    type: object
+    properties:
+      firstName:
+        type: string
+        description: First name of user.
+      lastName:
+        type: string
+        description: Last name of user.
+      address:
+        type: string
+        description: Street address of user.
+      city:
+        type: string
+        description: City where user resides.
+      region:
+        type: string
+        description: Region or state where user resides.
+      postalCode:
+        type: string
+        description: Postal code where user resides.
+      email:
+        type: string
+        description: Email for contacting user.
+  UnauthorizedResponse:
+    properties:
+      message:
+        type: string
