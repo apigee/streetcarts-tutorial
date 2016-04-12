@@ -4,8 +4,15 @@ var apigee = require('apigee-access');
 
 var host = 'BAASAPIREPLACE';
 var appPath = '/BAASORGREPLACE/BAASAPPREPLACE';
+
+// Name and scope for the Edge vault containing 
+// API BaaS credentials.
 var edgeVault = 'streetcarts';
 var edgeVaultScope = 'environment';
+
+// Names of vault entries whose values are API BaaS
+// client ID and secret. Thesee should have been created
+// as part of app configuration.
 var dataStoreIdEntry = 'datastore-client-id';
 var dataStoreSecretEntry = 'datastore-client-secret';
 var dataStoreTokenEntry = 'datastore-client-token';
@@ -2297,11 +2304,19 @@ function makeRequest(options, callback) {
  * Authenticates with the API BaaS data store using the 
  * BaaS organization client ID and secret. This level
  * of authorization grants full access to BaaS features.
+ * 
+ * This function is called from multiple places, wherever
+ * other code needs to authenticate with API BaaS as 
+ * "application client."
  */
 function authenticateAsDataStoreClient(callback) {
 
+    // Use apigee-access to get a reference to the vault, where 
+    // API BaaS credentials are stored.
     var orgVault = apigee.getVault(edgeVault, edgeVaultScope);
-
+    
+    // Get the vault entry value whose key is "datastore-client-id". 
+    // This is the API BaaS client ID.
     orgVault.get(dataStoreIdEntry, function(error, idValue) {
         var clientID;
         var clientSecret;
@@ -2310,16 +2325,23 @@ function authenticateAsDataStoreClient(callback) {
             callback(error);
         } else {
             clientID = idValue;
+            // If the client ID came back, get the value for the
+            // "datastore-client-secret" vault entry. This is the 
+            // API BaaS client secret.
             orgVault.get(dataStoreSecretEntry, function(error, secretValue) {
                 if (error) {
                     callback(error, null);
-                } else {
+                } else {                
                     clientSecret = secretValue;
+                    
+                    // With the client ID and secret in hand, authenticate
+                    // with them and get back a token for future requests.
                     
                     endpointPath = "/token";
                     var uri = host + appPath + endpointPath;
                 
-                    console.log("Authenticating as a data store client: " + uri);
+                    console.log("Authenticating as a data store client: " +
+                        uri);
                 
                     var authBody = {
                         "grant_type" : "client_credentials",
@@ -2338,6 +2360,9 @@ function authenticateAsDataStoreClient(callback) {
                             error.message = "Unable to authenticate as client.";
                             callback(error, null);
                         } else {
+                        
+                            // Call back with the OAuth token representing
+                            // StreetCarts as an application client.
                             var clientToken = JSON.parse(response).access_token;
                             console.log('Client access token: ' + clientToken);
                             callback(null, clientToken);
