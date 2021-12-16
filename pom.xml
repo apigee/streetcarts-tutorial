@@ -133,12 +133,7 @@
 
         <resources>
 
-            <resource>
-                <directory>${basedir}/src/main/java</directory>
-                <includes>
-                    <include>log4j.xml</include>
-                </includes>
-            </resource>
+            
         </resources>
         <plugins>
             <plugin>
@@ -205,12 +200,7 @@
             <artifactId>google-http-client</artifactId>
             <version>1.10.3-beta</version>
         </dependency>
-        <!-- using sl4j logging wrapping lg4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.6</version>
-        </dependency>
+        
         <!-- excluding commons logging by declaring it in the provided scope -->
         <dependency>
             <groupId>commons-logging</groupId>
